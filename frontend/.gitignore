@@ -1,29 +1,46 @@
+# Agent / AI tools
+.claude/
+.devin/
+.cursor/
+.copilot/
+.aider*
+.codeium/
+CLAUDE.md
+AGENTS.md
+
 # Dependencies
 node_modules/
 
 # Build outputs
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Angular cache
+dist/
+tmp/
+out-tsc/
+bazel-out/
 .angular/
 
-# IDEs
+# IDEs / Editors
 .vscode/
 .idea/
+.nova/
+.zed/
 *.swp
 *.swo
 *~
 
 # OS
 .DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
 Thumbs.db
 
-# Env / local
+# Env / secrets
 .env
-.env.local
+.env.*
+!.env.example
+
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -31,8 +48,8 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Testing
-/coverage
-/.nyc_output
+coverage/
+.nyc_output/
 
 # Misc
 *.tsbuildinfo

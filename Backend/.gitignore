@@ -1,0 +1,55 @@
+# Agent / AI tools
+.claude/
+.devin/
+.cursor/
+.copilot/
+.aider*
+.codeium/
+CLAUDE.md
+AGENTS.md
+agents/
+
+# IDEs / Editors
+.vscode/
+.idea/
+.nova/
+.zed/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+auth.json
+
+# Dependencies
+vendor/
+node_modules/
+
+# Laravel build / cache
+.phpunit.cache
+.phpunit.result.cache
+.phpactor.json
+public/build/
+public/hot
+public/storage
+_ide_helper.php
+storage/*.key
+storage/pail
+
+# Logs
+*.log
+
+# Misc
+Homestead.json
+Homestead.yaml
