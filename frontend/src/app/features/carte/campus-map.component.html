@@ -1,0 +1,154 @@
+<div class="carte-page">
+
+  <!-- ── Header ── -->
+  <div class="carte-header">
+    <div class="carte-title">
+      <span class="material-icons">account_balance</span>
+      <div>
+        <h1 class="section-title">CHU Ibn Badis — Constantine</h1>
+        <p class="text-muted">Carte interactive GPS · Données OpenStreetMap live</p>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-chip">
+        <span class="material-icons">bed</span>
+        <strong>{{ totalBeds() }}</strong> lits
+      </div>
+      <div class="kpi-chip kpi-chip--warn">
+        <span class="material-icons">person</span>
+        <strong>{{ occupiedBeds() }}</strong> occupés
+        <span class="kpi-pct">({{ occupancyPct() }}%)</span>
+      </div>
+      <div class="kpi-chip" [class.kpi-chip--danger]="criticalCount() > 0">
+        <span class="material-icons">emergency</span>
+        <strong>{{ criticalCount() }}</strong> critiques
+      </div>
+      @if (mapReady()) {
+        <div class="kpi-chip kpi-chip--green">
+          <span class="material-icons">map</span>
+          Carte chargée
+        </div>
+      }
+    </div>
+
+    <button class="legend-toggle-btn" (click)="showLegend.set(!showLegend())">
+      <span class="material-icons">legend_toggle</span>
+      {{ showLegend() ? 'Cacher' : 'Légende' }}
+    </button>
+  </div>
+
+  <!-- ── Body ── -->
+  <div class="carte-body">
+
+    <!-- Sidebar -->
+    <aside class="carte-sidebar">
+      <div class="search-wrap">
+        <span class="material-icons search-icon">search</span>
+        <input class="search-input" type="text" placeholder="Rechercher..."
+          [ngModel]="searchQuery()" (ngModelChange)="setSearch($event)" />
+      </div>
+
+      <div class="filter-chips">
+        <button class="filter-chip" [class.active]="activeFilter() === 'ALL'"
+          (click)="setFilter('ALL')">Tout</button>
+        @for (e of legendEntries; track e.type) {
+          <button class="filter-chip"
+            [class.active]="activeFilter() === e.type"
+            [style.border-color]="e.stroke"
+            [style.color]="activeFilter() === e.type ? '#fff' : e.stroke"
+            [style.background]="activeFilter() === e.type ? e.stroke : 'transparent'"
+            (click)="setFilter(e.type)">
+            {{ e.label }}
+          </button>
+        }
+      </div>
+
+      <p class="results-count">{{ filteredSvcs().length }} service(s)</p>
+
+      <div class="service-list">
+        @for (s of filteredSvcs(); track s.id) {
+          <div class="service-item"
+            [class.critique]="computeStatus(s) === 'CRITIQUE'"
+            [class.maintenance]="computeStatus(s) === 'MAINTENANCE'"
+            [class.selected]="selectedSvc()?.id === s.id"
+            (click)="flyToService(s)"
+          >
+            <span class="svc-dot"
+              [style.background]="getTypeColor(s.type)"
+              [style.border-color]="getTypeStroke(s.type)"></span>
+            <div class="svc-info">
+              <span class="svc-name">{{ s.name }}</span>
+              <span class="svc-sub">{{ s.chief?.name ?? s.type }}</span>
+            </div>
+            @if (totalLitsService(s) > 0) {
+              <span class="svc-badge" [class.svc-badge--full]="litsOccupesService(s) === totalLitsService(s)">
+                {{ litsOccupesService(s) }}/{{ totalLitsService(s) }}
+              </span>
+            }
+            <span class="material-icons svc-locate">my_location</span>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <!-- Map container -->
+    <div class="map-wrapper">
+
+      <!-- MapLibre mount point -->
+      <div #mapContainer class="maplibre-container"></div>
+
+      <!-- Error state -->
+      @if (mapError()) {
+        <div class="map-error">
+          <span class="material-icons">error_outline</span>
+          <p>{{ mapError() }}</p>
+        </div>
+      }
+
+      <!-- Loading spinner -->
+      @if (!mapReady() && !mapError()) {
+        <div class="map-loading">
+          <div class="spinner"></div>
+          <p>Chargement de la carte GPS…</p>
+        </div>
+      }
+
+      <!-- Floating legend -->
+      @if (showLegend()) {
+        <div class="legend-panel">
+          <p class="legend-title">SERVICES</p>
+          @for (e of legendEntries; track e.type) {
+            <div class="legend-row">
+              <span class="legend-dot"
+                [style.background]="e.fill"
+                [style.border-color]="e.stroke"></span>
+              <span>{{ e.label }}</span>
+            </div>
+          }
+          <hr class="legend-divider" />
+          <div class="legend-row">
+            <span class="legend-dot" style="background:#FFCDD2;border-color:#E53935"></span>
+            <span>Critique 🔴</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-dot" style="background:#EEE;border-color:#9E9E9E"></span>
+            <span>Maintenance</span>
+          </div>
+        </div>
+      }
+
+       <!-- Selected service detail panel -->
+       @if (selectedSvc()) {
+         <div class="detail-panel">
+           <hm-service-mini-card
+             [service]="selectedSvc()!"
+             (closed)="closePanel()"
+             (navigateToService)="goToServiceDetails($event)">
+           </hm-service-mini-card>
+         </div>
+       }
+
+    </div>
+  </div>
+</div>

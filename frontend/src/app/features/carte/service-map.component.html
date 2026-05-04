@@ -1,0 +1,190 @@
+@if (service()) {
+<div class="service-page page-fade-in">
+
+  <!-- Header -->
+  <div class="service-header">
+    <button class="back-btn" (click)="goBack()">
+      <span class="material-icons">arrow_back</span>
+    </button>
+
+    <div class="service-title-block"
+      [style.border-left-color]="getServiceStroke(service()!)">
+      <span class="service-type-badge"
+        [style.background]="getServiceColor(service()!)"
+        [style.color]="getServiceStroke(service()!)">
+        {{ service()!.type }}
+      </span>
+      <h1 class="section-title">{{ service()!.label }}</h1>
+      @if (service()!.chef) {
+        <p class="text-muted">Responsable : {{ service()!.chef }}</p>
+      }
+    </div>
+
+    <div class="service-kpis">
+      @if (service()!.totalBeds > 0) {
+        <div class="kpi-chip">
+          <span class="material-icons">bed</span>
+          <strong>{{ service()!.occupiedBeds }}</strong>/{{ service()!.totalBeds }} lits
+        </div>
+      }
+      <div class="kpi-chip" [class.kpi-chip--danger]="service()!.status === 'CRITIQUE'">
+        <span class="stt-dot"
+          [style.background]="getStatusColor(service()!.status)"></span>
+        {{ service()!.status }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Body: SVG floor plan + optional detail panel -->
+  <div class="service-body">
+
+    <!-- Floor plan SVG -->
+    <div class="floor-wrapper">
+      <svg class="floor-svg"
+        [attr.viewBox]="'0 0 ' + service()!.indoorWidth + ' ' + service()!.indoorHeight"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <!-- Floor background -->
+        <rect x="0" y="0"
+          [attr.width]="service()!.indoorWidth"
+          [attr.height]="service()!.indoorHeight"
+          fill="#F5F5F0" />
+
+        <!-- Rooms -->
+        @for (room of service()!.rooms; track room.id) {
+          <g class="room-group"
+            [attr.cursor]="room.type !== 'COULOIR' ? 'pointer' : 'default'"
+            (mouseenter)="hoveredRoom.set(room)"
+            (mouseleave)="hoveredRoom.set(null)"
+            (click)="onRoomClick(room)"
+          >
+            <rect
+              [attr.x]="room.x" [attr.y]="room.y"
+              [attr.width]="room.width" [attr.height]="room.height"
+              [attr.fill]="getRoomFill(room)"
+              [attr.stroke]="getRoomStroke(room)"
+              stroke-width="1.5" rx="4"
+              [style.filter]="hoveredRoom()?.id === room.id && room.type !== 'COULOIR'
+                ? 'drop-shadow(0 2px 6px rgba(0,0,0,0.22))'
+                : 'none'"
+            />
+
+            <!-- Room label -->
+            @if (room.label && room.type !== 'COULOIR' && room.width >= 60 && room.height >= 40) {
+              <text
+                [attr.x]="room.x + room.width / 2"
+                [attr.y]="room.y + room.height / 2 + (room.beds ? -6 : 4)"
+                text-anchor="middle" dominant-baseline="middle"
+                font-size="9" font-weight="600"
+                [attr.fill]="getRoomStroke(room)"
+                style="pointer-events:none"
+              >{{ room.label }}</text>
+            }
+
+            <!-- Bed count -->
+            @if (room.beds !== undefined && room.height >= 50) {
+              <text
+                [attr.x]="room.x + room.width / 2"
+                [attr.y]="room.y + room.height / 2 + 8"
+                text-anchor="middle" font-size="8" fill="#546E7A"
+                style="pointer-events:none"
+              >🛏 {{ room.bedsOccupied }}/{{ room.beds }}</text>
+            }
+
+            <!-- Critique ring -->
+            @if (room.status === 'CRITIQUE') {
+              <rect class="critique-ring"
+                [attr.x]="room.x - 2" [attr.y]="room.y - 2"
+                [attr.width]="room.width + 4" [attr.height]="room.height + 4"
+                fill="none" stroke="#E53935" stroke-width="2" rx="5"
+              />
+            }
+
+            <!-- Selected highlight -->
+            @if (selectedRoom()?.id === room.id) {
+              <rect
+                [attr.x]="room.x - 3" [attr.y]="room.y - 3"
+                [attr.width]="room.width + 6" [attr.height]="room.height + 6"
+                fill="none" stroke="#F57F17" stroke-width="3" rx="7"
+                stroke-dasharray="5 3"
+              />
+            }
+          </g>
+        }
+
+        <!-- Floor label -->
+        <text x="8" y="16" font-size="10" fill="#9CA3AF" font-family="sans-serif">
+          Étage {{ service()!.floor }} · {{ service()!.rooms.length }} pièce(s)
+        </text>
+      </svg>
+
+      <!-- Room detail card -->
+      @if (selectedRoom()) {
+        <div class="room-card">
+          <div class="room-card-header">
+            <div>
+              <span class="room-type-tag">{{ roomTypeLabels[selectedRoom()!.type] }}</span>
+              <h3 class="room-name">{{ selectedRoom()!.label || 'Zone sans étiquette' }}</h3>
+            </div>
+            <button class="close-btn" (click)="selectedRoom.set(null)">
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+          <div class="room-card-body">
+            <span class="status-badge"
+              [style.background]="getStatusColor(selectedRoom()!.status)"
+              [class.status--critique]="selectedRoom()!.status === 'CRITIQUE'">
+              {{ selectedRoom()!.status }}
+            </span>
+
+            @if (selectedRoom()!.responsable) {
+              <p class="room-meta">
+                <span class="material-icons">person</span>
+                {{ selectedRoom()!.responsable }}
+              </p>
+            }
+
+            @if (selectedRoom()!.beds !== undefined) {
+              <div class="beds-section">
+                <div class="beds-header">
+                  <span>Occupation</span>
+                  <strong>{{ selectedRoom()!.bedsOccupied }}/{{ selectedRoom()!.beds }}
+                    ({{ getBedsPct(selectedRoom()!) }}%)</strong>
+                </div>
+                <div class="beds-bar">
+                  <div class="beds-fill"
+                    [style.width.%]="getBedsPct(selectedRoom()!)"
+                    [class.beds-fill--full]="selectedRoom()!.bedsOccupied === selectedRoom()!.beds"
+                    [class.beds-fill--critique]="selectedRoom()!.status === 'CRITIQUE'">
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Status legend -->
+    <div class="floor-legend">
+      <p class="legend-title">STATUT</p>
+      <div class="legend-row"><span class="legend-dot" style="background:#C8E6C9;border-color:#388E3C"></span>Libre</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#FFF9C4;border-color:#F57F17"></span>Occupé</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#FFCDD2;border-color:#E53935"></span>Critique</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#EEE;border-color:#9E9E9E"></span>Maintenance</div>
+    </div>
+
+  </div>
+
+</div>
+}
+
+@if (!service()) {
+  <div class="not-found">
+    <span class="material-icons">error_outline</span>
+    <p>Service introuvable.</p>
+    <button class="back-btn" (click)="goBack()">
+      <span class="material-icons">arrow_back</span> Retour au plan
+    </button>
+  </div>
+}

@@ -1,0 +1,357 @@
+.dashboard-page {
+  padding: var(--space-6);
+  display: flex; flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.heading-row {
+  display: flex; align-items: center;
+  gap: var(--space-3); flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 1.5rem; font-weight: 700;
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.role-chip {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius-full); padding: 3px 12px;
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+
+.today-chip {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: #475569; font-weight: 500;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-full); padding: 4px 12px;
+  text-transform: capitalize;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; color: var(--color-primary); }
+}
+
+/* ── 5-KPI hospital strip ─────────────────────────────────── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.kpi-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  color: #fff;
+  display: flex; align-items: center; gap: var(--space-4);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &::after {
+    content: ''; position: absolute;
+    right: -28px; bottom: -28px;
+    width: 110px; height: 110px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 50%;
+  }
+
+  &:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+}
+
+.kpi-card__icon {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; backdrop-filter: blur(4px);
+
+  mat-icon { font-size: 26px; width: 26px; height: 26px; color: #fff; }
+}
+
+.kpi-card__body { position: relative; z-index: 1; min-width: 0; }
+.kpi-card__value {
+  font-family: var(--font-heading);
+  font-size: 2rem; font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1;
+}
+.kpi-card__label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-top: 6px; opacity: 0.92;
+}
+.kpi-card__sub {
+  font-size: 0.72rem; font-weight: 500;
+  margin-top: 2px; opacity: 0.78;
+}
+
+/* ── Map + metrics box ────────────────────────────────────── */
+.map-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.map-card__header {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+
+  h3 {
+    font-size: 0.95rem; font-weight: 700; color: #0f172a;
+    display: flex; align-items: center; gap: 8px;
+
+    mat-icon { font-size: 20px; width: 20px; color: var(--color-primary); }
+  }
+}
+
+.map-card__link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.78rem; font-weight: 600; color: var(--color-primary-dark);
+  padding: 4px 12px; border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  transition: background 0.15s;
+
+  &:hover { background: rgba(0,188,212,0.28); }
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+.map-card__body {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  height: 380px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+.map-card__map {
+  position: relative; overflow: hidden;
+  background: #eef3f6;
+  height: 100%;
+
+  @media (max-width: 900px) { height: 320px; }
+
+  /* CampusMapComponent is embedded with [compact]="true";
+     all internal compact styles live in its own SCSS via :host(.compact). */
+  hm-campus-map { display: block; width: 100%; height: 100%; }
+}
+
+.map-card__metrics {
+  background: linear-gradient(180deg, #FAFCFE 0%, #F1F5F9 100%);
+  border-left: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5);
+  display: flex; flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+
+  @media (max-width: 900px) {
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    flex-direction: row; flex-wrap: wrap;
+    .metric { flex: 1 1 140px; }
+  }
+}
+
+.metric {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+
+  &__label {
+    font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: #64748b;
+  }
+  &__value {
+    font-family: var(--font-heading);
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.03em; color: #0f172a; line-height: 1.1;
+    margin-top: 4px;
+
+    &--ok { color: var(--color-success); }
+  }
+  &__sub {
+    font-size: 0.85rem; font-weight: 500;
+    color: #94a3b8; margin-left: 2px;
+  }
+  &__bar {
+    margin-top: 8px;
+    width: 100%; height: 6px;
+    background: #E2E8F0; border-radius: 999px; overflow: hidden;
+  }
+  &__bar-fill {
+    height: 100%; background: var(--color-success);
+    border-radius: 999px; transition: width 0.4s ease;
+
+    &--warn   { background: var(--color-warning); }
+    &--danger { background: var(--color-urgent); }
+  }
+  &--alert {
+    background: #FFF5F5;
+    border-color: rgba(229,57,53,0.25);
+    .metric__label { color: #B71C1C; }
+    .metric__value { color: var(--color-urgent); }
+  }
+}
+
+/* ── Chart card ───────────────────────────────────────────── */
+.chart-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.chart-card-header {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); flex-wrap: wrap;
+
+  h3 {
+    font-size: 0.95rem; font-weight: 700; color: #0f172a;
+    display: flex; align-items: center; gap: 8px;
+
+    mat-icon { font-size: 20px; width: 20px; color: var(--color-primary); }
+  }
+}
+
+.view-toggle {
+  display: inline-flex;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.view-toggle__btn {
+  border: none; background: transparent;
+  padding: 6px 14px;
+  font-size: 0.78rem; font-weight: 600; color: #64748b;
+  border-radius: var(--radius-full);
+  cursor: pointer; transition: all 0.15s;
+
+  &:hover { color: var(--color-primary-dark); }
+  &.active {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,188,212,0.35);
+  }
+}
+
+.chart-date-range {
+  margin-left: auto;
+  font-size: 0.72rem; color: #94a3b8;
+  background: var(--color-bg); padding: 3px 10px;
+  border-radius: var(--radius-full); border: 1px solid var(--color-border);
+}
+
+.chart-legend {
+  display: flex; gap: var(--space-5); align-items: center;
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; font-weight: 500; color: #64748b;
+}
+
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.chart-body { padding: var(--space-5) var(--space-6); }
+
+.chart-area {
+  display: flex; gap: var(--space-2);
+  height: 120px; align-items: flex-end;
+}
+
+.chart-y-axis {
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  font-size: 11px; color: #94a3b8;
+  height: 100%; padding-right: var(--space-2);
+}
+
+.chart-bars-container {
+  display: flex; align-items: flex-end;
+  gap: var(--space-2); flex: 1;
+}
+
+.chart-group {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px; flex: 1;
+}
+
+.bar-group {
+  display: flex; gap: 2px;
+  align-items: flex-end; height: 80px;
+}
+
+.bar {
+  width: 10px; border-radius: 3px 3px 0 0;
+  min-height: 2px; transition: height 0.3s ease;
+}
+
+.bar-admissions { background: var(--color-primary); }
+.bar-radiologie { background: var(--color-success); }
+.bar-labo       { background: var(--color-info); }
+
+.bar-label { font-size: 10px; color: #94a3b8; }
+
+/* ── "Aujourd'hui" 4-card grid (toggle view) ──────────────── */
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  border-top: 3px solid transparent;
+  display: flex; align-items: flex-start; gap: var(--space-4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  &.admissions { border-top-color: var(--color-primary); }
+  &.waiting    { border-top-color: var(--color-warning); }
+  &.radiology  { border-top-color: var(--color-success); }
+  &.labo       { border-top-color: var(--color-info); }
+}
+
+.stat-icon-wrap {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+
+  mat-icon { font-size: 22px; }
+}
+
+.stat-card.admissions .stat-icon-wrap { background: var(--color-primary-light); color: var(--color-primary-dark); }
+.stat-card.waiting    .stat-icon-wrap { background: var(--color-warning-bg);    color: var(--color-warning); }
+.stat-card.radiology  .stat-icon-wrap { background: var(--color-success-bg);    color: var(--color-success); }
+.stat-card.labo       .stat-icon-wrap { background: var(--color-info-bg);       color: var(--color-info); }
+
+.stat-value {
+  font-size: 2rem; font-weight: 800;
+  font-family: var(--font-heading);
+  letter-spacing: -0.04em; line-height: 1;
+  color: #0f172a;
+}
+
+.stat-label {
+  font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: rgba(0,0,0,0.42); margin-top: 4px;
+}

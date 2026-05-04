@@ -1,0 +1,164 @@
+<div class="auth-layout">
+
+  <!-- ─── LEFT PANEL: brand storytelling ─── -->
+  <div class="auth-panel auth-panel--left" aria-hidden="true">
+    <div class="panel-overlay"></div>
+    <div class="panel-content">
+
+      <!-- Abstract medical cross shape (pure CSS, no SVG file) -->
+      <div class="brand-cross" aria-hidden="true">
+        <div class="cross-h"></div>
+        <div class="cross-v"></div>
+      </div>
+
+      <!-- Logo on left panel (white version) -->
+      <div class="brand-logo">
+        <span class="logo-health">Health</span><span class="logo-map">Map</span>
+      </div>
+      <p class="brand-tagline">Système d'Information Hospitalier</p>
+
+      <!-- Feature pills — reinforce trust signals -->
+      <div class="brand-features">
+        <div class="feature-pill">
+          <span class="pill-icon material-icons">verified_user</span>
+          <span>Données sécurisées HL7 FHIR</span>
+        </div>
+        <div class="feature-pill">
+          <span class="pill-icon material-icons">hub</span>
+          <span>Multi-établissements</span>
+        </div>
+        <div class="feature-pill">
+          <span class="pill-icon material-icons">monitor_heart</span>
+          <span>Surveillance en temps réel</span>
+        </div>
+      </div>
+
+      <!-- Bottom: institution name strip -->
+      <div class="panel-footer">
+        <span class="material-icons">local_hospital</span>
+        Ministère de la Santé — Algérie
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── RIGHT PANEL: form ─── -->
+  <div class="auth-panel auth-panel--right">
+    <div class="auth-form-wrapper">
+
+      <!-- Top-right: language hint (visual only) -->
+      <div class="lang-chip">
+        <span class="material-icons">translate</span>
+        FR
+      </div>
+
+      <!-- Form header -->
+      <div class="form-header">
+        <div class="form-logo">
+          <span class="logo-health">Health</span><span class="logo-map">Map</span>
+        </div>
+        <h1 class="form-title">Connexion</h1>
+        <p class="form-subtitle">Bienvenue. Identifiez-vous pour accéder à votre espace.</p>
+      </div>
+
+      <!-- Form body -->
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="auth-form" novalidate>
+
+        <!-- Username field -->
+        <div class="field-group">
+          <label class="field-label" for="username">Nom d'utilisateur</label>
+          <div class="field-input-wrap" [class.field-input-wrap--focus]="usernameFocused">
+            <span class="field-icon material-icons">person_outline</span>
+            <input
+              id="username"
+              class="field-input"
+              type="text"
+              [(ngModel)]="username"
+              name="username"
+              required
+              autocomplete="username"
+              placeholder="ex. dr.benali"
+              (focus)="usernameFocused = true"
+              (blur)="usernameFocused = false"
+              data-testid="input-username"
+            />
+          </div>
+        </div>
+
+        <!-- Password field -->
+        <div class="field-group">
+          <label class="field-label" for="password">Mot de passe</label>
+          <div class="field-input-wrap" [class.field-input-wrap--focus]="passwordFocused">
+            <span class="field-icon material-icons">lock_outline</span>
+            <input
+              id="password"
+              class="field-input"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="••••••••"
+              (focus)="passwordFocused = true"
+              (blur)="passwordFocused = false"
+              data-testid="input-password"
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="showPassword ? 'Masquer' : 'Afficher'"
+            >
+              <span class="material-icons">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error state -->
+        @if (error) {
+          <div class="auth-error" role="alert" data-testid="login-error">
+            <span class="material-icons">error_outline</span>
+            {{ error }}
+          </div>
+        }
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [class.submit-btn--loading]="loading"
+          [disabled]="loading || !username || !password"
+          data-testid="button-login"
+        >
+          @if (loading) {
+            <span class="btn-spinner material-icons">sync</span>
+          } @else {
+            <span class="material-icons">login</span>
+          }
+          <span>{{ loading ? 'Connexion...' : 'Se connecter' }}</span>
+        </button>
+
+        <!-- Forgot password (visual only, no route yet) -->
+        <div class="form-links">
+          <a class="link-muted" tabindex="0">Mot de passe oublié ?</a>
+        </div>
+
+      </form>
+
+      <!-- Demo credentials hint — click any chip to log in instantly -->
+      <div class="demo-hint">
+        <div class="hint-header">
+          <span class="material-icons">info_outline</span>
+          Comptes de démonstration
+        </div>
+        <div class="hint-grid">
+          <button type="button" class="hint-chip" (click)="fillDemo('Admin','root')"><strong>Admin</strong> / root</button>
+        </div>
+      </div>
+
+      <p class="version-line">Version 0.1.1 LTS — HealthMap</p>
+    </div>
+  </div>
+
+</div>

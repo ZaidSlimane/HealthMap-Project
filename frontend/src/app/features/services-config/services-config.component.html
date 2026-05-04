@@ -1,0 +1,124 @@
+<div class="svcfg-page">
+
+  <!-- ── Top Bar ── -->
+  <div class="top-bar">
+    <div class="page-title">
+      <span class="material-icons title-icon">medical_services</span>
+      <div>
+        <h1 class="section-title">Gestion des Services</h1>
+        <p class="text-muted">CHU Ibn Badis Constantine — {{ totalServices() }} services configurés</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="search-wrap">
+        <span class="material-icons">search</span>
+        <input type="text" placeholder="Rechercher un service…"
+          [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+        @if (searchQuery()) {
+          <button class="clear-btn" (click)="searchQuery.set('')">
+            <span class="material-icons">close</span>
+          </button>
+        }
+      </div>
+      <button class="btn-add" (click)="openAdd()">
+        <span class="material-icons">add</span>
+        Nouveau Service
+      </button>
+    </div>
+  </div>
+
+  <!-- ── KPI Strip ── -->
+  <div class="kpi-strip">
+    @for (k of kpiCards; track k.label) {
+      <div class="kpi-card" [style.background]="k.gradient">
+        <div class="kpi-left">
+          <span class="kpi-label">{{ k.label }}</span>
+          <span class="kpi-value">{{ k.value() }}</span>
+        </div>
+        <div class="kpi-right">
+          <span class="material-icons kpi-icon">{{ k.icon }}</span>
+          <svg class="sparkline" viewBox="0 0 56 24" fill="none">
+            <polyline
+              [attr.points]="sparklinePoints(k.sparkline)"
+              stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linejoin="round"
+              fill="none" />
+          </svg>
+        </div>
+      </div>
+    }
+    <div class="kpi-card kpi-card--occ">
+      <div class="kpi-left">
+        <span class="kpi-label">Occupation</span>
+        <span class="kpi-value">{{ globalOccPct() }}%</span>
+      </div>
+      <div class="kpi-right">
+        <span class="material-icons kpi-icon">person</span>
+        <div class="occ-mini-bar">
+          <div class="occ-mini-fill" [style.width.%]="globalOccPct()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Filter Chips ── -->
+  <div class="filter-row">
+    <button class="fchip" [class.active]="activeFilter() === 'TOUS'"
+      (click)="setFilter('TOUS')">Tous</button>
+    @for (t of allTypes; track t) {
+      <button class="fchip"
+        [class.active]="activeFilter() === t"
+        [style.border-color]="activeFilter() === t ? typeColor(t) : 'transparent'"
+        [style.background]="activeFilter() === t ? typeColor(t) : 'transparent'"
+        [style.color]="activeFilter() === t ? '#fff' : typeColor(t)"
+        (click)="setFilter(t)">
+        {{ t }}
+      </button>
+    }
+  </div>
+
+  <!-- ── Results info ── -->
+  <div class="results-info">
+    <span>{{ filteredServices().length }} service(s) affiché(s)</span>
+    @if (activeFilter() !== 'TOUS' || searchQuery()) {
+      <button class="clear-filter" (click)="setFilter('TOUS'); searchQuery.set('')">
+        <span class="material-icons">filter_alt_off</span>
+        Réinitialiser
+      </button>
+    }
+  </div>
+
+  <!-- ── Service Cards Grid ── -->
+  @if (filteredServices().length > 0) {
+    <div class="cards-grid">
+      @for (svc of filteredServices(); track svc.id) {
+        <hm-service-card
+          [service]="svc"
+          [userRole]="userRole"
+          (editClicked)="openEdit($event)"
+          (litsClicked)="openLits($event)"
+          (deleteClicked)="onDelete($event)"
+        />
+      }
+    </div>
+  } @else {
+    <div class="empty-page">
+      <span class="material-icons">search_off</span>
+      <h3>Aucun service trouvé</h3>
+      <p>Essayez de modifier votre recherche ou vos filtres</p>
+      <button class="btn-add" (click)="setFilter('TOUS'); searchQuery.set('')">
+        Afficher tous les services
+      </button>
+    </div>
+  }
+
+</div>
+
+<!-- ── Side Drawer ── -->
+<hm-service-drawer
+  [open]="drawerOpen()"
+  [mode]="drawerMode()"
+  [service]="selectedSvc()"
+  (saved)="onSave($event)"
+  (closed)="closeDrawer()"
+/>

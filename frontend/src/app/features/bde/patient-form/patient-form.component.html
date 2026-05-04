@@ -1,0 +1,184 @@
+<div class="pf-page page-fade-in">
+  <div class="pf-head">
+    <a routerLink="/bde/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon> Tableau de bord
+    </a>
+    <h1><mat-icon>person_add_alt</mat-icon> Ajouter un patient</h1>
+    <p class="sub">Création d'une fiche d'état civil et ouverture d'un nouveau dossier médical.</p>
+  </div>
+
+  <form (ngSubmit)="submit()" #f="ngForm" class="pf-form">
+
+    <!-- État civil -->
+    <section class="pf-section">
+      <header><mat-icon>badge</mat-icon><h2>État civil</h2></header>
+      <div class="grid">
+        <div class="field">
+          <label>Nom <span class="req">*</span></label>
+          <input [(ngModel)]="nomFr" name="nomFr" required data-testid="input-nom" />
+        </div>
+        <div class="field">
+          <label>Prénom <span class="req">*</span></label>
+          <input [(ngModel)]="prenomFr" name="prenomFr" required data-testid="input-prenom" />
+        </div>
+        <div class="field"><label>اللقب (Arabe)</label><input dir="rtl" [(ngModel)]="nomAr" name="nomAr" /></div>
+        <div class="field"><label>الإسم (Arabe)</label><input dir="rtl" [(ngModel)]="prenomAr" name="prenomAr" /></div>
+
+        <div class="field field--wide">
+          <label>NIN (18 chiffres)</label>
+          <div class="nin-row">
+            <input [(ngModel)]="nin" name="nin" maxlength="18" placeholder="ex. 198503150025001234" data-testid="input-nin" />
+            <button type="button" class="btn-ghost" (click)="rechercherNin()" data-testid="btn-nin-search">
+              <mat-icon>search</mat-icon> Recherche
+            </button>
+          </div>
+          @if (ninLookupMessage(); as nm) {
+            <span class="nin-msg" [attr.data-kind]="nm.kind" role="status" aria-live="polite">
+              <mat-icon>{{ nm.kind === 'ok' ? 'check_circle' : (nm.kind === 'none' ? 'info' : 'error_outline') }}</mat-icon>
+              {{ nm.text }}
+            </span>
+          } @else {
+            <span class="hint">Astuce : essayez un NIN du registre simulé (ex. 198503150025001234).</span>
+          }
+        </div>
+
+        <div class="field">
+          <label>Genre <span class="req">*</span></label>
+          <div class="radio-row">
+            <label class="radio"><input type="radio" name="genre" value="M" [(ngModel)]="genre" /> Homme</label>
+            <label class="radio"><input type="radio" name="genre" value="F" [(ngModel)]="genre" /> Femme</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Date de naissance <span class="req">*</span></label>
+          <input type="date" [(ngModel)]="dateNaissance" name="dateNaissance" required data-testid="input-dob" />
+        </div>
+        <div class="field"><label>Lieu de naissance</label><input [(ngModel)]="lieuNaissance" name="lieuNaissance" /></div>
+        <div class="field">
+          <label>Groupe sanguin</label>
+          <select [(ngModel)]="groupeSanguin" name="groupeSanguin">
+            <option value="">—</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Situation familiale</label>
+          <select [(ngModel)]="situation" name="situation">
+            <option value="">—</option>
+            <option>Célibataire</option><option>Marié(e)</option><option>Divorcé(e)</option><option>Veuf(ve)</option>
+          </select>
+        </div>
+        <div class="field"><label>Profession</label><input [(ngModel)]="profession" name="profession" /></div>
+        <div class="field"><label>Nationalité</label><input [(ngModel)]="nationalite" name="nationalite" /></div>
+      </div>
+    </section>
+
+    <!-- Filiation / Parental Information -->
+    <section class="pf-section">
+      <header><mat-icon>family_restroom</mat-icon><h2>Filiation</h2></header>
+      <p class="section-help">Informations relatives aux parents du patient (facultatives).</p>
+      <div class="grid">
+        <div class="field">
+          <label for="pereNom">Prénom du père</label>
+          <input id="pereNom" [(ngModel)]="pereNom" name="pereNom" data-testid="input-pere-nom" />
+        </div>
+        <div class="field">
+          <label for="pereNomAr">اسم الأب (بالعربية)</label>
+          <input id="pereNomAr" dir="rtl" [(ngModel)]="pereNomAr" name="pereNomAr" data-testid="input-pere-nom-ar" />
+        </div>
+        <div class="field">
+          <label for="mereNom">Prénom de la mère</label>
+          <input id="mereNom" [(ngModel)]="mereNom" name="mereNom" data-testid="input-mere-nom" />
+        </div>
+        <div class="field">
+          <label for="mereNomFille">Nom de jeune fille de la mère</label>
+          <input id="mereNomFille" [(ngModel)]="mereNomFille" name="mereNomFille" data-testid="input-mere-nom-fille" />
+        </div>
+        <div class="field">
+          <label for="mereNomAr">اسم الأم (بالعربية)</label>
+          <input id="mereNomAr" dir="rtl" [(ngModel)]="mereNomAr" name="mereNomAr" data-testid="input-mere-nom-ar" />
+        </div>
+        <div class="field">
+          <label for="mereNomFilleAr">لقب الأم قبل الزواج (بالعربية)</label>
+          <input id="mereNomFilleAr" dir="rtl" [(ngModel)]="mereNomFilleAr" name="mereNomFilleAr" data-testid="input-mere-nom-fille-ar" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Coordonnées -->
+    <section class="pf-section">
+      <header><mat-icon>place</mat-icon><h2>Coordonnées</h2></header>
+      <div class="grid">
+        <div class="field"><label>Téléphone</label><input [(ngModel)]="telephone" name="telephone" /></div>
+        <div class="field"><label>E-mail</label><input type="email" [(ngModel)]="email" name="email" /></div>
+        <div class="field field--wide"><label>Rue / Adresse</label><input [(ngModel)]="rue" name="rue" /></div>
+        <div class="field"><label>Ville</label><input [(ngModel)]="ville" name="ville" /></div>
+        <div class="field"><label>Wilaya</label><input [(ngModel)]="wilaya" name="wilaya" /></div>
+        <div class="field"><label>Code postal</label><input [(ngModel)]="codePostal" name="codePostal" /></div>
+      </div>
+    </section>
+
+    <!-- Pièce -->
+    <section class="pf-section">
+      <header><mat-icon>fingerprint</mat-icon><h2>Pièce d'identité</h2></header>
+      <div class="grid">
+        <div class="field">
+          <label>Type</label>
+          <select [(ngModel)]="pieceType" name="pieceType">
+            <option>CIN</option><option>Passeport</option><option>Permis</option>
+            <option>Acte de naissance</option><option>Autre</option>
+          </select>
+        </div>
+        <div class="field"><label>Numéro</label><input [(ngModel)]="pieceNumero" name="pieceNumero" /></div>
+      </div>
+    </section>
+
+    <!-- Optional: Accompagnant -->
+    <section class="pf-section pf-section--collapsible" [class.expanded]="showAccompagnant()">
+      <button type="button" class="collapsible-head" (click)="toggleAcc()" data-testid="toggle-accompagnant">
+        <mat-icon>person_add</mat-icon>
+        <h2>Accompagnant <span class="opt">(facultatif)</span></h2>
+        <mat-icon class="chev">{{ showAccompagnant() ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </button>
+      @if (showAccompagnant()) {
+        <div class="grid">
+          <div class="field"><label>Nom</label><input [(ngModel)]="accNom" name="accNom" /></div>
+          <div class="field"><label>Prénom</label><input [(ngModel)]="accPrenom" name="accPrenom" /></div>
+          <div class="field"><label>Lien</label><input [(ngModel)]="accLien" name="accLien" placeholder="ex. Conjoint, Fils..." /></div>
+          <div class="field"><label>Téléphone</label><input [(ngModel)]="accTel" name="accTel" /></div>
+        </div>
+      }
+    </section>
+
+    <!-- Optional: Contact d'urgence -->
+    <section class="pf-section pf-section--collapsible" [class.expanded]="showUrgence()">
+      <button type="button" class="collapsible-head" (click)="toggleUrg()" data-testid="toggle-urgence">
+        <mat-icon>emergency</mat-icon>
+        <h2>Contact d'urgence <span class="opt">(facultatif)</span></h2>
+        <mat-icon class="chev">{{ showUrgence() ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </button>
+      @if (showUrgence()) {
+        <div class="grid">
+          <div class="field"><label>Nom</label><input [(ngModel)]="urgNom" name="urgNom" /></div>
+          <div class="field"><label>Prénom</label><input [(ngModel)]="urgPrenom" name="urgPrenom" /></div>
+          <div class="field"><label>Lien</label><input [(ngModel)]="urgLien" name="urgLien" /></div>
+          <div class="field"><label>Téléphone</label><input [(ngModel)]="urgTel" name="urgTel" /></div>
+          <div class="field field--wide"><label>Adresse</label><input [(ngModel)]="urgAdr" name="urgAdr" /></div>
+        </div>
+      }
+    </section>
+
+    @if (errorMsg(); as err) {
+      <div class="alert-err"><mat-icon>error_outline</mat-icon>{{ err }}</div>
+    }
+
+    <div class="pf-actions">
+      <button type="button" class="btn-ghost" (click)="cancel()">Annuler</button>
+      <button type="submit" class="btn-primary" [disabled]="submitting()" data-testid="btn-submit-patient">
+        <mat-icon>check_circle</mat-icon>
+        {{ submitting() ? 'Création...' : 'Créer le patient & ouvrir le dossier' }}
+      </button>
+    </div>
+  </form>
+</div>

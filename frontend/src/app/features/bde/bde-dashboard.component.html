@@ -1,0 +1,171 @@
+<div class="bde-page page-fade-in">
+
+  <!-- Header -->
+  <div class="heading-row">
+    <div class="title-block">
+      <h1 class="page-title">Tableau de bord BDE</h1>
+      <p class="page-sub">Bureau Des Entrées · CHU Ibn Badis Constantine</p>
+    </div>
+    <span class="today-chip">
+      <mat-icon>event</mat-icon>{{ today }}
+    </span>
+    <a class="btn-primary" routerLink="/bde/patient/nouveau" data-testid="btn-new-patient">
+      <mat-icon>person_add_alt</mat-icon> Nouveau patient
+    </a>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="kpi-strip">
+    @for (k of kpis(); track k.label) {
+      <div class="kpi-card" [style.background]="k.gradient">
+        <div class="kpi-card__icon"><mat-icon>{{ k.icon }}</mat-icon></div>
+        <div class="kpi-card__body">
+          <div class="kpi-card__value">{{ k.value }}</div>
+          <div class="kpi-card__label">{{ k.label }}</div>
+          <div class="kpi-card__sub">{{ k.sub }}</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Chart + Donut row -->
+  <div class="two-col">
+    <div class="card chart-card">
+      <div class="card__header">
+        <h3><mat-icon>insights</mat-icon> Admissions — {{ chartView() }}</h3>
+        <div class="seg">
+          <button class="seg__btn" [class.active]="chartView()==='Quotidien'" (click)="setChartView('Quotidien')" data-testid="btn-chart-daily">Quotidien</button>
+          <button class="seg__btn" [class.active]="chartView()==='Mensuel'" (click)="setChartView('Mensuel')" data-testid="btn-chart-monthly">Mensuel</button>
+        </div>
+      </div>
+      <div class="chart-area">
+        <div class="chart-y-axis">
+          <span>{{ chartMax() }}</span>
+          <span>{{ (chartMax() / 2) | number:'1.0-0' }}</span>
+          <span>0</span>
+        </div>
+        <div class="chart-svg-wrap">
+          <svg class="chart-svg" [attr.viewBox]="'0 0 ' + chartViewBoxW + ' ' + chartViewBoxH"
+               preserveAspectRatio="none" role="img" aria-label="Courbe des admissions">
+            <defs>
+              <linearGradient id="bdeAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00BCD4" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#00BCD4" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            @if (chartAreaPath()) {
+              <path [attr.d]="chartAreaPath()" fill="url(#bdeAreaGradient)" />
+            }
+            @if (chartLinePath()) {
+              <path [attr.d]="chartLinePath()" fill="none" stroke="#00BCD4" stroke-width="2.5"
+                    stroke-linejoin="round" stroke-linecap="round" />
+            }
+            @for (p of chartPoints(); track p.label) {
+              <circle [attr.cx]="p.cx" [attr.cy]="p.cy" r="3.5" fill="#fff"
+                      stroke="#00BCD4" stroke-width="2">
+                <title>{{ p.label }} — {{ p.count }} admissions</title>
+              </circle>
+            }
+          </svg>
+          <div class="chart-x-axis">
+            @for (p of currentChart(); track p.label) {
+              <span class="chart-x-label">{{ p.label }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card donut-card">
+      <div class="card__header"><h3><mat-icon>donut_large</mat-icon> Répartition par genre</h3></div>
+      <div class="donut-wrap">
+        <div class="donut" [style.background]="donutBg()">
+          <div class="donut-hole">
+            <div class="donut-total">{{ genres().total }}</div>
+            <div class="donut-total-label">patients</div>
+          </div>
+        </div>
+        <ul class="donut-legend">
+          <li><span class="dot" style="background:#1E88E5"></span>Hommes <strong>{{ genres().M }}</strong></li>
+          <li><span class="dot" style="background:#EC407A"></span>Femmes <strong>{{ genres().F }}</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ce mois -->
+  <div class="card month-card" data-testid="card-this-month">
+    <div class="card__header">
+      <h3><mat-icon>calendar_month</mat-icon> Ce mois — {{ thisMonthLabel }}</h3>
+      <span class="month-total">{{ thisMonth().total }} admissions</span>
+    </div>
+    @if (thisMonth().total === 0) {
+      <p class="empty-line">Aucune admission enregistrée ce mois-ci.</p>
+    } @else {
+      <ul class="month-breakdown">
+        @for (r of thisMonthRows(); track r.key) {
+          <li>
+            <span class="m-icon" [style.background]="r.color + '1A'" [style.color]="r.color">
+              <mat-icon>{{ r.icon }}</mat-icon>
+            </span>
+            <div class="m-body">
+              <div class="m-row">
+                <span class="m-label">{{ r.label }}</span>
+                <span class="m-count">{{ r.count }}</span>
+              </div>
+              <div class="m-bar">
+                <div class="m-bar-fill"
+                     [style.width.%]="(r.count / thisMonthMaxCount()) * 100"
+                     [style.background]="r.color"></div>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <!-- État de sortie + Liste des patients quick-tiles -->
+  <div class="section-head">
+    <h2><mat-icon>assignment_turned_in</mat-icon> État de sortie</h2>
+    <span class="text-muted">Sélectionnez une catégorie pour filtrer la liste</span>
+  </div>
+
+  <div class="etat-grid">
+    <a class="etat-card etat-card--list" routerLink="/bde/patients" data-testid="card-liste-patients">
+      <div class="etat-card__icon" style="background:linear-gradient(135deg,#00BCD4,#0097A7);color:#fff;">
+        <mat-icon>list_alt</mat-icon>
+      </div>
+      <div class="etat-card__body">
+        <div class="etat-card__count">{{ patientCount() }}</div>
+        <div class="etat-card__label">Liste des patients</div>
+      </div>
+      <mat-icon class="etat-card__arrow">chevron_right</mat-icon>
+    </a>
+
+    @for (t of sortieTiles(); track t.label) {
+      <a class="etat-card" [routerLink]="t.link" [attr.data-testid]="t.testId">
+        <div class="etat-card__icon" [style.background]="t.color + '1A'" [style.color]="t.color">
+          <mat-icon>{{ t.icon }}</mat-icon>
+        </div>
+        <div class="etat-card__body">
+          <div class="etat-card__count">{{ t.count }}</div>
+          <div class="etat-card__label">{{ t.label }}</div>
+        </div>
+        <mat-icon class="etat-card__arrow">chevron_right</mat-icon>
+      </a>
+    }
+  </div>
+
+  <!-- Quick links -->
+  <div class="quick-links">
+    <a routerLink="/admin/services" class="ql-card">
+      <mat-icon>medical_services</mat-icon>
+      <div>
+        <strong>Gestion des services & lits</strong>
+        <span>Configurer les unités, salles et lits</span>
+      </div>
+    </a>
+  </div>
+
+</div>

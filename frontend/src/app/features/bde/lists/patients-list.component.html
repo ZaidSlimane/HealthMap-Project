@@ -1,0 +1,146 @@
+<div class="pl-page page-fade-in">
+
+  <div class="pl-head">
+    <a routerLink="/bde/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon> Tableau de bord
+    </a>
+    <div class="title-row">
+      <div class="title-icon"><mat-icon>{{ icon() }}</mat-icon></div>
+      <div>
+        <h1>{{ title() }}</h1>
+        <p class="sub">{{ rows().length }} patient(s)</p>
+      </div>
+      <a class="btn-primary" routerLink="/bde/patient/nouveau" data-testid="btn-toolbar-new">
+        <mat-icon>person_add_alt</mat-icon> Nouvelle Admission
+      </a>
+    </div>
+  </div>
+
+  <div class="pl-grid" [class.has-aside]="mode()==='admis'">
+
+    <div class="pl-card">
+      <div class="pl-toolbar">
+        <div class="search">
+          <mat-icon>search</mat-icon>
+          <input [ngModel]="searchTerm()" (ngModelChange)="setSearch($event)"
+                 placeholder="Rechercher par nom, dossier, service..."
+                 data-testid="input-search" />
+        </div>
+        @if (mode()==='admis') {
+          <div class="toolbar-actions">
+            <a class="btn-ghost" routerLink="/bde/patients" data-testid="btn-toolbar-all">
+              <mat-icon>list_alt</mat-icon> Toutes les admissions
+            </a>
+            <button class="btn-ghost" type="button" (click)="toggleFilters()" data-testid="btn-toolbar-filter">
+              <mat-icon>filter_alt</mat-icon> Filtrer
+            </button>
+            <button class="btn-ghost" type="button" (click)="imprimerListe()" data-testid="btn-toolbar-print">
+              <mat-icon>print</mat-icon> Imprimer
+            </button>
+          </div>
+        }
+      </div>
+
+      @if (mode()==='admis' && showFilters()) {
+        <div class="filter-row">
+          <span class="filter-label">Mode :</span>
+          @for (opt of modeOptions; track opt) {
+            <button class="chip" [class.active]="modeFilter()===opt"
+                    (click)="setModeFilter(opt)" type="button">
+              {{ opt === 'ALL' ? 'Tous' : opt }}
+            </button>
+          }
+        </div>
+      }
+
+      <table class="pl-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Dossier</th>
+            <th>Nom &amp; prénom</th>
+            <th>Né(e) le</th>
+            <th>Genre</th>
+            <th>Téléphone</th>
+            <th>Service</th>
+            <th>État</th>
+            <th class="action-col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (pagedRows().length === 0) {
+            <tr><td colspan="9" class="empty-row">
+              <mat-icon>inbox</mat-icon>
+              Aucun patient correspondant
+            </td></tr>
+          } @else {
+            @for (r of pagedRows(); track r.p.id; let i = $index) {
+              <tr (click)="open(r.p.id)" class="data-row">
+                <td>{{ (currentPage()-1) * pageSize + i + 1 }}</td>
+                <td><span class="dossier-pill">{{ r.p.dossierId }}</span></td>
+                <td>
+                  <strong>{{ r.p.nomFr | uppercase }} {{ r.p.prenomFr }}</strong>
+                  @if (r.p.nomAr) { <span class="ar" dir="rtl">{{ r.p.nomAr }} {{ r.p.prenomAr }}</span> }
+                </td>
+                <td>{{ r.p.dateNaissance | date:'dd/MM/yyyy' }}</td>
+                <td><span class="g-pill" [class.f]="r.p.genre==='F'">{{ r.p.genre }}</span></td>
+                <td>{{ r.p.telephone || '—' }}</td>
+                <td>{{ r.lastAdm?.service || '—' }}</td>
+                <td>
+                  @if (r.lastAdm; as a) {
+                    <span class="t-pill" [style.background]="meta[a.etatSortie].color + '1A'" [style.color]="meta[a.etatSortie].color">
+                      <mat-icon>{{ meta[a.etatSortie].icon }}</mat-icon>{{ meta[a.etatSortie].label }}
+                    </span>
+                  } @else {
+                    <span class="t-pill" style="background:#f1f5f9;color:#64748b;">
+                      <mat-icon>info</mat-icon>Aucun parcours
+                    </span>
+                  }
+                </td>
+                <td class="action-col" (click)="$event.stopPropagation()">
+                  <button class="btn-link" (click)="open(r.p.id)" data-testid="btn-open-dossier">
+                    <mat-icon>folder_open</mat-icon> Dossier
+                  </button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+
+      <div class="pl-pager">
+        <span class="muted" aria-live="polite">Page {{ currentPage() }} / {{ totalPages() }} — {{ rows().length }} résultat(s)</span>
+        <div class="pager-btns">
+          <button class="btn-ghost" type="button" (click)="prevPage()" [disabled]="currentPage()<=1" data-testid="btn-prev-page">
+            <mat-icon>chevron_left</mat-icon> Précédent
+          </button>
+          <button class="btn-ghost" type="button" (click)="nextPage()" [disabled]="currentPage()>=totalPages()" data-testid="btn-next-page">
+            Suivant <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    @if (mode()==='admis') {
+      <aside class="pl-aside">
+        <div class="aside-card">
+          <h3><mat-icon>donut_large</mat-icon> Répartition par genre</h3>
+          <div class="donut-wrap">
+            <div class="donut" [style.background]="donutBg()">
+              <div class="donut-hole">
+                <strong>{{ genreBreakdown().total }}</strong>
+                <span>admis</span>
+              </div>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><span class="dot" style="background:#1E88E5"></span> Hommes <strong>{{ genreBreakdown().m }}</strong></li>
+            <li><span class="dot" style="background:#EC407A"></span> Femmes <strong>{{ genreBreakdown().f }}</strong></li>
+          </ul>
+        </div>
+      </aside>
+    }
+
+  </div>
+
+</div>

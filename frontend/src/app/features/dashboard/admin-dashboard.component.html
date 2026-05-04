@@ -1,0 +1,157 @@
+<div class="dashboard-page page-fade-in">
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="heading-row">
+    <h1 class="page-title">Tableau de bord</h1>
+    <span class="role-chip">Super admin</span>
+    <span class="today-chip">
+      <mat-icon>event</mat-icon>
+      {{ today }}
+    </span>
+  </div>
+
+  <!-- ── 5-KPI Hospital strip ──────────────────────────────── -->
+  <div class="kpi-strip">
+    @for (k of hospitalKpis(); track k.label) {
+      <div class="kpi-card" [style.background]="k.gradient">
+        <div class="kpi-card__icon">
+          <mat-icon>{{ k.icon }}</mat-icon>
+        </div>
+        <div class="kpi-card__body">
+          <div class="kpi-card__value">{{ k.value }}</div>
+          <div class="kpi-card__label">{{ k.label }}</div>
+          <div class="kpi-card__sub">{{ k.sub }}</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ── Map + Metrics box ─────────────────────────────────── -->
+  <div class="map-card">
+    <div class="map-card__header">
+      <h3>
+        <mat-icon>map</mat-icon>
+        Carte du CHU — Vue temps réel
+      </h3>
+      <a routerLink="/carte" class="map-card__link">
+        Plein écran
+        <mat-icon>open_in_new</mat-icon>
+      </a>
+    </div>
+
+    <div class="map-card__body">
+      <div class="map-card__map">
+        <hm-campus-map [compact]="true"></hm-campus-map>
+      </div>
+
+      <aside class="map-card__metrics">
+        <div class="metric">
+          <div class="metric__label">Services actifs</div>
+          <div class="metric__value">
+            {{ activeServices() }}<span class="metric__sub">/{{ servicesCount() }}</span>
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric__label">Lits totaux</div>
+          <div class="metric__value">{{ totalBeds() }}</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric__label">Lits occupés</div>
+          <div class="metric__value">
+            {{ occupiedBeds() }}<span class="metric__sub">/{{ totalBeds() }}</span>
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric__label">Lits libres</div>
+          <div class="metric__value metric__value--ok">{{ freeBeds() }}</div>
+        </div>
+
+        <div class="metric metric--bar">
+          <div class="metric__label">Taux d'occupation</div>
+          <div class="metric__value">{{ occupancyPct() }}%</div>
+          <div class="metric__bar">
+            <div class="metric__bar-fill"
+              [class.metric__bar-fill--warn]="occupancyPct() >= 60 && occupancyPct() < 90"
+              [class.metric__bar-fill--danger]="occupancyPct() >= 90"
+              [style.width.%]="occupancyPct()"></div>
+          </div>
+        </div>
+
+        <div class="metric metric--alert">
+          <div class="metric__label">Alertes critiques</div>
+          <div class="metric__value">{{ criticalAlerts }}</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ── Chart card with view toggle ───────────────────────── -->
+  <div class="chart-card">
+    <div class="chart-card-header">
+      <h3>
+        <mat-icon>{{ chartView === 'today' ? 'today' : 'bar_chart' }}</mat-icon>
+        {{ chartView === 'today' ? "Activité d'aujourd'hui" : 'Résumé des 10 derniers jours' }}
+      </h3>
+
+      <div class="view-toggle">
+        <button class="view-toggle__btn"
+          [class.active]="chartView === 'history'"
+          (click)="setChartView('history')">
+          10 derniers jours
+        </button>
+        <button class="view-toggle__btn"
+          [class.active]="chartView === 'today'"
+          (click)="setChartView('today')">
+          Aujourd'hui
+        </button>
+      </div>
+    </div>
+
+    @if (chartView === 'history') {
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#00BCD4"></span>Admissions</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#43A047"></span>Radiologie</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1E88E5"></span>Labo</span>
+        <span class="chart-date-range">07/12/2022 — 16/12/2022</span>
+      </div>
+      <div class="chart-body">
+        <div class="chart-area">
+          <div class="chart-y-axis">
+            <span>1</span>
+            <span>0</span>
+          </div>
+          <div class="chart-bars-container">
+            @for (point of chartData; track point.date) {
+              <div class="chart-group">
+                <div class="bar-group">
+                  <div class="bar bar-admissions" [style.height.px]="barHeight(point.admissions)"></div>
+                  <div class="bar bar-radiologie" [style.height.px]="barHeight(point.radiologie)"></div>
+                  <div class="bar bar-labo"       [style.height.px]="barHeight(point.labo)"></div>
+                </div>
+                <span class="bar-label">{{ point.date }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="today-grid">
+        @for (stat of todaysStats; track stat.label) {
+          <div class="stat-card" [class]="stat.cls">
+            <div class="stat-icon-wrap">
+              <mat-icon>{{ stat.icon }}</mat-icon>
+            </div>
+            <div>
+              <div class="stat-value">{{ stat.value }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+</div>

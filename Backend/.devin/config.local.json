@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Exec(ls)",
+      "Exec(cat)",
+      "Exec(find)",
+      "Exec(mkdir)",
+      "Exec(node)",
+      "Exec(head)",
+      "Exec(rm)",
+      "Exec(docker compose)",
+      "Exec(docker ps)",
+      "Exec(docker exec)",
+      "Exec(curl)",
+      "Exec(grep)",
+      "Exec(php)"
+    ]
+  }
+}

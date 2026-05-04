@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSE_FILE = '/opt/healthmap/production/docker-compose.yml'
+        DEPLOY_PATH  = '/opt/healthmap/production'
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh "cp -r ${WORKSPACE}/Backend/. ${DEPLOY_PATH}/Backend/"
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose build --no-cache app"
+            }
+        }
+
+        stage('Restart Services') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose up -d --force-recreate app nginx"
+            }
+        }
+
+        stage('Composer Install') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose exec -T app composer install --no-interaction --optimize-autoloader"
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose exec -T app php artisan migrate --force"
+            }
+        }
+
+        stage('Cache Config') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose exec -T app php artisan config:cache"
+                sh "cd ${DEPLOY_PATH} && docker compose exec -T app php artisan route:cache"
+                sh "cd ${DEPLOY_PATH} && docker compose exec -T app php artisan view:cache"
+            }
+        }
+    }
+
+    post {
+        success { echo 'Backend deployed successfully.' }
+        failure {
+            sh "cd ${DEPLOY_PATH} && docker compose logs app --tail=50"
+        }
+    }
+}

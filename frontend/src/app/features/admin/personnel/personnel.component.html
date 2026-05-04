@@ -1,0 +1,300 @@
+<div class="personnel-page">
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Personnel & Utilisateurs</h1>
+      <p class="page-sub">Gestion du personnel hospitalier, des comptes utilisateurs et des grades.</p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <div class="banner banner--error" role="alert">
+      <mat-icon>error_outline</mat-icon>{{ errorMessage() }}
+    </div>
+  }
+  @if (successMessage()) {
+    <div class="banner banner--success" role="status">
+      <mat-icon>check_circle</mat-icon>{{ successMessage() }}
+    </div>
+  }
+
+  <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="onTabChange($event)" animationDuration="120ms">
+
+    <!-- ─────────────────── TAB 0 — PERSONNEL ─────────────────── -->
+    <mat-tab label="Personnel">
+      <section class="tab-body">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <mat-icon>search</mat-icon>
+            <input
+              type="search"
+              placeholder="Rechercher par matricule, nom, prénom…"
+              [(ngModel)]="personnelSearch"
+              (keydown.enter)="refreshPersonnel()"
+            />
+          </div>
+          <button class="btn-primary" type="button" (click)="startCreatePersonnel()">
+            <mat-icon>person_add_alt</mat-icon> Ajouter
+          </button>
+        </div>
+
+        @if (loadingPersonnel()) {
+          <p class="muted">Chargement…</p>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Nom (ar)</th>
+                  <th>Prénom (ar)</th>
+                  <th>Poste</th>
+                  <th>Consultation</th>
+                  <th>Service</th>
+                  <th class="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of personnel(); track p.id) {
+                  <tr>
+                    <td>{{ p.matricule || '—' }}</td>
+                    <td>{{ p.name || '—' }}</td>
+                    <td>{{ p.first_name || '—' }}</td>
+                    <td dir="rtl">{{ p.name_ar || '—' }}</td>
+                    <td dir="rtl">{{ p.first_name_ar || '—' }}</td>
+                    <td>{{ posteLabel(p.poste_id) }}</td>
+                    <td>
+                      @if (p.is_consultant) { <mat-icon class="ic-yes">check_circle</mat-icon> }
+                      @else { <mat-icon class="ic-no">remove</mat-icon> }
+                    </td>
+                    <td>{{ serviceLabel(p.service_id) }}</td>
+                    <td class="actions-col">
+                      @if (!p.username) {
+                        <button class="ic-btn" type="button" matTooltip="Promouvoir en utilisateur" (click)="promoteToUser(p)">
+                          <mat-icon>vpn_key</mat-icon>
+                        </button>
+                      }
+                      <button class="ic-btn" type="button" matTooltip="Modifier" (click)="startEditPersonnel(p)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button class="ic-btn ic-btn--danger" type="button" matTooltip="Supprimer" (click)="deletePersonnel(p)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (personnel().length === 0) {
+                  <tr><td colspan="9" class="empty">Aucun personnel enregistré.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        <!-- Inline create/edit drawer -->
+        @if (editingPersonnel(); as draft) {
+          <div class="drawer">
+            <h3>{{ draft.id ? 'Modifier' : 'Ajouter' }} un personnel</h3>
+            <div class="grid">
+              <label>Matricule
+                <input type="text" [ngModel]="draft.matricule" (ngModelChange)="patchPersonnel('matricule', $event)" />
+              </label>
+              <label>Nom
+                <input type="text" [ngModel]="draft.name" (ngModelChange)="patchPersonnel('name', $event)" />
+              </label>
+              <label>Prénom
+                <input type="text" [ngModel]="draft.first_name" (ngModelChange)="patchPersonnel('first_name', $event)" />
+              </label>
+              <label>Nom (اللقب)
+                <input dir="rtl" type="text" [ngModel]="draft.name_ar" (ngModelChange)="patchPersonnel('name_ar', $event)" />
+              </label>
+              <label>Prénom (الاسم)
+                <input dir="rtl" type="text" [ngModel]="draft.first_name_ar" (ngModelChange)="patchPersonnel('first_name_ar', $event)" />
+              </label>
+              <label>Poste
+                <select [ngModel]="draft.poste_id" (ngModelChange)="patchPersonnel('poste_id', $event ?? null)">
+                  <option [ngValue]="null">— Aucun —</option>
+                  @for (p of postes(); track p.id) { <option [ngValue]="p.id">{{ p.label }}</option> }
+                </select>
+              </label>
+              <label>Service
+                <select [ngModel]="draft.service_id" (ngModelChange)="patchPersonnel('service_id', $event ?? null)">
+                  <option [ngValue]="null">— Aucun —</option>
+                  @for (s of services(); track s.id) { <option [ngValue]="s.id">{{ s.name }}</option> }
+                </select>
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" [ngModel]="draft.is_consultant" (ngModelChange)="patchPersonnel('is_consultant', $event)" />
+                Consultation
+              </label>
+            </div>
+            <div class="drawer-actions">
+              <button type="button" class="btn-secondary" (click)="cancelEditPersonnel()">Annuler</button>
+              <button type="button" class="btn-primary" (click)="savePersonnel()">Enregistrer</button>
+            </div>
+          </div>
+        }
+      </section>
+    </mat-tab>
+
+    <!-- ─────────────────── TAB 1 — UTILISATEURS ─────────────────── -->
+    <mat-tab label="Utilisateurs">
+      <section class="tab-body">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <mat-icon>search</mat-icon>
+            <input
+              type="search"
+              placeholder="Rechercher par nom d'utilisateur, nom…"
+              [(ngModel)]="userSearch"
+              (keydown.enter)="refreshUsers()"
+            />
+          </div>
+          <p class="muted small">Pour ajouter un utilisateur, utilisez l'icône <mat-icon class="inline-ic">vpn_key</mat-icon> sur un personnel.</p>
+        </div>
+
+        @if (loadingUsers()) {
+          <p class="muted">Chargement…</p>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom d'utilisateur</th>
+                  <th>Mot de passe</th>
+                  <th>Groupe</th>
+                  <th>Nom & Prénom</th>
+                  <th>En ligne</th>
+                  <th class="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (u of users(); track u.id) {
+                  <tr [class.row-inactive]="!u.is_active">
+                    <td><strong>{{ u.username }}</strong></td>
+                    <td><span class="pw-mask">••••••••</span></td>
+                    <td>{{ rolesLabel(u.roles) }}</td>
+                    <td>{{ fullName(u) }}</td>
+                    <td>
+                      <span class="online-pill" [class.online-pill--on]="isOnline(u)">
+                        <span class="dot"></span>
+                        {{ isOnline(u) ? 'En ligne' : 'Hors ligne' }}
+                      </span>
+                    </td>
+                    <td class="actions-col">
+                      <button class="ic-btn" type="button" matTooltip="Modifier les identifiants" (click)="startEditCredentials(u)">
+                        <mat-icon>key</mat-icon>
+                      </button>
+                      <button class="ic-btn" type="button" [matTooltip]="u.is_active ? 'Désactiver' : 'Activer'" (click)="toggleActive(u)">
+                        <mat-icon>{{ u.is_active ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                      </button>
+                      <button class="ic-btn ic-btn--danger" type="button" matTooltip="Révoquer l'accès" (click)="revokeCredentials(u)">
+                        <mat-icon>block</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (users().length === 0) {
+                  <tr><td colspan="6" class="empty">Aucun utilisateur. Promouvez un personnel depuis l'onglet Personnel.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        <!-- Credential drawer -->
+        @if (credentialDraft(); as cd) {
+          <div class="drawer">
+            <h3>Identifiants</h3>
+            <div class="grid">
+              <label>Nom d'utilisateur
+                <input type="text" [ngModel]="cd.username" (ngModelChange)="patchCredential('username', $event)" />
+              </label>
+              <label>Mot de passe (min. 8)
+                <input type="password" [ngModel]="cd.password" (ngModelChange)="patchCredential('password', $event)" autocomplete="new-password" />
+              </label>
+              <div class="full">
+                <span class="label-text">Groupes</span>
+                <div class="role-chips">
+                  @for (r of roles(); track r.id) {
+                    <button type="button" class="chip" [class.chip--on]="isRoleInDraft(r.id)" (click)="toggleRoleInDraft(r.id)">
+                      {{ r.role }}
+                    </button>
+                  }
+                  @if (roles().length === 0) { <span class="muted">Aucun groupe disponible.</span> }
+                </div>
+              </div>
+            </div>
+            <div class="drawer-actions">
+              <button type="button" class="btn-secondary" (click)="cancelCredentials()">Annuler</button>
+              <button type="button" class="btn-primary" (click)="saveCredentials()">Enregistrer</button>
+            </div>
+          </div>
+        }
+      </section>
+    </mat-tab>
+
+    <!-- ─────────────────── TAB 2 — GRADES (POSTES) ─────────────────── -->
+    <mat-tab label="Grades">
+      <section class="tab-body">
+        <div class="toolbar">
+          <p class="muted">Liste des postes / grades disponibles dans l'établissement.</p>
+          <button class="btn-primary" type="button" (click)="startCreatePoste()">
+            <mat-icon>add</mat-icon> Ajouter un poste
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Poste</th>
+                <th>Poste (ar)</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of postes(); track p.id) {
+                <tr>
+                  <td>{{ p.label }}</td>
+                  <td dir="rtl">{{ p.label_ar || '—' }}</td>
+                  <td class="actions-col">
+                    <button class="ic-btn" type="button" matTooltip="Modifier" (click)="startEditPoste(p)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button class="ic-btn ic-btn--danger" type="button" matTooltip="Supprimer" (click)="deletePoste(p)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (postes().length === 0) {
+                <tr><td colspan="3" class="empty">Aucun poste configuré.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (editingPoste(); as draft) {
+          <div class="drawer">
+            <h3>{{ draft.id ? 'Modifier' : 'Ajouter' }} un poste</h3>
+            <div class="grid">
+              <label>Poste
+                <input type="text" [ngModel]="draft.label" (ngModelChange)="patchPoste('label', $event)" />
+              </label>
+              <label>Poste (arabe)
+                <input dir="rtl" type="text" [ngModel]="draft.label_ar" (ngModelChange)="patchPoste('label_ar', $event)" />
+              </label>
+            </div>
+            <div class="drawer-actions">
+              <button type="button" class="btn-secondary" (click)="cancelEditPoste()">Annuler</button>
+              <button type="button" class="btn-primary" (click)="savePoste()">Enregistrer</button>
+            </div>
+          </div>
+        }
+      </section>
+    </mat-tab>
+  </mat-tab-group>
+</div>

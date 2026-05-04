@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSE_FILE = '/opt/healthmap/production/docker-compose.yml'
+        DEPLOY_PATH  = '/opt/healthmap/production'
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh "cp -r ${WORKSPACE}/frontend/. ${DEPLOY_PATH}/frontend/"
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose build --no-cache frontend"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "cd ${DEPLOY_PATH} && docker compose up -d --force-recreate frontend"
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh "sleep 5 && curl --fail http://localhost:3100 || exit 1"
+            }
+        }
+    }
+
+    post {
+        success { echo 'Frontend deployed successfully.' }
+        failure {
+            sh "cd ${DEPLOY_PATH} && docker compose logs frontend --tail=30"
+        }
+    }
+}

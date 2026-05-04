@@ -1,0 +1,42 @@
+<header class="app-header">
+  <button class="hamburger-btn" (click)="toggleSidebar.emit()" title="Ouvrir/Fermer le menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <button class="search-btn">
+    <mat-icon>search</mat-icon>
+    <span>Rechercher...</span>
+  </button>
+
+  <div class="header-spacer"></div>
+
+  <span class="header-clock">{{ currentTime }}</span>
+
+  <button class="notif-btn" title="Notifications système">
+    <mat-icon>notifications</mat-icon>
+    <span class="notif-badge">2</span>
+  </button>
+
+  <button class="notif-btn" title="Alertes patients">
+    <mat-icon>notification_important</mat-icon>
+    <span class="notif-badge">5</span>
+  </button>
+
+  <button class="notif-btn" title="Alertes administratives">
+    <mat-icon>notifications_active</mat-icon>
+    <span class="notif-badge">8</span>
+  </button>
+
+  <button class="notif-btn" title="Messages">
+    <mat-icon>mail</mat-icon>
+    <span class="notif-badge notif-badge-accent">3</span>
+  </button>
+
+  <div class="user-section">
+    <div class="user-avatar">{{ (auth.currentUser()?.name || 'U')[0].toUpperCase() }}</div>
+    <span class="username-chip">{{ auth.currentUser()?.name }}</span>
+    <button class="logout-btn" (click)="logout()" title="Déconnexion">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</header>

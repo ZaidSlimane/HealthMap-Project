@@ -1,0 +1,295 @@
+<!-- Backdrop -->
+@if (open) {
+  <div class="drawer-backdrop" (click)="close()"></div>
+}
+
+<!-- Panel -->
+<div class="drawer-panel" [class.open]="open">
+
+  <!-- ── Drawer Header ── -->
+  <div class="drawer-header" [style.border-left-color]="typeColor">
+    <div>
+      <span class="drawer-mode-badge">{{ mode === 'ADD' ? '+ Nouveau' : '✎ Éditer' }}</span>
+      <h2 class="drawer-title">
+        {{ mode === 'ADD' ? 'Nouveau service' : (form().name || 'Service') }}
+      </h2>
+    </div>
+    <button class="close-btn" (click)="close()">
+      <span class="material-icons">close</span>
+    </button>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'general'" (click)="setTab('general')">
+      <span class="material-icons">info</span> Général
+    </button>
+    <button class="tab" [class.active]="activeTab() === 'unites'" (click)="setTab('unites')">
+      <span class="material-icons">domain</span> Unités
+      <span class="tab-count">{{ unites().length }}</span>
+    </button>
+    <button class="tab" [class.active]="activeTab() === 'salles'" (click)="setTab('salles')">
+      <span class="material-icons">bed</span> Salles & Lits
+    </button>
+  </div>
+
+  <!-- ── Body ── -->
+  <div class="drawer-body">
+
+    <!-- TAB 1 — Général -->
+    @if (activeTab() === 'general') {
+      <div class="tab-content">
+
+        <div class="form-group">
+          <label>Nom du service <span class="req">*</span></label>
+          <input type="text" [ngModel]="form().name" (ngModelChange)="patchForm('name', $event)"
+            placeholder="ex: CHIRURGIE MAXILLO FACIALE" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Type de service <span class="req">*</span></label>
+            <select [ngModel]="form().type" (ngModelChange)="patchForm('type', $event)">
+              @for (t of allTypes; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Code carte <span class="req">*</span></label>
+            <input type="number" min="1" max="99"
+              [ngModel]="form().code" (ngModelChange)="patchForm('code', $event)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Médecin Chef <span class="req">*</span></label>
+          <input type="text" [ngModel]="chefNom()" (ngModelChange)="chefNom.set($event)"
+            placeholder="ex: Pr. Brahimi" />
+        </div>
+
+        <div class="form-group">
+          <label>Coordinateur</label>
+          <input type="text" [ngModel]="coordinateurNom()"
+            (ngModelChange)="coordinateurNom.set($event)"
+            placeholder="Nom du coordinateur" />
+        </div>
+
+        <div class="form-group">
+          <label>Statut</label>
+          <div class="toggle-wrap">
+            <label class="toggle-label">
+              <input type="checkbox" class="toggle-input"
+                [ngModel]="actif()" (ngModelChange)="actif.set($event)" />
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="toggle-text">{{ actif() ? 'Actif' : 'Inactif' }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="type-preview" [style.border-color]="typeColor" [style.background]="typeColor + '11'">
+          <span class="type-preview-dot" [style.background]="typeColor"></span>
+          <span [style.color]="typeColor" style="font-weight:700;font-size:12px">{{ form().type }}</span>
+          <span style="color:#9CA3AF;font-size:11px">— Couleur sur la carte</span>
+        </div>
+
+      </div>
+    }
+
+    <!-- TAB 2 — Unités -->
+    @if (activeTab() === 'unites') {
+      <div class="tab-content">
+
+        @if (unites().length === 0) {
+          <div class="empty-state">
+            <span class="material-icons">domain_disabled</span>
+            <p>Aucune unité configurée</p>
+          </div>
+        }
+
+        @for (u of unites(); track u.id) {
+          <div class="unit-row" [class.editing]="editingUnitId() === u.id">
+            @if (editingUnitId() === u.id) {
+              <div class="unit-edit-form">
+                <input #editNom [value]="u.name" style="flex:1" />
+                <select #editType [value]="u.unit_type">
+                  @for (t of allUnitTypes; track t) {
+                    <option [value]="t" [selected]="t === u.unit_type">{{ t }}</option>
+                  }
+                </select>
+                <button class="icon-btn icon-btn--green"
+                  (click)="saveEditUnit(u, editNom.value, $any(editType.value))">
+                  <span class="material-icons">check</span>
+                </button>
+                <button class="icon-btn" (click)="editingUnitId.set(null)">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+            } @else {
+              <div class="unit-dot" [style.background]="uniteTypeColor(u)"></div>
+              <div class="unit-info">
+                <span class="unit-nom">{{ u.name }}</span>
+                <span class="unit-type">{{ u.unit_type }}</span>
+              </div>
+              <span class="unit-stats">
+                {{ u.rooms.length }} salle(s) · {{ totalLitsUnite(u) }} lits
+              </span>
+              <button class="icon-btn" (click)="startEditUnit(u)">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="icon-btn icon-btn--red" (click)="deleteUnit(u.id)">
+                <span class="material-icons">delete</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (showAddUnit()) {
+          <div class="add-unit-form">
+            <input type="text" placeholder="Nom de l'unité"
+              [ngModel]="newUnitNom()" (ngModelChange)="newUnitNom.set($event)" />
+            <select [ngModel]="newUnitType()" (ngModelChange)="newUnitType.set($event)">
+              @for (t of allUnitTypes; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+            <div class="form-row-gap">
+              <button class="btn-primary-sm" (click)="addUnit()">
+                <span class="material-icons">add</span> Ajouter
+              </button>
+              <button class="btn-ghost-sm" (click)="showAddUnit.set(false)">Annuler</button>
+            </div>
+          </div>
+        } @else {
+          <button class="add-item-btn" (click)="showAddUnit.set(true)">
+            <span class="material-icons">add_circle</span>
+            Ajouter une unité
+          </button>
+        }
+
+      </div>
+    }
+
+    <!-- TAB 3 — Salles & Lits -->
+    @if (activeTab() === 'salles') {
+      <div class="tab-content">
+
+        @if (unites().length === 0) {
+          <div class="empty-state">
+            <span class="material-icons">error_outline</span>
+            <p>Créez d'abord des unités dans l'onglet Unités</p>
+          </div>
+        } @else {
+          <div class="form-group">
+            <label>Sélectionner une unité</label>
+            <select [ngModel]="selectedUniteId()" (ngModelChange)="selectedUniteId.set($event)">
+              @for (u of unites(); track u.id) {
+                <option [value]="u.id">{{ u.name }} ({{ u.rooms.length }} salle(s))</option>
+              }
+            </select>
+          </div>
+
+          @if (selectedUnite()) {
+            <div class="salles-list">
+              @for (s of selectedUnite()!.rooms; track s.id; let i = $index) {
+                <div class="salle-card">
+                  <div class="salle-header">
+                    <div class="salle-info">
+                      <span class="material-icons salle-icon">meeting_room</span>
+                      <strong>{{ s.name }}</strong>
+                      <span class="salle-type-badge">{{ s.type }}</span>
+                    </div>
+                    <div class="salle-actions">
+                      <div class="cap-control">
+                        <button (click)="updateSalleCapacite(s.id, s.capacity - 1)">
+                          <span class="material-icons">remove</span>
+                        </button>
+                        <span class="cap-val">{{ s.capacity }} lits</span>
+                        <button (click)="updateSalleCapacite(s.id, s.capacity + 1)">
+                          <span class="material-icons">add</span>
+                        </button>
+                      </div>
+                      <button class="icon-btn icon-btn--red" (click)="deleteSalle(s.id)">
+                        <span class="material-icons">delete</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="lits-grid">
+                    @for (l of s.beds; track l.id) {
+                      <button class="lit-chip"
+                        [style.background]="litColor(l.status) + '22'"
+                        [style.border-color]="litColor(l.status)"
+                        [style.color]="litColor(l.status)"
+                        [title]="l.status"
+                        (click)="toggleLitStatut(s.id, l.id)">
+                        <span class="material-icons">{{ litIcon(l.status) }}</span>
+                        {{ l.bed_number }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (selectedUnite()!.rooms.length === 0) {
+                <div class="empty-state" style="padding:12px">
+                  <p>Aucune salle dans cette unité</p>
+                </div>
+              }
+
+              @if (showAddSalle()) {
+                <div class="add-salle-form">
+                  <div class="form-row">
+                    <div class="form-group flex-2">
+                      <label>Nom de la salle</label>
+                      <input type="text" placeholder="ex: Salle A1"
+                        [ngModel]="newSalleNom()" (ngModelChange)="newSalleNom.set($event)" />
+                    </div>
+                    <div class="form-group flex-1">
+                      <label>Type</label>
+                      <select [ngModel]="newSalleType()" (ngModelChange)="newSalleType.set($event)">
+                        @for (t of salleTypes; track t) {
+                          <option [value]="t">{{ t }}</option>
+                        }
+                      </select>
+                    </div>
+                    <div class="form-group" style="flex:0.8">
+                      <label>Capacité</label>
+                      <input type="number" min="1" max="30"
+                        [ngModel]="newSalleCap()" (ngModelChange)="newSalleCap.set(+$event)" />
+                    </div>
+                  </div>
+                  <div class="form-row-gap">
+                    <button class="btn-primary-sm" (click)="addSalle()">
+                      <span class="material-icons">add</span> Créer la salle
+                    </button>
+                    <button class="btn-ghost-sm" (click)="showAddSalle.set(false)">Annuler</button>
+                  </div>
+                </div>
+              } @else {
+                <button class="add-item-btn" (click)="showAddSalle.set(true)">
+                  <span class="material-icons">add_circle</span>
+                  Ajouter une salle
+                </button>
+              }
+            </div>
+          }
+        }
+
+      </div>
+    }
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="drawer-footer">
+    <button class="btn-cancel" (click)="close()">Annuler</button>
+    <button class="btn-save" [style.background]="typeColor" (click)="save()">
+      <span class="material-icons">save</span>
+      {{ mode === 'ADD' ? 'Créer le service' : 'Enregistrer' }}
+    </button>
+  </div>
+
+</div>

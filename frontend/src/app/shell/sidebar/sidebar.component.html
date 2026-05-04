@@ -1,0 +1,71 @@
+<nav class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-logo">
+    <div class="logo-icon">H</div>
+    <span class="logo-health">Health</span><span class="logo-map">Map</span>
+  </div>
+
+  <ul class="nav-list">
+    @for (item of filteredItems(); track item.label) {
+      @if (item.sectionLabel && !collapsed) {
+        <li class="nav-divider-wrap">
+          <div class="nav-divider"></div>
+          <span class="nav-section-label">{{ item.sectionLabel }}</span>
+        </li>
+      }
+      @if (item.children && item.children.length > 0) {
+        <li class="nav-group">
+          <div class="nav-item nav-group-header"
+               [class.active]="isActive(item)"
+               [matTooltip]="collapsed ? item.label : ''"
+               matTooltipPosition="right"
+               (click)="toggleGroup(item)">
+            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+            @if (!collapsed) {
+              <span class="nav-label">{{ item.label }}</span>
+              <mat-icon class="chevron" [class.expanded]="item.expanded">chevron_left</mat-icon>
+            }
+          </div>
+          @if (item.expanded && !collapsed) {
+            <ul class="nav-children">
+              @for (child of item.children; track child.label) {
+                <li class="nav-item nav-child"
+                    [class.active]="isActive(child)"
+                    (click)="navigate(child.route)">
+                  <div class="nav-item-inner">
+                    <mat-icon class="nav-icon">{{ child.icon }}</mat-icon>
+                    <span class="nav-label">{{ child.label }}</span>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      } @else {
+        <li class="nav-item"
+            [class.active]="isActive(item)"
+            [matTooltip]="collapsed ? item.label : ''"
+            matTooltipPosition="right"
+            (click)="navigate(item.route)">
+          <div class="nav-item-inner">
+            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+            @if (!collapsed) {
+              <span class="nav-label">{{ item.label }}</span>
+            }
+            @if (item.orangeDot && !collapsed) {
+              <span class="orange-dot"></span>
+            }
+            @if (item.badge && !collapsed) {
+              <span class="nav-badge">{{ item.badge }}</span>
+            }
+          </div>
+        </li>
+      }
+    }
+  </ul>
+
+  @if (!collapsed) {
+    <div class="sidebar-footer">
+      <p class="copyright">© 2016-2025 HealthMap</p>
+    </div>
+  }
+</nav>

@@ -1,0 +1,92 @@
+<div class="svc-card" [class.inactive]="!service.is_active">
+
+  <div class="accent-strip" [style.background]="typeColor"></div>
+
+  <div class="card-header">
+    <span class="type-badge"
+      [style.background]="typeColor + '22'"
+      [style.color]="typeColor">{{ service.type }}</span>
+    <span class="code-badge">#{{ service.code }}</span>
+    <span class="status-dot" [class.active]="service.is_active"
+      [matTooltip]="service.is_active ? 'Actif' : 'Inactif'"></span>
+  </div>
+
+  <h3 class="svc-name">{{ service.name }}</h3>
+
+  <div class="chef-row">
+    <div class="chef-avatar" [style.background]="typeColor + '33'" [style.color]="typeColor">
+      @if (service.chief?.first_name) {
+        <img [src]="service.chief.first_name" [alt]="service.chief.name" />
+      } @else {
+        <span>{{ svcInitials }}</span>
+      }
+    </div>
+    <div class="chef-info">
+      <span class="chef-name">{{ service.chief?.name }}</span>
+      <span class="chef-role">Médecin Chef</span>
+    </div>
+    @if (service.medical_chief) {
+      <div class="coord-pill">
+        <span class="material-icons">person_pin</span>
+        {{ service.medical_chief.name }}
+      </div>
+    }
+  </div>
+
+  <hr class="divider" />
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-value">{{ totalUnites }}</span>
+      <span class="stat-label">Unités</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ totalSalles }}</span>
+      <span class="stat-label">Salles</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ totalLits }}</span>
+      <span class="stat-label">Lits</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ litsOccupes }}</span>
+      <span class="stat-label">Occupés</span>
+    </div>
+  </div>
+
+  @if (totalLits > 0) {
+    <div class="occ-wrap">
+      <div class="occ-header">
+        <span class="occ-label">Occupation</span>
+        <strong [style.color]="occColor(taux)">{{ taux }}%</strong>
+      </div>
+      <div class="occ-track">
+        <div class="occ-fill"
+          [style.width.%]="taux"
+          [style.background]="occColor(taux)"></div>
+      </div>
+    </div>
+  } @else {
+    <p class="no-lits-note">Aucun lit configuré</p>
+  }
+
+  <hr class="divider" />
+
+  <div class="action-row">
+    @if (canEdit) {
+      <button class="btn-config" (click)="$event.stopPropagation(); editClicked.emit(service)">
+        <span class="material-icons">settings</span>
+        Configurer le service
+      </button>
+      <button class="btn-lits" (click)="$event.stopPropagation(); litsClicked.emit(service)">
+        <span class="material-icons">bed</span>
+        Gérer les lits
+      </button>
+    }
+    @if (canDelete) {
+      <button class="btn-delete" (click)="$event.stopPropagation(); deleteClicked.emit(service.id)">
+        <span class="material-icons">delete_outline</span>
+      </button>
+    }
+  </div>
+</div>

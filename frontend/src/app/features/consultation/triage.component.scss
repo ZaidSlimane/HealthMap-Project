@@ -1,0 +1,97 @@
+.triage-page { height: 100%; display: flex; flex-direction: column; }
+
+.patient-context-bar {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.patient-info { display: flex; align-items: center; gap: var(--space-3); }
+.patient-avatar { font-size: 36px; width: 36px; color: rgba(255,255,255,0.85); }
+.patient-name { display: block; font-size: 16px; font-weight: 700; font-family: var(--font-heading); }
+.patient-dob { display: block; font-size: 12px; opacity: 0.85; }
+
+.triage-content {
+  display: flex;
+  gap: var(--space-4);
+  flex: 1;
+  align-items: flex-start;
+}
+
+.main-area { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
+
+.specialty-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.spec-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: transparent;
+  color: #757575;
+  font-size: 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+
+  mat-icon { font-size: 22px; }
+  &.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+  &:hover:not(.active) { background: rgba(0,0,0,0.03); }
+}
+
+.symptom-section { background: white; border-radius: var(--radius-md); padding: var(--space-4); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+.symptom-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #424242;
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.5px;
+}
+
+.symptom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.symptom-col { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.symptom-item {
+  font-size: 13px;
+}
+
+.synthesis-panel {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.synthesis-card {
+  background: var(--color-info);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+
+  h4 { font-size: 15px; font-weight: 700; margin-bottom: var(--space-2); }
+}
+
+.synthesis-card .text-muted { color: rgba(255,255,255,0.8); }
+
+.synthesis-actions {
+  display: flex;
+  gap: var(--space-3);
+
+  button { flex: 1; }
+}

@@ -1,0 +1,101 @@
+<div class="carte-page page-fade-in">
+
+  <!-- ── Top header bar ── -->
+  <div class="carte-header">
+    <div class="carte-title">
+      <span class="material-icons">account_balance</span>
+      <div>
+        <h1 class="section-title">CHU Ibn Badis — Constantine</h1>
+        <p class="text-muted">Plan interactif · Cliquer sur un espace</p>
+      </div>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="kpi-row">
+      <div class="kpi-chip">
+        <span class="material-icons">bed</span>
+        <strong>{{ totalBeds() }}</strong> lits
+      </div>
+      <div class="kpi-chip kpi-chip--warn">
+        <span class="material-icons">person</span>
+        <strong>{{ occupiedBeds() }}</strong> occupés
+        <span class="kpi-pct">({{ occupancyPct() }}%)</span>
+      </div>
+      <div class="kpi-chip" [class.kpi-chip--danger]="criticalCount() > 0">
+        <span class="material-icons">emergency</span>
+        <strong>{{ criticalCount() }}</strong> critiques
+      </div>
+    </div>
+
+    <!-- Legend toggle -->
+    <button class="legend-toggle-btn" (click)="showLegend.set(!showLegend())">
+      <span class="material-icons">legend_toggle</span>
+      {{ showLegend() ? 'Cacher légende' : 'Légende' }}
+    </button>
+  </div>
+
+  <!-- ── Main layout: full-width map ── -->
+  <div class="carte-layout">
+    <div class="map-wrapper">
+
+      <!-- Loading overlay -->
+      @if (!mapReady() && !mapError()) {
+        <div class="map-overlay map-loading">
+          <span class="material-icons spin">sync</span>
+          <p>Chargement de la carte 3D...</p>
+          <span class="text-muted text-sm">CHU Ibn Badis — Constantine</span>
+        </div>
+      }
+
+      <!-- Error state -->
+      @if (mapError()) {
+        <div class="map-overlay map-error">
+          <span class="material-icons">error_outline</span>
+          <p>{{ mapError() }}</p>
+        </div>
+      }
+
+      <!-- Mappedin renders here -->
+      <div #mapContainer class="map-container"
+        [class.map-container--ready]="mapReady()">
+      </div>
+
+      <!-- ── Legend (floating top-left) ── -->
+      @if (showLegend() && mapReady()) {
+        <div class="legend-panel">
+          <p class="legend-title">LÉGENDE — SERVICES</p>
+          @for (entry of legendEntries; track entry.type) {
+            <div class="legend-row">
+              <span class="legend-dot"
+                [style.background]="entry.fill"
+                [style.border-color]="entry.stroke">
+              </span>
+              <span>{{ entry.label }}</span>
+            </div>
+          }
+          <hr class="legend-divider"/>
+          <div class="legend-row">
+            <span class="legend-dot" style="background:#FFCDD2; border-color:#E53935"></span>
+            <span>Critique 🔴</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-dot" style="background:#EEE; border-color:#9E9E9E"></span>
+            <span>Maintenance</span>
+          </div>
+          <p class="legend-note">Périmètre: OSM Way 312322676</p>
+        </div>
+      }
+
+      <!-- ── Service detail card (bottom-right, slides up on click) ── -->
+      @if (selectedSvc()) {
+        <div class="detail-card">
+          <hm-service-card [service]="selectedSvc()!" />
+          <button class="detail-close-overlay" (click)="closePanel()">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+      }
+
+    </div><!-- /map-wrapper -->
+  </div><!-- /carte-layout -->
+</div>

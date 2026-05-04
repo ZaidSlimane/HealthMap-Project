@@ -1,0 +1,884 @@
+[
+  {
+    "slug": "chu-constantine",
+    "name": "CHU Ibn Badis Constantine",
+    "type_code": "CHU",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "ehs-daksi",
+    "name": "EHS Daksi",
+    "type_code": "EHS",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "eph-didouche",
+    "name": "EPH Didouche Mourad",
+    "type_code": "EPH",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "eph-el-khroub",
+    "name": "EPH Mohamed Boudiaf El Khroub",
+    "type_code": "EPH",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "ehs-mere-enfant",
+    "name": "EHS Mère et Enfant Sidi Mabrouk",
+    "type_code": "EHS",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "epsp-constantine",
+    "name": "EPSP Constantine",
+    "type_code": "EPSP",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "clinique-debussy",
+    "name": "Clinique Debussy",
+    "type_code": "Clinique privée",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "poly-ali-mendjeli",
+    "name": "Polyclinique Ali Mendjeli",
+    "type_code": "Polyclinique",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "cs-zighoud",
+    "name": "Centre de santé Zighoud Youcef",
+    "type_code": "Centre de santé",
+    "wilaya_code": 25
+  },
+  {
+    "slug": "chu-mustapha",
+    "name": "CHU Mustapha Pacha",
+    "type_code": "CHU",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "ehu-oran-alger",
+    "name": "EHU 1er Novembre Oran (antenne Alger)",
+    "type_code": "EHU",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "eph-kouba",
+    "name": "EPH Kouba",
+    "type_code": "EPH",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "eph-el-harrach",
+    "name": "EPH El Harrach",
+    "type_code": "EPH",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "ehs-ait-idir",
+    "name": "EHS Aït Idir",
+    "type_code": "EHS",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "eph-bab-el-oued",
+    "name": "EPH Bab El Oued",
+    "type_code": "EPH",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "eph-birtraria",
+    "name": "EPH Birtraria",
+    "type_code": "EPH",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "ehs-drid-hocine",
+    "name": "EHS Drid Hocine",
+    "type_code": "EHS",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "eph-rouiba",
+    "name": "EPH Rouiba",
+    "type_code": "EPH",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "epsp-draria",
+    "name": "EPSP Draria",
+    "type_code": "EPSP",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "clinique-alger-centre",
+    "name": "Clinique El Azhar",
+    "type_code": "Clinique privée",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "poly-bab-ezzouar",
+    "name": "Polyclinique Bab Ezzouar",
+    "type_code": "Polyclinique",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "cs-hussein-dey",
+    "name": "Centre de santé Hussein Dey",
+    "type_code": "Centre de santé",
+    "wilaya_code": 16
+  },
+  {
+    "slug": "chu-oran",
+    "name": "CHU Oran",
+    "type_code": "CHU",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "ehu-oran",
+    "name": "EHU 1er Novembre 1954 Oran",
+    "type_code": "EHU",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "eph-ain-turck",
+    "name": "EPH Aïn El Türck",
+    "type_code": "EPH",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "eph-oran-hai",
+    "name": "EPH Haï Sabah",
+    "type_code": "EPH",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "ehs-canastel",
+    "name": "EHS Canastel (psychiatrie)",
+    "type_code": "EHS",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "epsp-oran",
+    "name": "EPSP Oran",
+    "type_code": "EPSP",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "clinique-oran",
+    "name": "Clinique Les Sources",
+    "type_code": "Clinique privée",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "poly-es-senia",
+    "name": "Polyclinique Es-Sénia",
+    "type_code": "Polyclinique",
+    "wilaya_code": 31
+  },
+  {
+    "slug": "chu-annaba",
+    "name": "CHU Ibn Rochd Annaba",
+    "type_code": "CHU",
+    "wilaya_code": 23
+  },
+  {
+    "slug": "eph-el-bouni",
+    "name": "EPH El Bouni",
+    "type_code": "EPH",
+    "wilaya_code": 23
+  },
+  {
+    "slug": "ehs-annaba-cardio",
+    "name": "EHS Cardiologie Annaba",
+    "type_code": "EHS",
+    "wilaya_code": 23
+  },
+  {
+    "slug": "epsp-annaba",
+    "name": "EPSP Annaba",
+    "type_code": "EPSP",
+    "wilaya_code": 23
+  },
+  {
+    "slug": "clinique-seybouse",
+    "name": "Clinique Seybouse",
+    "type_code": "Clinique privée",
+    "wilaya_code": 23
+  },
+  {
+    "slug": "chu-setif",
+    "name": "CHU Sétif",
+    "type_code": "CHU",
+    "wilaya_code": 19
+  },
+  {
+    "slug": "eph-ain-oulmene",
+    "name": "EPH Aïn Oulmène",
+    "type_code": "EPH",
+    "wilaya_code": 19
+  },
+  {
+    "slug": "eph-el-eulma",
+    "name": "EPH El Eulma",
+    "type_code": "EPH",
+    "wilaya_code": 19
+  },
+  {
+    "slug": "ehs-setif-neuro",
+    "name": "EHS Neurochirurgie Sétif",
+    "type_code": "EHS",
+    "wilaya_code": 19
+  },
+  {
+    "slug": "epsp-setif",
+    "name": "EPSP Sétif",
+    "type_code": "EPSP",
+    "wilaya_code": 19
+  },
+  {
+    "slug": "chu-batna",
+    "name": "CHU Batna",
+    "type_code": "CHU",
+    "wilaya_code": 5
+  },
+  {
+    "slug": "eph-barika",
+    "name": "EPH Barika",
+    "type_code": "EPH",
+    "wilaya_code": 5
+  },
+  {
+    "slug": "eph-arris",
+    "name": "EPH Arris",
+    "type_code": "EPH",
+    "wilaya_code": 5
+  },
+  {
+    "slug": "epsp-batna",
+    "name": "EPSP Batna",
+    "type_code": "EPSP",
+    "wilaya_code": 5
+  },
+  {
+    "slug": "chu-blida",
+    "name": "CHU Frantz Fanon Blida",
+    "type_code": "CHU",
+    "wilaya_code": 9
+  },
+  {
+    "slug": "eph-boufarik",
+    "name": "EPH Boufarik",
+    "type_code": "EPH",
+    "wilaya_code": 9
+  },
+  {
+    "slug": "ehs-blida-psychiatrie",
+    "name": "EHS Psychiatrie Blida",
+    "type_code": "EHS",
+    "wilaya_code": 9
+  },
+  {
+    "slug": "epsp-blida",
+    "name": "EPSP Blida",
+    "type_code": "EPSP",
+    "wilaya_code": 9
+  },
+  {
+    "slug": "chu-tizi-ouzou",
+    "name": "CHU Nedir Mohamed Tizi Ouzou",
+    "type_code": "CHU",
+    "wilaya_code": 15
+  },
+  {
+    "slug": "eph-azazga",
+    "name": "EPH Azazga",
+    "type_code": "EPH",
+    "wilaya_code": 15
+  },
+  {
+    "slug": "eph-ain-el-hammam",
+    "name": "EPH Aïn El Hammam",
+    "type_code": "EPH",
+    "wilaya_code": 15
+  },
+  {
+    "slug": "epsp-tizi-ouzou",
+    "name": "EPSP Tizi Ouzou",
+    "type_code": "EPSP",
+    "wilaya_code": 15
+  },
+  {
+    "slug": "chu-bejaia",
+    "name": "CHU Khelil Amrane Béjaïa",
+    "type_code": "CHU",
+    "wilaya_code": 6
+  },
+  {
+    "slug": "eph-akbou",
+    "name": "EPH Akbou",
+    "type_code": "EPH",
+    "wilaya_code": 6
+  },
+  {
+    "slug": "eph-kherrata",
+    "name": "EPH Kherrata",
+    "type_code": "EPH",
+    "wilaya_code": 6
+  },
+  {
+    "slug": "epsp-bejaia",
+    "name": "EPSP Béjaïa",
+    "type_code": "EPSP",
+    "wilaya_code": 6
+  },
+  {
+    "slug": "chu-tlemcen",
+    "name": "CHU Tlemcen",
+    "type_code": "CHU",
+    "wilaya_code": 13
+  },
+  {
+    "slug": "eph-ghazaouet",
+    "name": "EPH Ghazaouet",
+    "type_code": "EPH",
+    "wilaya_code": 13
+  },
+  {
+    "slug": "eph-maghnia",
+    "name": "EPH Maghnia",
+    "type_code": "EPH",
+    "wilaya_code": 13
+  },
+  {
+    "slug": "epsp-tlemcen",
+    "name": "EPSP Tlemcen",
+    "type_code": "EPSP",
+    "wilaya_code": 13
+  },
+  {
+    "slug": "eph-biskra",
+    "name": "EPH Bachir Bennacer Biskra",
+    "type_code": "EPH",
+    "wilaya_code": 7
+  },
+  {
+    "slug": "eph-tolga",
+    "name": "EPH Tolga",
+    "type_code": "EPH",
+    "wilaya_code": 7
+  },
+  {
+    "slug": "epsp-biskra",
+    "name": "EPSP Biskra",
+    "type_code": "EPSP",
+    "wilaya_code": 7
+  },
+  {
+    "slug": "eph-skikda",
+    "name": "EPH Skikda",
+    "type_code": "EPH",
+    "wilaya_code": 21
+  },
+  {
+    "slug": "epsp-skikda",
+    "name": "EPSP Skikda",
+    "type_code": "EPSP",
+    "wilaya_code": 21
+  },
+  {
+    "slug": "eph-medea",
+    "name": "EPH Médéa",
+    "type_code": "EPH",
+    "wilaya_code": 26
+  },
+  {
+    "slug": "epsp-medea",
+    "name": "EPSP Médéa",
+    "type_code": "EPSP",
+    "wilaya_code": 26
+  },
+  {
+    "slug": "eph-djelfa",
+    "name": "EPH Djelfa",
+    "type_code": "EPH",
+    "wilaya_code": 17
+  },
+  {
+    "slug": "epsp-djelfa",
+    "name": "EPSP Djelfa",
+    "type_code": "EPSP",
+    "wilaya_code": 17
+  },
+  {
+    "slug": "eph-msila",
+    "name": "EPH M'Sila",
+    "type_code": "EPH",
+    "wilaya_code": 28
+  },
+  {
+    "slug": "epsp-msila",
+    "name": "EPSP M'Sila",
+    "type_code": "EPSP",
+    "wilaya_code": 28
+  },
+  {
+    "slug": "eph-ouargla",
+    "name": "EPH Mohamed Boudiaf Ouargla",
+    "type_code": "EPH",
+    "wilaya_code": 30
+  },
+  {
+    "slug": "epsp-ouargla",
+    "name": "EPSP Ouargla",
+    "type_code": "EPSP",
+    "wilaya_code": 30
+  },
+  {
+    "slug": "eph-guelma",
+    "name": "EPH Guelma",
+    "type_code": "EPH",
+    "wilaya_code": 24
+  },
+  {
+    "slug": "epsp-guelma",
+    "name": "EPSP Guelma",
+    "type_code": "EPSP",
+    "wilaya_code": 24
+  },
+  {
+    "slug": "eph-mila",
+    "name": "EPH Mila",
+    "type_code": "EPH",
+    "wilaya_code": 43
+  },
+  {
+    "slug": "epsp-mila",
+    "name": "EPSP Mila",
+    "type_code": "EPSP",
+    "wilaya_code": 43
+  },
+  {
+    "slug": "eph-jijel",
+    "name": "EPH Mohammed Seddik Benyahia Jijel",
+    "type_code": "EPH",
+    "wilaya_code": 18
+  },
+  {
+    "slug": "epsp-jijel",
+    "name": "EPSP Jijel",
+    "type_code": "EPSP",
+    "wilaya_code": 18
+  },
+  {
+    "slug": "eph-thenia",
+    "name": "EPH Thénia",
+    "type_code": "EPH",
+    "wilaya_code": 35
+  },
+  {
+    "slug": "epsp-boumerdes",
+    "name": "EPSP Boumerdès",
+    "type_code": "EPSP",
+    "wilaya_code": 35
+  },
+  {
+    "slug": "eph-bouira",
+    "name": "EPH Bouira",
+    "type_code": "EPH",
+    "wilaya_code": 10
+  },
+  {
+    "slug": "epsp-bouira",
+    "name": "EPSP Bouira",
+    "type_code": "EPSP",
+    "wilaya_code": 10
+  },
+  {
+    "slug": "eph-mostaganem",
+    "name": "EPH Che Guevara Mostaganem",
+    "type_code": "EPH",
+    "wilaya_code": 27
+  },
+  {
+    "slug": "epsp-mostaganem",
+    "name": "EPSP Mostaganem",
+    "type_code": "EPSP",
+    "wilaya_code": 27
+  },
+  {
+    "slug": "chu-sba",
+    "name": "CHU Sidi Bel Abbès",
+    "type_code": "CHU",
+    "wilaya_code": 22
+  },
+  {
+    "slug": "eph-sba",
+    "name": "EPH Sidi Bel Abbès",
+    "type_code": "EPH",
+    "wilaya_code": 22
+  },
+  {
+    "slug": "eph-tiaret",
+    "name": "EPH Youssef Damerdji Tiaret",
+    "type_code": "EPH",
+    "wilaya_code": 14
+  },
+  {
+    "slug": "epsp-tiaret",
+    "name": "EPSP Tiaret",
+    "type_code": "EPSP",
+    "wilaya_code": 14
+  },
+  {
+    "slug": "eph-saida",
+    "name": "EPH Ahmed Medeghri Saïda",
+    "type_code": "EPH",
+    "wilaya_code": 20
+  },
+  {
+    "slug": "epsp-saida",
+    "name": "EPSP Saïda",
+    "type_code": "EPSP",
+    "wilaya_code": 20
+  },
+  {
+    "slug": "eph-mascara",
+    "name": "EPH Meslem Tayeb Mascara",
+    "type_code": "EPH",
+    "wilaya_code": 29
+  },
+  {
+    "slug": "epsp-mascara",
+    "name": "EPSP Mascara",
+    "type_code": "EPSP",
+    "wilaya_code": 29
+  },
+  {
+    "slug": "eph-oeb",
+    "name": "EPH Oum El Bouaghi",
+    "type_code": "EPH",
+    "wilaya_code": 4
+  },
+  {
+    "slug": "epsp-oeb",
+    "name": "EPSP Oum El Bouaghi",
+    "type_code": "EPSP",
+    "wilaya_code": 4
+  },
+  {
+    "slug": "eph-tebessa",
+    "name": "EPH Tébessa",
+    "type_code": "EPH",
+    "wilaya_code": 12
+  },
+  {
+    "slug": "epsp-tebessa",
+    "name": "EPSP Tébessa",
+    "type_code": "EPSP",
+    "wilaya_code": 12
+  },
+  {
+    "slug": "eph-khenchela",
+    "name": "EPH Khenchela",
+    "type_code": "EPH",
+    "wilaya_code": 40
+  },
+  {
+    "slug": "epsp-khenchela",
+    "name": "EPSP Khenchela",
+    "type_code": "EPSP",
+    "wilaya_code": 40
+  },
+  {
+    "slug": "eph-souk-ahras",
+    "name": "EPH Souk Ahras",
+    "type_code": "EPH",
+    "wilaya_code": 41
+  },
+  {
+    "slug": "epsp-souk-ahras",
+    "name": "EPSP Souk Ahras",
+    "type_code": "EPSP",
+    "wilaya_code": 41
+  },
+  {
+    "slug": "eph-bba",
+    "name": "EPH Bordj Bou Arréridj",
+    "type_code": "EPH",
+    "wilaya_code": 34
+  },
+  {
+    "slug": "epsp-bba",
+    "name": "EPSP Bordj Bou Arréridj",
+    "type_code": "EPSP",
+    "wilaya_code": 34
+  },
+  {
+    "slug": "eph-el-tarf",
+    "name": "EPH El Tarf",
+    "type_code": "EPH",
+    "wilaya_code": 36
+  },
+  {
+    "slug": "epsp-el-tarf",
+    "name": "EPSP El Tarf",
+    "type_code": "EPSP",
+    "wilaya_code": 36
+  },
+  {
+    "slug": "eph-tipaza",
+    "name": "EPH Tipaza",
+    "type_code": "EPH",
+    "wilaya_code": 42
+  },
+  {
+    "slug": "epsp-tipaza",
+    "name": "EPSP Tipaza",
+    "type_code": "EPSP",
+    "wilaya_code": 42
+  },
+  {
+    "slug": "eph-ain-defla",
+    "name": "EPH Aïn Defla",
+    "type_code": "EPH",
+    "wilaya_code": 44
+  },
+  {
+    "slug": "epsp-ain-defla",
+    "name": "EPSP Aïn Defla",
+    "type_code": "EPSP",
+    "wilaya_code": 44
+  },
+  {
+    "slug": "eph-ain-temouchent",
+    "name": "EPH Aïn Témouchent",
+    "type_code": "EPH",
+    "wilaya_code": 46
+  },
+  {
+    "slug": "epsp-ain-temouchent",
+    "name": "EPSP Aïn Témouchent",
+    "type_code": "EPSP",
+    "wilaya_code": 46
+  },
+  {
+    "slug": "eph-relizane",
+    "name": "EPH Relizane",
+    "type_code": "EPH",
+    "wilaya_code": 48
+  },
+  {
+    "slug": "epsp-relizane",
+    "name": "EPSP Relizane",
+    "type_code": "EPSP",
+    "wilaya_code": 48
+  },
+  {
+    "slug": "eph-ghardaia",
+    "name": "EPH Ghardaïa",
+    "type_code": "EPH",
+    "wilaya_code": 47
+  },
+  {
+    "slug": "epsp-ghardaia",
+    "name": "EPSP Ghardaïa",
+    "type_code": "EPSP",
+    "wilaya_code": 47
+  },
+  {
+    "slug": "eph-laghouat",
+    "name": "EPH Laghouat",
+    "type_code": "EPH",
+    "wilaya_code": 3
+  },
+  {
+    "slug": "epsp-laghouat",
+    "name": "EPSP Laghouat",
+    "type_code": "EPSP",
+    "wilaya_code": 3
+  },
+  {
+    "slug": "eph-adrar",
+    "name": "EPH Adrar",
+    "type_code": "EPH",
+    "wilaya_code": 1
+  },
+  {
+    "slug": "epsp-adrar",
+    "name": "EPSP Adrar",
+    "type_code": "EPSP",
+    "wilaya_code": 1
+  },
+  {
+    "slug": "eph-bechar",
+    "name": "EPH Béchar",
+    "type_code": "EPH",
+    "wilaya_code": 8
+  },
+  {
+    "slug": "epsp-bechar",
+    "name": "EPSP Béchar",
+    "type_code": "EPSP",
+    "wilaya_code": 8
+  },
+  {
+    "slug": "eph-tamanrasset",
+    "name": "EPH Tamanrasset",
+    "type_code": "EPH",
+    "wilaya_code": 11
+  },
+  {
+    "slug": "epsp-tamanrasset",
+    "name": "EPSP Tamanrasset",
+    "type_code": "EPSP",
+    "wilaya_code": 11
+  },
+  {
+    "slug": "eph-naama",
+    "name": "EPH Naâma",
+    "type_code": "EPH",
+    "wilaya_code": 45
+  },
+  {
+    "slug": "epsp-naama",
+    "name": "EPSP Naâma",
+    "type_code": "EPSP",
+    "wilaya_code": 45
+  },
+  {
+    "slug": "eph-el-bayadh",
+    "name": "EPH El Bayadh",
+    "type_code": "EPH",
+    "wilaya_code": 32
+  },
+  {
+    "slug": "epsp-el-bayadh",
+    "name": "EPSP El Bayadh",
+    "type_code": "EPSP",
+    "wilaya_code": 32
+  },
+  {
+    "slug": "eph-illizi",
+    "name": "EPH Illizi",
+    "type_code": "EPH",
+    "wilaya_code": 33
+  },
+  {
+    "slug": "epsp-illizi",
+    "name": "EPSP Illizi",
+    "type_code": "EPSP",
+    "wilaya_code": 33
+  },
+  {
+    "slug": "eph-tissemsilt",
+    "name": "EPH Tissemsilt",
+    "type_code": "EPH",
+    "wilaya_code": 38
+  },
+  {
+    "slug": "epsp-tissemsilt",
+    "name": "EPSP Tissemsilt",
+    "type_code": "EPSP",
+    "wilaya_code": 38
+  },
+  {
+    "slug": "eph-el-oued",
+    "name": "EPH El Oued",
+    "type_code": "EPH",
+    "wilaya_code": 39
+  },
+  {
+    "slug": "epsp-el-oued",
+    "name": "EPSP El Oued",
+    "type_code": "EPSP",
+    "wilaya_code": 39
+  },
+  {
+    "slug": "eph-tindouf",
+    "name": "EPH Tindouf",
+    "type_code": "EPH",
+    "wilaya_code": 37
+  },
+  {
+    "slug": "epsp-tindouf",
+    "name": "EPSP Tindouf",
+    "type_code": "EPSP",
+    "wilaya_code": 37
+  },
+  {
+    "slug": "eph-chlef",
+    "name": "EPH Chlef",
+    "type_code": "EPH",
+    "wilaya_code": 2
+  },
+  {
+    "slug": "epsp-chlef",
+    "name": "EPSP Chlef",
+    "type_code": "EPSP",
+    "wilaya_code": 2
+  },
+  {
+    "slug": "eph-el-mghair",
+    "name": "EPH El M'Ghair",
+    "type_code": "EPH",
+    "wilaya_code": 49
+  },
+  {
+    "slug": "eph-el-meniaa",
+    "name": "EPH El Meniaa",
+    "type_code": "EPH",
+    "wilaya_code": 50
+  },
+  {
+    "slug": "eph-ouled-djellal",
+    "name": "EPH Ouled Djellal",
+    "type_code": "EPH",
+    "wilaya_code": 51
+  },
+  {
+    "slug": "eph-bbm",
+    "name": "EPH Bordj Badji Mokhtar",
+    "type_code": "EPH",
+    "wilaya_code": 52
+  },
+  {
+    "slug": "eph-beni-abbes",
+    "name": "EPH Béni Abbès",
+    "type_code": "EPH",
+    "wilaya_code": 53
+  },
+  {
+    "slug": "eph-timimoun",
+    "name": "EPH Timimoun",
+    "type_code": "EPH",
+    "wilaya_code": 54
+  },
+  {
+    "slug": "eph-touggourt",
+    "name": "EPH Touggourt",
+    "type_code": "EPH",
+    "wilaya_code": 55
+  },
+  {
+    "slug": "eph-djanet",
+    "name": "EPH Djanet",
+    "type_code": "EPH",
+    "wilaya_code": 56
+  },
+  {
+    "slug": "eph-in-salah",
+    "name": "EPH In Salah",
+    "type_code": "EPH",
+    "wilaya_code": 57
+  },
+  {
+    "slug": "eph-in-guezzam",
+    "name": "EPH In Guezzam",
+    "type_code": "EPH",
+    "wilaya_code": 58
+  }
+]

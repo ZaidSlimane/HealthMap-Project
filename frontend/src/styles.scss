@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Nunito:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  --color-primary:       #00BCD4;
+  --color-primary-dark:  #0097A7;
+  --color-primary-light: #E0F7FA;
+  --color-primary-glow:  rgba(0,188,212,0.18);
+
+  --color-success:    #43A047;
+  --color-urgent:     #E53935;
+  --color-warning:    #FB8C00;
+  --color-info:       #1E88E5;
+
+  --color-urgent-bg:  #fff5f5;
+  --color-warning-bg: #fff8f0;
+  --color-info-bg:    #f0f7ff;
+  --color-success-bg: #f0faf0;
+
+  --color-bg:            #F4F6F8;
+  --color-surface:       #FFFFFF;
+  --color-surface-2:     #F8FAFC;
+  --color-border:        rgba(0,0,0,0.08);
+  --color-border-strong: rgba(0,0,0,0.14);
+
+  --color-sidebar:             #1E2328;
+  --color-sidebar-active:      rgba(0,188,212,0.18);
+  --color-sidebar-text:        rgba(255,255,255,0.65);
+  --color-sidebar-text-active: #00BCD4;
+
+  --font-body:    'Inter', -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-brand:   'Nunito', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Consolas', monospace;
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-full: 9999px;
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:  0 2px 4px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.10);
+  --shadow-xl:  0 4px 8px rgba(0,0,0,0.08), 0 24px 48px rgba(0,0,0,0.14);
+
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 60px;
+  --header-height: 58px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--color-bg);
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 { font-family: var(--font-heading); line-height: 1.2; }
+
+.urgent-stripe {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-urgent), var(--color-urgent) 10px,
+    #EF5350 10px, #EF5350 20px
+  );
+  color: white;
+}
+
+.badge-urgence {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px;
+  background: rgba(229,57,53,0.10);
+  color: #C62828;
+  border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
+.badge-normal {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px;
+  background: rgba(67,160,71,0.10);
+  color: #2E7D32;
+  border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
+.badge-observation {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px;
+  background: rgba(251,140,0,0.12);
+  color: #E65100;
+  border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
+.mat-mdc-card {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.mat-mdc-table { width: 100%; }
+.mat-mdc-row { transition: background 0.1s ease; }
+.mat-mdc-row:hover { background: rgba(0,188,212,0.04); }
+.row-urgent .mat-mdc-cell { background: rgba(251,140,0,0.08) !important; }
+
+.page-fade-in {
+  animation: fadeInPage 0.18s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-container {
+  padding: var(--space-6);
+  min-height: 100%;
+}
+
+.card-surface {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem; font-weight: 700;
+  color: #0f172a; margin-bottom: var(--space-4);
+}
+
+.text-muted { color: #64748b; font-size: 13px; }
+
+a { color: var(--color-primary); text-decoration: none; cursor: pointer; }
+
+button, input, select, textarea { font-family: var(--font-body); }
+
+.mat-toolbar {
+  background: var(--color-surface) !important;
+  color: #1a1a2e !important;
+}
+
+.mdc-button--unelevated {
+  font-family: var(--font-body) !important;
+}
+
+/* ────────────────────────────────────────────
+   MapLibre GL — service marker DOM elements
+   These must be global because MapLibre injects
+   them directly into <body>, outside Angular scope
+──────────────────────────────────────────── */
+.svc-marker-wrapper { z-index: 10; }
+
+.svc-marker {
+  position: relative;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  padding: 3px 7px 3px 26px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  min-width: 72px;
+  max-width: 110px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: system-ui, sans-serif;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+    z-index: 100;
+  }
+
+  &--critique { animation: svcCritBlink 1.4s ease-in-out infinite; }
+  &--maintenance { opacity: 0.6; filter: grayscale(0.5); }
+}
+
+@keyframes svcCritBlink {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 0 rgba(229,57,53,0); }
+  50%       { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 6px rgba(229,57,53,0.35); }
+}
+
+.svc-code {
+  position: absolute;
+  left: 3px; top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; color: white;
+}
+
+.svc-label {
+  font-size: 9.5px; font-weight: 700;
+  color: #1A2332; line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.svc-beds { font-size: 8px; color: #546E7A; margin-top: 1px; }
+
+.svc-critique-dot {
+  position: absolute; top: -4px; right: -4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #E53935; border: 2px solid white;
+  animation: svcDotPulse 1s ease-in-out infinite;
+}
+
+@keyframes svcDotPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.4); }
+}

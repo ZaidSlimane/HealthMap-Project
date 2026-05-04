@@ -1,0 +1,456 @@
+<div class="onboarding-layout">
+
+  <!-- ─── LEFT PANEL: brand + context ─── -->
+  <div class="onboarding-panel onboarding-panel--left" aria-hidden="true">
+    <div class="panel-overlay"></div>
+    <div class="panel-content">
+
+      <div class="brand-cross" aria-hidden="true">
+        <div class="cross-h"></div>
+        <div class="cross-v"></div>
+      </div>
+
+      <div class="brand-logo">
+        <span class="logo-health">Health</span><span class="logo-map">Map</span>
+      </div>
+      <p class="brand-tagline">Configuration de votre compte</p>
+
+      <!-- Step indicator on left panel -->
+      <div class="steps-sidebar">
+        @for (step of steps; track step.key; let i = $index) {
+          <button
+            class="step-item"
+            [class.step-item--active]="currentStep() === step.key"
+            [class.step-item--completed]="isStepCompleted(step.key)"
+            [class.step-item--accessible]="isStepAccessible(step.key)"
+            [disabled]="!isStepAccessible(step.key)"
+            (click)="goToStep(step.key)"
+          >
+            <div class="step-number">
+              @if (isStepCompleted(step.key) && currentStep() !== step.key) {
+                <span class="material-icons">check</span>
+              } @else {
+                {{ i + 1 }}
+              }
+            </div>
+            <div class="step-info">
+              <span class="step-label">{{ step.label }}</span>
+            </div>
+          </button>
+        }
+      </div>
+
+      <div class="panel-footer">
+        <span class="material-icons">local_hospital</span>
+        Ministère de la Santé — Algérie
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── RIGHT PANEL: wizard content ─── -->
+  <div class="onboarding-panel onboarding-panel--right">
+    <div class="wizard-wrapper">
+
+      <!-- Skip button top-right -->
+      <button class="skip-btn" (click)="skip()" type="button">
+        <span class="material-icons">skip_next</span>
+        Configurer plus tard
+      </button>
+
+      <!-- Step 1: Establishment Type -->
+      @if (currentStep() === 'type') {
+        <div class="wizard-step page-fade-in">
+          <div class="step-header">
+            <span class="step-icon material-icons">domain</span>
+            <div>
+              <h2 class="step-title">Type d'établissement</h2>
+              <p class="step-subtitle">Sélectionnez le type de votre établissement de santé.</p>
+            </div>
+          </div>
+
+          <div class="type-grid">
+            @for (type of establishmentTypes(); track type.code) {
+              <button
+                class="type-card"
+                [class.type-card--selected]="profile().establishmentType === type.code"
+                (click)="selectType(type.code)"
+                type="button"
+              >
+                <span class="type-abbrev">{{ type.code }}</span>
+                <span class="type-full">{{ type.label }}</span>
+              </button>
+            }
+            @if (establishmentTypes().length === 0) {
+              <p class="empty-state">Chargement des types…</p>
+            }
+          </div>
+
+          <div class="step-actions">
+            <div></div>
+            <button
+              class="btn-primary"
+              [disabled]="!canGoNext()"
+              (click)="nextStep()"
+              type="button"
+            >
+              Suivant
+              <span class="material-icons">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Wilaya -->
+      @if (currentStep() === 'wilaya') {
+        <div class="wizard-step page-fade-in">
+          <div class="step-header">
+            <span class="step-icon material-icons">location_on</span>
+            <div>
+              <h2 class="step-title">Wilaya</h2>
+              <p class="step-subtitle">Choisissez la wilaya de votre établissement.</p>
+            </div>
+          </div>
+
+          <!-- Search -->
+          <div class="search-box">
+            <span class="material-icons search-icon">search</span>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Rechercher une wilaya..."
+              [(ngModel)]="wilayaSearch"
+            />
+          </div>
+
+          <div class="selection-list">
+            @for (w of filteredWilayas(); track w.code) {
+              <button
+                class="list-item"
+                [class.list-item--selected]="profile().wilayaCode === w.code"
+                (click)="selectWilaya(w.code)"
+                type="button"
+              >
+                <span class="list-item-code">{{ w.code }}</span>
+                <span class="list-item-name">{{ w.name }}</span>
+                @if (profile().wilayaCode === w.code) {
+                  <span class="material-icons list-item-check">check_circle</span>
+                }
+              </button>
+            }
+            @if (filteredWilayas().length === 0) {
+              <div class="empty-state">
+                <span class="material-icons">search_off</span>
+                <p>Aucune wilaya trouvée</p>
+              </div>
+            }
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-secondary" (click)="prevStep()" type="button">
+              <span class="material-icons">arrow_back</span>
+              Précédent
+            </button>
+            <button
+              class="btn-primary"
+              [disabled]="!canGoNext()"
+              (click)="nextStep()"
+              type="button"
+            >
+              Suivant
+              <span class="material-icons">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 3: Establishment -->
+      @if (currentStep() === 'establishment') {
+        <div class="wizard-step page-fade-in">
+          <div class="step-header">
+            <span class="step-icon material-icons">local_hospital</span>
+            <div>
+              <h2 class="step-title">Établissement</h2>
+              <p class="step-subtitle">
+                Sélectionnez votre établissement
+                @if (profile().wilayaCode) {
+                  dans la wilaya de <strong>{{ getWilayaName(profile().wilayaCode!) }}</strong>
+                }
+              </p>
+            </div>
+          </div>
+
+          <!-- Search -->
+          <div class="search-box">
+            <span class="material-icons search-icon">search</span>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Rechercher un établissement..."
+              [(ngModel)]="establishmentSearch"
+            />
+          </div>
+
+          <div class="selection-list">
+            @if (loadingEstablishments()) {
+              <div class="empty-state">
+                <span class="material-icons">sync</span>
+                <p>Chargement des établissements…</p>
+              </div>
+            }
+            @for (e of filteredEstablishmentList(); track e.slug) {
+              <button
+                class="list-item"
+                [class.list-item--selected]="profile().establishmentId === e.slug"
+                (click)="selectEstablishment(e.slug)"
+                type="button"
+              >
+                <span class="list-item-badge">{{ e.type?.code }}</span>
+                <span class="list-item-name">
+                  {{ e.name }}
+                  @if (e.source === 'custom') {
+                    <small class="list-item-tag">(personnalisé)</small>
+                  }
+                </span>
+                @if (profile().establishmentId === e.slug) {
+                  <span class="material-icons list-item-check">check_circle</span>
+                }
+              </button>
+            }
+            @if (!loadingEstablishments() && filteredEstablishmentList().length === 0) {
+              <div class="empty-state">
+                <span class="material-icons">domain_disabled</span>
+                <p>Aucun établissement trouvé pour cette combinaison.</p>
+              </div>
+            }
+          </div>
+
+          <!-- "Not in list" custom establishment -->
+          <div class="custom-establishment">
+            @if (!showCustomForm()) {
+              <button type="button" class="custom-toggle" (click)="toggleCustomForm()">
+                <span class="material-icons">add_circle_outline</span>
+                Mon établissement n'est pas dans la liste
+              </button>
+            } @else {
+              <form class="custom-form" (ngSubmit)="submitCustomEstablishment()" novalidate>
+                <p class="custom-form__hint">
+                  Renseignez le nom de votre établissement. Le type
+                  (<strong>{{ profile().establishmentType }}</strong>) et la wilaya
+                  (<strong>{{ getWilayaName(profile().wilayaCode!) }}</strong>) sont
+                  repris des étapes précédentes.
+                </p>
+
+                <div class="field-group">
+                  <label class="field-label" for="customName">Nom de l'établissement *</label>
+                  <input
+                    id="customName"
+                    class="field-input"
+                    [(ngModel)]="customName"
+                    name="customName"
+                    required
+                    minlength="2"
+                    maxlength="180"
+                    placeholder="Ex: Hôpital Mustapha Pacha"
+                  />
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="customNameAr">Nom (arabe)</label>
+                  <input
+                    id="customNameAr"
+                    class="field-input"
+                    [(ngModel)]="customNameAr"
+                    name="customNameAr"
+                    maxlength="180"
+                    placeholder="اختياري"
+                    dir="rtl"
+                  />
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="customAddress">Adresse</label>
+                  <input
+                    id="customAddress"
+                    class="field-input"
+                    [(ngModel)]="customAddress"
+                    name="customAddress"
+                    maxlength="255"
+                    placeholder="Optionnel"
+                  />
+                </div>
+
+                <div class="custom-form__row">
+                  <div class="field-group">
+                    <label class="field-label" for="customPhone">Téléphone</label>
+                    <input
+                      id="customPhone"
+                      class="field-input"
+                      [(ngModel)]="customPhone"
+                      name="customPhone"
+                      maxlength="32"
+                      placeholder="Optionnel"
+                    />
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="customEmail">Email</label>
+                    <input
+                      id="customEmail"
+                      type="email"
+                      class="field-input"
+                      [(ngModel)]="customEmail"
+                      name="customEmail"
+                      maxlength="180"
+                      placeholder="Optionnel"
+                    />
+                  </div>
+                </div>
+
+                @if (customError) {
+                  <div class="auth-error" role="alert">
+                    <span class="material-icons">error_outline</span>
+                    {{ customError }}
+                  </div>
+                }
+
+                <div class="custom-form__actions">
+                  <button type="button" class="btn-secondary" (click)="toggleCustomForm()">
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn-primary"
+                    [disabled]="customLoading || !customName.trim()"
+                  >
+                    @if (customLoading) {
+                      <span class="btn-spinner material-icons">sync</span>
+                    } @else {
+                      <span class="material-icons">save</span>
+                    }
+                    {{ customLoading ? 'Création…' : 'Créer et sélectionner' }}
+                  </button>
+                </div>
+              </form>
+            }
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-secondary" (click)="prevStep()" type="button">
+              <span class="material-icons">arrow_back</span>
+              Précédent
+            </button>
+            <button
+              class="btn-primary"
+              [disabled]="!canGoNext()"
+              (click)="nextStep()"
+              type="button"
+            >
+              Suivant
+              <span class="material-icons">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 4: Password -->
+      @if (currentStep() === 'password') {
+        <div class="wizard-step page-fade-in">
+          <div class="step-header">
+            <span class="step-icon material-icons">lock</span>
+            <div>
+              <h2 class="step-title">Mot de passe administrateur</h2>
+              <p class="step-subtitle">Définissez le mot de passe du compte administrateur dédié à votre établissement. Il sera créé à la finalisation.</p>
+            </div>
+          </div>
+
+          <form class="password-form" novalidate>
+            <div class="field-group">
+              <label class="field-label" for="newPw">Nouveau mot de passe</label>
+              <div class="field-input-wrap">
+                <span class="field-icon material-icons">lock_outline</span>
+                <input
+                  id="newPw"
+                  class="field-input"
+                  [type]="showNewPassword ? 'text' : 'password'"
+                  [(ngModel)]="newPassword"
+                  name="newPassword"
+                  required
+                  minlength="8"
+                  autocomplete="new-password"
+                  placeholder="Min. 8 caractères"
+                />
+                <button
+                  type="button"
+                  class="toggle-pw"
+                  (click)="showNewPassword = !showNewPassword"
+                >
+                  <span class="material-icons">{{ showNewPassword ? 'visibility_off' : 'visibility' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="confirmPw">Confirmer le mot de passe</label>
+              <div class="field-input-wrap">
+                <span class="field-icon material-icons">lock_outline</span>
+                <input
+                  id="confirmPw"
+                  class="field-input"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  required
+                  autocomplete="new-password"
+                  placeholder="Retapez le mot de passe"
+                />
+                <button
+                  type="button"
+                  class="toggle-pw"
+                  (click)="showConfirmPassword = !showConfirmPassword"
+                >
+                  <span class="material-icons">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
+                </button>
+              </div>
+            </div>
+
+            @if (passwordError) {
+              <div class="auth-error" role="alert">
+                <span class="material-icons">error_outline</span>
+                {{ passwordError }}
+              </div>
+            }
+
+            @if (completionError) {
+              <div class="auth-error" role="alert">
+                <span class="material-icons">error_outline</span>
+                {{ completionError }}
+              </div>
+            }
+          </form>
+
+          <div class="step-actions">
+            <button class="btn-secondary" (click)="prevStep()" type="button">
+              <span class="material-icons">arrow_back</span>
+              Précédent
+            </button>
+            <button
+              class="btn-finish"
+              (click)="finish()"
+              [disabled]="completingOnboarding || !passwordValid()"
+              type="button"
+            >
+              @if (completingOnboarding) {
+                <span class="btn-spinner material-icons">sync</span>
+              } @else {
+                <span class="material-icons">check_circle</span>
+              }
+              {{ completingOnboarding ? 'Finalisation...' : 'Terminer la configuration' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      <p class="version-line">Version 0.1.1 LTS — HealthMap</p>
+    </div>
+  </div>
+
+</div>

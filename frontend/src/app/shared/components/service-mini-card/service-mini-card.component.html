@@ -1,0 +1,50 @@
+<div class="mini-card" [class.inactive]="!service.is_active">
+  <div class="card-header">
+    <div class="type-info">
+      <span class="type-badge"
+        [style.background]="typeFill"
+        [style.color]="typeColor">
+        {{ lbl }}
+      </span>
+      <span class="code-badge">#{{ service.code }}</span>
+    </div>
+    <span class="status-indicator"
+      [style.background]="statusFill[status]"
+      [style.border-color]="statusStroke[status]"
+      [title]="status">
+    </span>
+  </div>
+
+  <div class="card-body">
+    <h4 class="service-title">{{ service.name }}</h4>
+    
+    <div class="mini-dashboard">
+      <div class="metric">
+        <span class="metric-label">Lits</span>
+        <span class="metric-value">
+          {{ litsOccupes }}/{{ totalLits }}
+        </span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Occupation</span>
+        <span class="metric-value" [style.color]="occColor(taux)">
+          {{ taux }}%
+        </span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Salles</span>
+        <span class="metric-value">{{ totalSalles }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-details" (click)="go()">
+      <span class="material-icons">open_in_full</span>
+      Détails
+    </button>
+    <button class="btn-close" (click)="close()">
+      <span class="material-icons">close</span>
+    </button>
+  </div>
+</div>

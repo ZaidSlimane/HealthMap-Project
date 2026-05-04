@@ -1,0 +1,34 @@
+[
+  {
+    "code": "EPH",
+    "label": "Établissement Public Hospitalier"
+  },
+  {
+    "code": "CHU",
+    "label": "Centre Hospitalo-Universitaire"
+  },
+  {
+    "code": "EHS",
+    "label": "Établissement Hospitalier Spécialisé"
+  },
+  {
+    "code": "EPSP",
+    "label": "Établissement Public de Santé de Proximité"
+  },
+  {
+    "code": "EHU",
+    "label": "Établissement Hospitalier Universitaire"
+  },
+  {
+    "code": "Clinique privée",
+    "label": "Clinique privée"
+  },
+  {
+    "code": "Polyclinique",
+    "label": "Polyclinique"
+  },
+  {
+    "code": "Centre de santé",
+    "label": "Centre de santé"
+  }
+]

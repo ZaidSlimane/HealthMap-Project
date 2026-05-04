@@ -1,0 +1,123 @@
+<div class="consultation-page page-fade-in">
+  <!-- Patient context bar -->
+  <div class="patient-context-bar">
+    <div class="patient-info">
+      <mat-icon class="patient-avatar">account_circle</mat-icon>
+      <div>
+        <span class="patient-name">{{ patient.fullName }}</span>
+        <span class="patient-dob">Date de naissance : {{ patient.dob }}</span>
+      </div>
+    </div>
+    <div class="patient-actions">
+      <button mat-stroked-button class="action-btn" data-testid="btn-rappeler">
+        <mat-icon>phone</mat-icon> Rappeler le patient
+      </button>
+      <button mat-stroked-button class="action-btn" data-testid="btn-observation">
+        <mat-icon>visibility</mat-icon> Garder en observation
+      </button>
+      <button mat-stroked-button class="action-btn" data-testid="btn-admission">
+        <mat-icon>local_hospital</mat-icon> Admission (Service)
+      </button>
+      <button mat-stroked-button class="action-btn" data-testid="btn-suivant">
+        <mat-icon>navigate_next</mat-icon> Patient suivant
+      </button>
+    </div>
+  </div>
+
+  <!-- Content layout -->
+  <div class="content-layout page-container">
+    <!-- LEFT: Compte rendu + medications -->
+    <div class="left-col">
+      <div class="card-surface compte-rendu-card">
+        <h4 class="card-title">Le compte rendu</h4>
+        <textarea [(ngModel)]="compteRendu" class="compte-rendu-textarea" rows="8"
+                  placeholder="Entrez vos notes cliniques..." data-testid="textarea-compte-rendu"></textarea>
+        <div class="print-row">
+          <button mat-stroked-button>
+            <mat-icon>print</mat-icon> Imprimer
+          </button>
+        </div>
+      </div>
+
+      <div class="card-surface medication-card">
+        <div class="med-header">
+          <h4 class="med-title">Gestion des médicaments</h4>
+          <button mat-stroked-button class="btn-ordonnance">Ordonnance type</button>
+        </div>
+        <div class="med-list">
+          @for (med of medications; track med; let i = $index) {
+            <div class="med-row">
+              <select [(ngModel)]="med.nom" class="med-select med-nom">
+                <option value="">Médicament...</option>
+                <option value="Paracétamol">Paracétamol</option>
+                <option value="Amoxicilline">Amoxicilline</option>
+                <option value="Ibuprofène">Ibuprofène</option>
+              </select>
+              <input type="number" [(ngModel)]="med.qte" class="med-input med-qte" [min]="1">
+              <select [(ngModel)]="med.forme" class="med-select med-forme">
+                <option value="CP">CP</option>
+                <option value="Sachet">Sachet</option>
+                <option value="Ampoule">Ampoule</option>
+              </select>
+              <input type="number" [(ngModel)]="med.qte" class="med-input med-freq" [min]="1">
+              <select [(ngModel)]="med.frequency" class="med-select">
+                <option value="par jour">par jour</option>
+                <option value="par semaine">par semaine</option>
+              </select>
+              <span class="med-qsp-label">QSP</span>
+              <input [(ngModel)]="med.qsp" class="med-input" placeholder="">
+              <span class="med-jours-label">Jours</span>
+              <input type="number" [(ngModel)]="med.jours" class="med-input med-jours" [min]="1">
+              <button mat-icon-button color="warn" (click)="removeMedication(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+        <button mat-flat-button class="btn-add-med" (click)="addMedication()" data-testid="btn-add-medication">
+          <mat-icon>add</mat-icon> Ajouter un médicament
+        </button>
+        <button mat-flat-button class="btn-print-ordonnance" data-testid="btn-print-ordonnance">
+          <mat-icon>print</mat-icon> Imprimer l'ordonnance
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Sidebar cards -->
+    <div class="right-col">
+      <div class="card-surface sidebar-card">
+        <h4 class="card-title">Modèle</h4>
+        <select [(ngModel)]="selectedModele" class="modele-select" data-testid="select-modele">
+          <option value="">Veuillez choisir un modèle</option>
+          @for (m of modeles; track m) {
+            <option [value]="m">{{ m }}</option>
+          }
+        </select>
+        @if (selectedModele) {
+          <p class="text-muted" style="margin-top:8px">{{ selectedModele }}</p>
+        }
+      </div>
+
+      <div class="card-surface sidebar-card">
+        <h4 class="card-title">Rédiger un document</h4>
+        <ul class="documents-list">
+          @for (doc of documents; track doc) {
+            <li class="document-link">
+              <mat-icon>arrow_right</mat-icon>
+              <a>{{ doc }}</a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="card-surface sidebar-card">
+        <h4 class="card-title">Historique</h4>
+        <div class="history-row">
+          <mat-icon>history</mat-icon>
+          <span>Consultations</span>
+          <span class="badge-urgence" style="margin-left:auto">1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="triage-page page-fade-in">
+  <!-- Patient context bar -->
+  <div class="patient-context-bar">
+    <div class="patient-info">
+      <mat-icon class="patient-avatar">account_circle</mat-icon>
+      <div>
+        <span class="patient-name">{{ patient.fullName }}</span>
+        <span class="patient-dob">Date de naissance : {{ patient.dob }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="triage-content page-container">
+    <div class="main-area">
+      <!-- Specialty tabs -->
+      <div class="specialty-tabs">
+        @for (spec of specialties; track spec.label; let i = $index) {
+          <button class="spec-tab" [class.active]="selectedSpecialty === i" (click)="selectedSpecialty = i">
+            <mat-icon>{{ spec.icon }}</mat-icon>
+            <span>{{ spec.label }}</span>
+          </button>
+        }
+      </div>
+
+      <!-- Symptom checkboxes -->
+      <div class="symptom-section">
+        <h3 class="symptom-section-title">FONCTIONNELS</h3>
+        <div class="symptom-grid">
+          <div class="symptom-col">
+            @for (s of fonctionnelsLeft; track s.label) {
+              <mat-checkbox [(ngModel)]="s.checked" class="symptom-item">{{ s.label }}</mat-checkbox>
+            }
+          </div>
+          <div class="symptom-col">
+            @for (s of fonctionnelsRight; track s.label) {
+              <mat-checkbox [(ngModel)]="s.checked" class="symptom-item">{{ s.label }}</mat-checkbox>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="symptom-section">
+        <h3 class="symptom-section-title">PHYSIQUES</h3>
+        <div class="symptom-grid">
+          <div class="symptom-col">
+            @for (s of physiquesLeft; track s.label) {
+              <mat-checkbox [(ngModel)]="s.checked" class="symptom-item">{{ s.label }}</mat-checkbox>
+            }
+          </div>
+          <div class="symptom-col">
+            @for (s of physiquesRight; track s.label) {
+              <mat-checkbox [(ngModel)]="s.checked" class="symptom-item">{{ s.label }}</mat-checkbox>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-panel">
+      <div class="synthesis-card">
+        <h4>Synthèse de la consultation</h4>
+        <p class="text-muted">{{ checkedCount }} symptôme(s) sélectionné(s)</p>
+      </div>
+      <div class="synthesis-actions">
+        <button mat-stroked-button>Annuler</button>
+        <button mat-flat-button color="primary">Suivant</button>
+      </div>
+    </div>
+  </div>
+</div>

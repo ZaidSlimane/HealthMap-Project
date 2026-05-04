@@ -1,0 +1,153 @@
+.split-layout {
+  display: flex;
+  gap: var(--space-4);
+  height: calc(100vh - 56px - 48px);
+}
+
+.left-panel {
+  width: 35%;
+  min-width: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.right-panel {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  color: #424242;
+}
+
+.waiting-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.urgent-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.urgent-header {
+  padding: var(--space-3) var(--space-4);
+
+  .patient-name {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .exam-type {
+    display: block;
+    font-size: 12px;
+    opacity: 0.9;
+  }
+}
+
+.urgent-actions {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+
+  .btn-skip {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    border-color: #ccc;
+    mat-icon { font-size: 16px; width: 16px; margin-right: 4px; }
+  }
+}
+
+.list-link {
+  margin-top: auto;
+  a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--color-primary);
+    mat-icon { font-size: 16px; }
+  }
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.calendar-date {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  flex: 1;
+  text-align: center;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+
+  .active-view {
+    background: var(--color-primary);
+    color: white;
+  }
+}
+
+.calendar-grid {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.cal-header, .all-day-row, .time-row {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.time-col {
+  width: 80px;
+  min-width: 80px;
+  padding: var(--space-2) var(--space-3);
+  font-size: 12px;
+  color: #9E9E9E;
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  align-items: flex-start;
+}
+
+.day-col {
+  flex: 1;
+  padding: var(--space-2);
+}
+
+.day-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #424242;
+}
+
+.time-slot {
+  height: 52px;
+  background: #FAFAF0;
+}
+
+.all-day-row .time-col {
+  font-size: 11px;
+  color: #BDBDBD;
+}

@@ -1,0 +1,64 @@
+<div class="page-container page-fade-in">
+  <div class="split-layout">
+    <!-- LEFT: Waiting list -->
+    <div class="left-panel card-surface">
+      <h3 class="panel-title">Liste des demandes en attente</h3>
+      <div class="waiting-list">
+        @for (req of urgentRequests; track req.id) {
+          <div class="urgent-card">
+            <div class="urgent-header urgent-stripe">
+              <span class="patient-name">{{ req.patientName }}</span>
+              <span class="exam-type">{{ req.examType }}</span>
+            </div>
+            <div class="urgent-actions">
+              <button mat-stroked-button class="btn-skip">
+                <mat-icon>skip_next</mat-icon>
+                Passer sans rdv
+              </button>
+              <span class="badge-urgence">urgence</span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="list-link">
+        <a routerLink="/radiology/requests/liste">
+          <mat-icon>table_chart</mat-icon> Voir la liste complète
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Calendar -->
+    <div class="right-panel card-surface">
+      <div class="calendar-nav">
+        <button mat-icon-button (click)="prevDay()"><mat-icon>chevron_left</mat-icon></button>
+        <button mat-icon-button (click)="nextDay()"><mat-icon>chevron_right</mat-icon></button>
+        <button mat-stroked-button (click)="today()">Aujourd'hui</button>
+        <h2 class="calendar-date">{{ formattedDate }}</h2>
+        <div class="view-toggle">
+          <button mat-stroked-button [class.active-view]="calendarView==='mois'" (click)="calendarView='mois'">Mois</button>
+          <button mat-stroked-button [class.active-view]="calendarView==='semaine'" (click)="calendarView='semaine'">Semaine</button>
+          <button mat-flat-button [class.active-view]="calendarView==='jour'" (click)="calendarView='jour'" color="primary">Jour</button>
+        </div>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="cal-header">
+          <div class="time-col"></div>
+          <div class="day-col">
+            <div class="day-name">lundi</div>
+          </div>
+        </div>
+        <div class="all-day-row">
+          <div class="time-col">Toute la journée</div>
+          <div class="day-col"></div>
+        </div>
+        @for (hour of hours; track hour) {
+          <div class="time-row">
+            <div class="time-col">{{ hour }}</div>
+            <div class="day-col time-slot"></div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: healthmap_frontend
+    restart: unless-stopped
+    ports:
+      - "3100:80"
+    networks:
+      - healthmap_network
+
+networks:
+  healthmap_network:
+    external: true

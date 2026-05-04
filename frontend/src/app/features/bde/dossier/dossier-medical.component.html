@@ -1,0 +1,311 @@
+@if (bundle(); as b) {
+  <div class="dm-page page-fade-in">
+
+    @if (toast(); as msg) {
+      <div class="dm-toast" data-testid="dossier-toast" role="status" aria-live="polite">
+        <mat-icon>check_circle</mat-icon><span>{{ msg }}</span>
+      </div>
+    }
+
+    <div class="dm-body">
+      <aside class="dm-rail" data-testid="dossier-rail">
+        <a routerLink="/bde/patients" class="rail-back">
+          <mat-icon>arrow_back</mat-icon> Liste des patients
+        </a>
+        <div class="rail-section">
+          <h4>Actions rapides</h4>
+          <button class="rail-btn" (click)="obtenirMatricule()" data-testid="rail-matricule">
+            <mat-icon>fingerprint</mat-icon> Obtenir un matricule national
+          </button>
+          <button class="rail-btn" (click)="setTab('facturation')" data-testid="rail-jump-facturation">
+            <mat-icon>request_quote</mat-icon> Facturation
+          </button>
+        </div>
+        <div class="rail-section">
+          <h4>Impression</h4>
+          <button class="rail-btn" (click)="printPlaceholder('Badge')" data-testid="rail-print-bulletin">
+            <mat-icon>badge</mat-icon> Badge
+          </button>
+          <button class="rail-btn" (click)="printPlaceholder('Feuille code-barres')" data-testid="rail-print-labels">
+            <mat-icon>qr_code_2</mat-icon> Feuille code-barres
+          </button>
+          <button class="rail-btn" (click)="printPlaceholder('Bracelet')" data-testid="rail-print-sortie">
+            <mat-icon>watch</mat-icon> Bracelet
+          </button>
+        </div>
+        <div class="rail-section">
+          <h4>Historique d’admissions</h4>
+          @if (b.dossier.parcours.length === 0) {
+            <p class="rail-empty">Aucun parcours enregistré.</p>
+          } @else {
+            <ul class="rail-history">
+              @for (a of b.dossier.parcours.slice().reverse(); track a.id) {
+                <li>
+                  <span class="rail-dot" [style.background]="meta[a.etatSortie].color"></span>
+                  <div>
+                    <strong>{{ a.date | date:'dd/MM/yyyy' }}</strong>
+                    <span class="rail-svc">{{ a.service }}</span>
+                    <span class="rail-etat">{{ meta[a.etatSortie].label }}</span>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </aside>
+      <div class="dm-main">
+
+    <div class="dm-head">
+      <a routerLink="/bde/dashboard" class="back-link">
+        <mat-icon>arrow_back</mat-icon> Tableau de bord
+      </a>
+      <div class="title-row">
+        <div class="avatar" [class.female]="b.patient.genre === 'F'">
+          <mat-icon>{{ b.patient.genre === 'F' ? 'face_3' : 'face_6' }}</mat-icon>
+        </div>
+        <div class="title-text">
+          <h1>{{ b.patient.nomFr | uppercase }} {{ b.patient.prenomFr }}</h1>
+          <p class="sub">
+            <span class="dossier-pill">Dossier&nbsp;{{ b.dossier.id }}</span>
+            <span>· {{ age(b.patient.dateNaissance) }} ans</span>
+            <span>· {{ b.patient.genre === 'M' ? 'Homme' : 'Femme' }}</span>
+            @if (b.patient.nin) { <span>· NIN&nbsp;{{ b.patient.nin }}</span> }
+          </p>
+        </div>
+        <div class="head-actions">
+          <button class="btn-ghost" (click)="printPlaceholder('Bulletin d’admission')">
+            <mat-icon>print</mat-icon> Bulletin
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="dm-tabs">
+      <button [class.active]="activeTab()==='civil'"        (click)="setTab('civil')"        data-testid="tab-civil"><mat-icon>badge</mat-icon> État civil</button>
+      <button [class.active]="activeTab()==='parcours'"     (click)="setTab('parcours')"     data-testid="tab-parcours"><mat-icon>route</mat-icon> Parcours</button>
+      <button [class.active]="activeTab()==='facturation'"  (click)="setTab('facturation')"  data-testid="tab-facturation"><mat-icon>request_quote</mat-icon> Facturation</button>
+      <button [class.active]="activeTab()==='impressions'"  (click)="setTab('impressions')"  data-testid="tab-impressions"><mat-icon>print</mat-icon> Impressions</button>
+    </nav>
+
+    <!-- Tab: État civil -->
+    @if (activeTab()==='civil') {
+      <div class="tab-panel">
+        @if (b.dossier.parcours.length > 0) {
+          <div class="info-card admission-summary" data-testid="admission-summary">
+            <h3><mat-icon>how_to_reg</mat-icon> Admission</h3>
+            @if (b.dossier.parcours[b.dossier.parcours.length - 1]; as last) {
+              <dl class="adm-grid">
+                <div><dt>Date d'entrée</dt><dd>{{ last.date | date:'dd/MM/yyyy' }}</dd></div>
+                <div><dt>Mode</dt><dd>{{ last.mode || '—' }}</dd></div>
+                <div><dt>Service</dt><dd>{{ last.service || '—' }}</dd></div>
+                <div><dt>État</dt>
+                  <dd>
+                    <span class="t-pill" [style.background]="meta[last.etatSortie].color + '1A'" [style.color]="meta[last.etatSortie].color">
+                      <mat-icon>{{ meta[last.etatSortie].icon }}</mat-icon>{{ meta[last.etatSortie].label }}
+                    </span>
+                  </dd>
+                </div>
+                @if (last.dateSortie) {
+                  <div><dt>Date de sortie</dt><dd>{{ last.dateSortie | date:'dd/MM/yyyy' }}</dd></div>
+                }
+              </dl>
+            }
+          </div>
+        }
+        <div class="info-grid">
+          <div class="info-card">
+            <h3><mat-icon>person</mat-icon> Identité</h3>
+            <dl>
+              <div><dt>Nom</dt><dd>{{ b.patient.nomFr }}</dd></div>
+              <div><dt>Prénom</dt><dd>{{ b.patient.prenomFr }}</dd></div>
+              <div><dt>اللقب / الإسم</dt><dd dir="rtl">{{ b.patient.nomAr || '—' }} / {{ b.patient.prenomAr || '—' }}</dd></div>
+              <div><dt>NIN</dt><dd>{{ b.patient.nin || '—' }}</dd></div>
+              <div><dt>Genre</dt><dd>{{ b.patient.genre === 'M' ? 'Homme' : 'Femme' }}</dd></div>
+              <div><dt>Naissance</dt><dd>{{ b.patient.dateNaissance | date:'dd/MM/yyyy' }} ({{ age(b.patient.dateNaissance) }} ans)</dd></div>
+              <div><dt>Lieu</dt><dd>{{ b.patient.lieuNaissance || '—' }}</dd></div>
+              <div><dt>Nationalité</dt><dd>{{ b.patient.nationalite }}</dd></div>
+              <div><dt>Groupe sanguin</dt><dd>{{ b.patient.groupeSanguin || '—' }}</dd></div>
+              <div><dt>Situation</dt><dd>{{ b.patient.situationFamiliale || '—' }}</dd></div>
+              <div><dt>Profession</dt><dd>{{ b.patient.profession || '—' }}</dd></div>
+            </dl>
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>family_restroom</mat-icon> Filiation</h3>
+            <dl>
+              <div><dt>Prénom du père</dt><dd>{{ b.patient.pereNom || '—' }}</dd></div>
+              <div><dt>اسم الأب</dt><dd dir="rtl">{{ b.patient.pereNomAr || '—' }}</dd></div>
+              <div><dt>Prénom de la mère</dt><dd>{{ b.patient.mereNom || '—' }}</dd></div>
+              <div><dt>Nom de jeune fille de la mère</dt><dd>{{ b.patient.mereNomFille || '—' }}</dd></div>
+              <div><dt>اسم الأم</dt><dd dir="rtl">{{ b.patient.mereNomAr || '—' }}</dd></div>
+              <div><dt>لقب الأم قبل الزواج</dt><dd dir="rtl">{{ b.patient.mereNomFilleAr || '—' }}</dd></div>
+            </dl>
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>contact_mail</mat-icon> Coordonnées</h3>
+            <dl>
+              <div><dt>Téléphone</dt><dd>{{ b.patient.telephone || '—' }}</dd></div>
+              <div><dt>E-mail</dt><dd>{{ b.patient.email || '—' }}</dd></div>
+              <div class="full"><dt>Adresse</dt><dd>{{ b.patient.adresse.rue }} — {{ b.patient.adresse.ville }}, {{ b.patient.adresse.wilaya }} {{ b.patient.adresse.codePostal || '' }}</dd></div>
+              @if (b.patient.piece) {
+                <div><dt>Pièce</dt><dd>{{ b.patient.piece.type }} · {{ b.patient.piece.numero }}</dd></div>
+              }
+            </dl>
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>person_add</mat-icon> Accompagnant</h3>
+            @if (b.patient.accompagnant; as a) {
+              <dl>
+                <div><dt>Nom</dt><dd>{{ a.nom }} {{ a.prenom }}</dd></div>
+                <div><dt>Lien</dt><dd>{{ a.lien || '—' }}</dd></div>
+                <div><dt>Téléphone</dt><dd>{{ a.telephone || '—' }}</dd></div>
+              </dl>
+            } @else {
+              <p class="empty">Aucun accompagnant déclaré.</p>
+              <button class="btn-add">
+                <mat-icon>add</mat-icon> Ajouter un accompagnant
+              </button>
+            }
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>emergency</mat-icon> Contact d'urgence</h3>
+            @if (b.patient.contactUrgence; as u) {
+              <dl>
+                <div><dt>Nom</dt><dd>{{ u.nom }} {{ u.prenom }}</dd></div>
+                <div><dt>Lien</dt><dd>{{ u.lien || '—' }}</dd></div>
+                <div><dt>Téléphone</dt><dd>{{ u.telephone || '—' }}</dd></div>
+                @if (u.adresse) { <div class="full"><dt>Adresse</dt><dd>{{ u.adresse }}</dd></div> }
+              </dl>
+            } @else {
+              <p class="empty">Aucun contact d'urgence renseigné.</p>
+              <button class="btn-add">
+                <mat-icon>add</mat-icon> Ajouter un contact
+              </button>
+            }
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>family_restroom</mat-icon> Conjoint</h3>
+            <p class="empty">Aucun conjoint enregistré.</p>
+            <button class="btn-add"><mat-icon>add</mat-icon> Ajouter un conjoint</button>
+          </div>
+
+          <div class="info-card">
+            <h3><mat-icon>shield</mat-icon> Assurance</h3>
+            @if (b.dossier.facturation.assurance; as a) {
+              <dl>
+                <div><dt>Organisme</dt><dd>{{ a.organisme }}</dd></div>
+                <div><dt>N° d'affiliation</dt><dd>{{ a.numero }}</dd></div>
+              </dl>
+            } @else {
+              <p class="empty">Aucune assurance déclarée.</p>
+              <button class="btn-add"><mat-icon>add</mat-icon> Ajouter une assurance</button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Parcours -->
+    @if (activeTab()==='parcours') {
+      <div class="tab-panel">
+        <div class="parcours-card">
+          <header>
+            <h3><mat-icon>route</mat-icon> Historique des admissions</h3>
+            <span class="text-muted">{{ b.dossier.parcours.length }} entrée(s)</span>
+          </header>
+          @if (b.dossier.parcours.length === 0) {
+            <div class="empty-block">
+              <mat-icon>event_note</mat-icon>
+              <p>Aucune admission enregistrée pour ce patient.</p>
+              <span>Les admissions validées par les services apparaîtront ici.</span>
+            </div>
+          } @else {
+            <ol class="timeline">
+              @for (a of b.dossier.parcours; track a.id) {
+                <li>
+                  <div class="t-dot" [style.background]="meta[a.etatSortie].color"></div>
+                  <div class="t-card">
+                    <div class="t-row1">
+                      <strong>{{ a.service }}</strong>
+                      <span class="t-pill" [style.background]="meta[a.etatSortie].color + '1A'" [style.color]="meta[a.etatSortie].color">
+                        <mat-icon>{{ meta[a.etatSortie].icon }}</mat-icon>{{ meta[a.etatSortie].label }}
+                      </span>
+                    </div>
+                    <div class="t-row2">{{ a.date | date:'dd/MM/yyyy' }} · {{ a.mode }} · Dr. {{ a.medecin }}</div>
+                    <div class="t-motif">{{ a.motif }}</div>
+                  </div>
+                </li>
+              }
+            </ol>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Facturation -->
+    @if (activeTab()==='facturation') {
+      <div class="tab-panel">
+        <div class="bill-grid">
+          <div class="info-card">
+            <h3><mat-icon>request_quote</mat-icon> Synthèse facturation</h3>
+            <dl>
+              <div><dt>Type de prise en charge</dt><dd>{{ b.dossier.facturation.typePriseEnCharge || '— (à définir)' }}</dd></div>
+              <div><dt>Montant total</dt><dd><strong>{{ b.dossier.facturation.montantTotal }} DA</strong></dd></div>
+              <div><dt>Montant réglé</dt><dd>{{ b.dossier.facturation.montantRegle }} DA</dd></div>
+              <div><dt>Reste dû</dt><dd>{{ b.dossier.facturation.montantTotal - b.dossier.facturation.montantRegle }} DA</dd></div>
+            </dl>
+          </div>
+          <div class="info-card">
+            <h3><mat-icon>receipt_long</mat-icon> Lignes facturables</h3>
+            <p class="empty">La facturation détaillée sera branchée dans une étape ultérieure.</p>
+            <button class="btn-add"><mat-icon>add</mat-icon> Ajouter une prestation</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Impressions -->
+    @if (activeTab()==='impressions') {
+      <div class="tab-panel">
+        <div class="prints-grid">
+          <button class="print-card" (click)="printPlaceholder('Bulletin d’admission')">
+            <mat-icon>article</mat-icon>
+            <strong>Bulletin d'admission</strong>
+            <span>Document d'admission officiel</span>
+          </button>
+          <button class="print-card" (click)="printPlaceholder('Bulletin de sortie')">
+            <mat-icon>logout</mat-icon>
+            <strong>Bulletin de sortie</strong>
+            <span>État de sortie & destination</span>
+          </button>
+          <button class="print-card" (click)="printPlaceholder('Fichier médical')">
+            <mat-icon>folder_shared</mat-icon>
+            <strong>Fichier médical complet</strong>
+            <span>Tout le dossier — usage interne</span>
+          </button>
+          <button class="print-card" (click)="printPlaceholder('Étiquette patient')">
+            <mat-icon>qr_code_2</mat-icon>
+            <strong>Étiquettes patient</strong>
+            <span>Étiquettes code-barres</span>
+          </button>
+        </div>
+      </div>
+    }
+
+      </div><!-- /dm-main -->
+    </div><!-- /dm-body -->
+
+  </div>
+} @else {
+  <div class="dm-empty">
+    <mat-icon>folder_off</mat-icon>
+    <h2>Dossier introuvable</h2>
+    <p>Le patient demandé n'existe pas ou a été supprimé.</p>
+    <a routerLink="/bde/dashboard" class="btn-primary"><mat-icon>arrow_back</mat-icon> Retour au tableau de bord</a>
+  </div>
+}

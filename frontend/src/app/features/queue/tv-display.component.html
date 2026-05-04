@@ -1,0 +1,50 @@
+<div class="tv-page">
+  <div class="tv-header">
+    <div class="tv-logo">
+      <span class="logo-health">Health</span><span class="logo-map">Map</span>
+    </div>
+    <div class="tv-time">
+      <div class="tv-clock">{{ currentTime }}</div>
+      <div class="tv-date">{{ currentDate }}</div>
+    </div>
+  </div>
+
+  <div class="tv-content">
+    <!-- Current called numbers (highlighted) -->
+    <div class="current-section">
+      <h2 class="section-heading">
+        <span class="fr-label">EN COURS D'APPEL</span>
+        <span class="ar-label">يُرجى التوجه إلى</span>
+      </h2>
+      <div class="current-grid">
+        @for (item of currentQueue; track item.number) {
+          <div class="current-card blink">
+            <div class="big-number">{{ item.number }}</div>
+            <div class="box-info">
+              <div class="box-name-fr">{{ item.service }}</div>
+              <div class="box-name-ar" dir="rtl">{{ item.serviceAr }}</div>
+              <div class="box-number">مكتب {{ item.boxNumber }} — Bureau {{ item.boxNumber }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Recent calls list -->
+    <div class="recent-section">
+      <h3 class="recent-heading">
+        <span>Derniers appelés</span>
+        <span dir="rtl">آخر المستدعين</span>
+      </h3>
+      <div class="recent-list">
+        @for (item of recentCalled; track item.number) {
+          <div class="recent-item">
+            <span class="recent-num">{{ item.number }}</span>
+            <span class="recent-service">{{ item.service }} — {{ item.serviceAr }}</span>
+            <span class="recent-box">Bureau {{ item.boxNumber }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

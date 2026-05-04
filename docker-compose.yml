@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: healthmap_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./Backend:/var/www
+    networks:
+      - healthmap_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: healthmap_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./Backend:/var/www
+      - ./Backend/docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - healthmap_network
+
+  db:
+    image: mysql:8.0
+    container_name: healthmap_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - healthmap_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: healthmap_frontend
+    restart: unless-stopped
+    ports:
+      - "3100:80"
+    networks:
+      - healthmap_network
+
+networks:
+  healthmap_network:
+    driver: bridge
+
+volumes:
+  db_data:

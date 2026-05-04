@@ -1,0 +1,75 @@
+<div class="page-container page-fade-in">
+  <div class="page-header-row">
+    <h2 class="section-title">Demande examen radiologique en attente {{ today }}</h2>
+    <button mat-flat-button class="btn-archive">
+      <mat-icon>archive</mat-icon> Archive
+    </button>
+  </div>
+
+  <div class="card-surface">
+    <div class="controls-row">
+      <div class="records-control">
+        <select [(ngModel)]="pageSize" class="records-select">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+        <span class="text-muted">enregistrements par page</span>
+      </div>
+      <div class="search-control">
+        <label class="text-muted">Recherche:</label>
+        <input [(ngModel)]="searchTerm" placeholder="Rechercher..." class="search-input" data-testid="input-search">
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="filtered" class="requests-table">
+      <ng-container matColumnDef="no">
+        <th mat-header-cell *matHeaderCellDef>No</th>
+        <td mat-cell *matCellDef="let row; let i = index" [class.cell-urgent]="row.statut==='urgence'">{{ i + 1 }}</td>
+      </ng-container>
+      <ng-container matColumnDef="nomPrenom">
+        <th mat-header-cell *matHeaderCellDef>Nom Prénom</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.patientName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="medecin">
+        <th mat-header-cell *matHeaderCellDef>Médecin</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.medecin }}</td>
+      </ng-container>
+      <ng-container matColumnDef="service">
+        <th mat-header-cell *matHeaderCellDef>Service</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.service }}</td>
+      </ng-container>
+      <ng-container matColumnDef="examen">
+        <th mat-header-cell *matHeaderCellDef>Examen</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.examType }}</td>
+      </ng-container>
+      <ng-container matColumnDef="dateRequest">
+        <th mat-header-cell *matHeaderCellDef>Date de la demande</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.dateRequest }}</td>
+      </ng-container>
+      <ng-container matColumnDef="rndv">
+        <th mat-header-cell *matHeaderCellDef>Rndv</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">{{ row.rndv }}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row" [class.cell-urgent]="row.statut==='urgence'">
+          <button mat-flat-button class="btn-delete" data-testid="button-delete">Supprimer</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [class.row-urgent]="row.statut==='urgence'"></tr>
+    </table>
+
+    <div class="table-footer">
+      <span class="text-muted">Affichage de 1 à {{ filtered.length }} de {{ filtered.length }} entrées</span>
+      <div class="pagination">
+        <button mat-stroked-button>Précédent</button>
+        <button mat-flat-button color="primary">1</button>
+        <button mat-stroked-button>Suivant</button>
+      </div>
+    </div>
+  </div>
+</div>
