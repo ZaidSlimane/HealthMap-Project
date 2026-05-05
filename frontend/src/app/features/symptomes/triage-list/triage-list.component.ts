@@ -1,7 +1,8 @@
-import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 import { MockDataService } from '../../../core/services/mock-data.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { NiveauUrgence, Triage } from '../../../core/models/symptome.model';
@@ -162,22 +163,36 @@ import { NiveauUrgence, Triage } from '../../../core/models/symptome.model';
     .btn-teal { display: inline-flex; align-items: center; gap: var(--space-2); background: var(--color-primary); color: #fff; border: none; border-radius: var(--radius-md); padding: 10px var(--space-5); font-size: 13px; font-weight: 600; cursor: pointer; mat-icon { font-size: 18px; } }
   `]
 })
-export class TriageListComponent {
+export class TriageListComponent implements OnInit {
   private mockData = inject(MockDataService);
   private patientSvc = inject(PatientService);
+
+  patientNames = signal<Record<string, string>>({});
 
   triages = computed(() => this.mockData.getTriages().sort((a, b) => {
     const order = { CRITIQUE: 0, URGENT: 1, SEMI_URGENT: 2, NON_URGENT: 3, NORMAL: 4 };
     return order[a.niveauUrgence] - order[b.niveauUrgence];
   }));
 
+  async ngOnInit() {
+    const names: Record<string, string> = {};
+    for (const t of this.triages()) {
+      try {
+        const p = await firstValueFrom(this.patientSvc.getPatient(+t.patientId));
+        if (p) names[t.patientId] = p.fullName;
+      } catch {
+        names[t.patientId] = `Patient #${t.patientId}`;
+      }
+    }
+    this.patientNames.set(names);
+  }
+
   countByNiveau(n: NiveauUrgence): number {
     return this.mockData.getTriages().filter(t => t.niveauUrgence === n).length;
   }
 
   getPatientName(id: string): string {
-    const p = this.patientSvc.getPatient(+id);
-    return p ? p.fullName : `Patient #${id}`;
+    return this.patientNames()[id] || `Patient #${id}`;
   }
 
   urgenceLabel(n: NiveauUrgence): string {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 import { PatientService } from '../../../core/services/patient.service';
 import { NiveauUrgence } from '../../../core/models/symptome.model';
 
@@ -258,10 +259,17 @@ export class TriageFormComponent {
     { score: 5, emoji: '😟', label: '5–6' }, { score: 7, emoji: '😣', label: '7–8' }, { score: 9, emoji: '😭', label: '9–10' }
   ];
 
-  filterPatients(): void {
+  async filterPatients(): Promise<void> {
     const q = this.patientSearch.toLowerCase();
     if (!q) { this.patientSuggestions.set([]); return; }
-    this.patientSuggestions.set(this.patientSvc.getPatients().filter(p => p.fullName.toLowerCase().includes(q)).slice(0, 5).map(p => ({ id: p.id, fullName: p.fullName })));
+
+    const patients = await firstValueFrom(this.patientSvc.search(q));
+    this.patientSuggestions.set(
+      patients.slice(0, 5).map(p => ({
+        id: p.id,
+        fullName: [p.first_name, p.name].filter(Boolean).join(' ').trim() || `Patient #${p.id}`
+      }))
+    );
   }
 
   selectPatient(p: { id: number; fullName: string }): void {

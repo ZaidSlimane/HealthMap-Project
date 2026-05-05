@@ -4,6 +4,7 @@ import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
+import { UserRole } from '../../core/auth/models/user.model';
 import { filter } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
@@ -13,7 +14,7 @@ export interface NavItem {
   icon: string;
   route?: string;
   children?: NavItem[];
-  roles: string[];
+  roles: UserRole[];
   badge?: number;
   orangeDot?: boolean;
   expanded?: boolean;
