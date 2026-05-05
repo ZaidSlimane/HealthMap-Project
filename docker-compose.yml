@@ -18,7 +18,7 @@ services:
     container_name: healthmap_nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "3000:80"
     volumes:
       - ./Backend:/var/www
       - ./Backend/docker/nginx/conf.d:/etc/nginx/conf.d
