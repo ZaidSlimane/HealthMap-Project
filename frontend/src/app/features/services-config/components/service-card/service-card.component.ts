@@ -5,7 +5,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
-  ServiceConfig, ServiceType, TYPE_COLOR,
+  ServiceConfig, ServiceType, TYPE_COLOR, typeColorById,
   totalLitsService, litsOccupesService, tauxOccupation,
   totalSallesService, initials
 } from '../../models/service-config.model';
@@ -26,7 +26,10 @@ export class ServiceCardComponent {
   @Output() litsClicked   = new EventEmitter<ServiceConfig>();
   @Output() deleteClicked = new EventEmitter<string>();
 
-  get typeColor(): string { return TYPE_COLOR[this.service.type] ?? '#546E7A'; }
+  get typeColor(): string {
+    const t = this.service.type;
+    return typeof t === 'number' ? typeColorById(t) : (TYPE_COLOR[t] ?? '#546E7A');
+  }
   get svcInitials(): string  { return initials(this.service.chief?.name ?? 'Unknown'); }
   get totalUnites(): number  { return this.service.units.length; }
   get totalSalles(): number  { return totalSallesService(this.service); }

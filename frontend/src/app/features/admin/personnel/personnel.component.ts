@@ -122,15 +122,15 @@ export class PersonnelComponent implements OnInit {
   savePersonnel(): void {
     const draft = this.editingPersonnel();
     if (!draft) return;
-    const payload: PersonnelInput = { ...draft };
-    delete (payload as any).id;
-    const op$ = draft.id
-      ? this.api.updatePersonnel(draft.id, payload)
+
+    const { id, ...payload } = draft;
+    const op$ = id
+      ? this.api.updatePersonnel(id, payload)
       : this.api.createPersonnel(payload);
     op$.subscribe({
       next: () => {
         this.editingPersonnel.set(null);
-        this.flash(`Personnel ${draft.id ? 'modifié' : 'ajouté'}.`);
+        this.flash(`Personnel ${id ? 'modifié' : 'ajouté'}.`);
         this.refreshPersonnel();
       },
       error: err => this.bubbleError(err),

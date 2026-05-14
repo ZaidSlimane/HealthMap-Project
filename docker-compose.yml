@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # ─── PHP-FPM (Laravel backend) ─────────────────────────────────────
   app:
     build:
       context: ./Backend
@@ -10,15 +9,20 @@ services:
     working_dir: /var/www
     volumes:
       - ./Backend:/var/www
+      - ./Backend/storage/app:/var/www/storage/app
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - healthmap_network
 
-  nginx:
-    image: nginx:alpine
-    container_name: healthmap_nginx
+  # ─── Backend Nginx (FastCGI proxy to PHP-FPM) ──────────────────────
+  nginx_backend:
+    image: nginx:1.25-alpine
+    container_name: healthmap_nginx_backend
     restart: unless-stopped
-    ports:
-      - "3000:80"
     volumes:
       - ./Backend:/var/www
       - ./Backend/docker/nginx/conf.d:/etc/nginx/conf.d
@@ -27,20 +31,7 @@ services:
     networks:
       - healthmap_network
 
-  db:
-    image: mysql:8.0
-    container_name: healthmap_db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - healthmap_network
-
+  # ─── Frontend (Angular SPA + reverse proxy to backend) ──────────────
   frontend:
     build:
       context: ./frontend
@@ -48,7 +39,28 @@ services:
     container_name: healthmap_frontend
     restart: unless-stopped
     ports:
-      - "3100:80"
+      - "80:80"
+    depends_on:
+      - nginx_backend
+    networks:
+      - healthmap_network
+
+  # ─── MySQL Database ─────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: healthmap_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - healthmap_network
 

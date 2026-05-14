@@ -201,9 +201,9 @@ class OnboardingController extends Controller
             $est->forceFill(['admin_user_id' => $newAdmin->id])->save();
 
             // Restore the bootstrap account's password so the *next* admin
-            // can onboard a different establishment with Admin/root.
+            // can onboard a different establishment with the same bootstrap credentials.
             $bootstrap->forceFill([
-                'password' => Hash::make('root'),
+                'password' => Hash::make(config('auth.bootstrap_admin_password')),
                 'must_change_password' => true,
             ])->save();
 

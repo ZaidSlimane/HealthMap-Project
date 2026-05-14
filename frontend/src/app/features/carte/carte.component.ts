@@ -21,6 +21,10 @@ import { ServiceConfig } from '../services-config/models/service-config.model';
 
 type ServiceStatus = 'LIBRE' | 'OCCUPE' | 'CRITIQUE' | 'MAINTENANCE';
 
+interface MappedInSpace extends Space {
+  name?: string;
+}
+
 const STATUS_FILLS: Record<ServiceStatus, string> = {
   LIBRE:       '#C8E6C9',
   OCCUPE:      '#FFF9C4',
@@ -67,7 +71,7 @@ export class CarteComponent implements OnInit, OnDestroy {
   private servicesStore = inject(ServicesStore); // Inject store
 
   private mapView: MapView | null = null;
-  private allSpaces: Space[] = [];
+  private allSpaces: MappedInSpace[] = [];
 
   mapReady    = signal(false);
   mapError    = signal('');
@@ -134,10 +138,10 @@ export class CarteComponent implements OnInit, OnDestroy {
         } as any
       );
 
-      this.allSpaces = mapData.getByType('space') as Space[];
+      this.allSpaces = mapData.getByType('space') as MappedInSpace[];
 
       // Dev helper: expose space names for easy SPACE_TO_CHU_SERVICE expansion
-      const spaceNames = this.allSpaces.map((s: any) => s.name ?? 'unnamed');
+      const spaceNames = this.allSpaces.map(s => s.name ?? 'unnamed');
       console.log('[HealthMap] Map spaces:', JSON.stringify(spaceNames, null, 2));
       (window as any).__CHU_SPACES = spaceNames;
 
@@ -153,11 +157,11 @@ export class CarteComponent implements OnInit, OnDestroy {
     }
   }
 
-  private applyServiceColors(spaces: Space[]): void {
+  private applyServiceColors(spaces: MappedInSpace[]): void {
     if (!this.mapView) return;
 
     for (const space of spaces) {
-      const name = (space as any).name ?? '';
+      const name = space.name ?? '';
       const svcId = SPACE_TO_CHU_SERVICE[name];
       const svc = svcId ? this.servicesStore.byId(svcId) : null;
 
@@ -183,11 +187,11 @@ export class CarteComponent implements OnInit, OnDestroy {
     }
   }
 
-  private addServiceLabels(spaces: Space[]): void {
+  private addServiceLabels(spaces: MappedInSpace[]): void {
     if (!this.mapView) return;
 
     for (const space of spaces) {
-      const name = (space as any).name ?? '';
+      const name = space.name ?? '';
       const svcId = SPACE_TO_CHU_SERVICE[name];
       const svc = svcId ? this.servicesStore.byId(svcId) : null;
       if (!svc) continue;
@@ -273,11 +277,11 @@ export class CarteComponent implements OnInit, OnDestroy {
     }
   }
 
-  private bindClicks(spaces: Space[]): void {
+  private bindClicks(spaces: MappedInSpace[]): void {
     if (!this.mapView) return;
 
     this.mapView.on('click', (event: any) => {
-      const clicked: Space[] = event?.spaces ?? [];
+      const clicked: MappedInSpace[] = event?.spaces ?? [];
       if (!clicked.length) {
         this.selectedSvc.set(null);
         this.applyServiceColors(spaces);
@@ -285,7 +289,7 @@ export class CarteComponent implements OnInit, OnDestroy {
       }
 
       const space = clicked[0];
-      const name  = (space as any).name ?? '';
+      const name  = space.name ?? '';
       const svcId = SPACE_TO_CHU_SERVICE[name];
       const svc   = svcId ? this.servicesStore.byId(svcId) : null;
 

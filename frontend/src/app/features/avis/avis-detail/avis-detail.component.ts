@@ -19,7 +19,7 @@ import { AvisExterne, StatutAvis } from '../../../core/models/avis.model';
           <button class="btn-back" routerLink="/avis-externes"><mat-icon>arrow_back</mat-icon></button>
           <div class="ad-title-wrap">
             <h1 class="ad-title">Avis — {{ avis()!.specialite }}</h1>
-            <p class="ad-sub">{{ getPatientName(avis()!.patientId) }} · {{ avis()!.datedemande | date:'dd/MM/yyyy' }}</p>
+            <p class="ad-sub">{{ patientName() }} · {{ avis()!.datedemande | date:'dd/MM/yyyy' }}</p>
           </div>
           <span class="statut-badge" [class]="'s-' + avis()!.statut.toLowerCase()">{{ statutLabel(avis()!.statut) }}</span>
         </div>
@@ -27,7 +27,7 @@ import { AvisExterne, StatutAvis } from '../../../core/models/avis.model';
         <div class="ad-grid">
           <div class="ad-card">
             <h3 class="adc-title">Détails de la demande</h3>
-            <div class="ad-field"><label>Patient</label><p>{{ getPatientName(avis()!.patientId) }}</p></div>
+            <div class="ad-field"><label>Patient</label><p>{{ patientName() }}</p></div>
             <div class="ad-field"><label>Médecin demandeur</label><p>{{ avis()!.medecinDemandeur }}</p></div>
             <div class="ad-field"><label>Spécialité</label><p>{{ avis()!.specialite }}</p></div>
             <div class="ad-field"><label>Type</label><p>{{ avis()!.externe ? 'Externe — ' + avis()!.etablissement : 'Inter-service' }}</p></div>
@@ -98,18 +98,20 @@ export class AvisDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   avis = signal<AvisExterne | null>(null);
+  patientName = computed(() => {
+    const a = this.avis();
+    if (!a) return '';
+    const p = this.patientSvc.getPatient(+a.patientId);
+    return p ? p.fullName : `Patient #${a.patientId}`;
+  });
   reponseText = '';
   selectedRec = signal<string>('');
   recOptions = ['Hospitaliser', 'Référer', 'Traitement ambulatoire'];
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.avis.set(this.mockData.getAvis_(id) ?? null);
-  }
-
-  getPatientName(id: string): string {
-    const p = this.patientSvc.getPatient(+id);
-    return p ? p.fullName : `Patient #${id}`;
+    const avisData = this.mockData.getAvis_(id);
+    this.avis.set(avisData ?? null);
   }
 
   statutLabel(s: StatutAvis): string {

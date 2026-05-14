@@ -65,14 +65,14 @@
   <div class="filter-row">
     <button class="fchip" [class.active]="activeFilter() === 'TOUS'"
       (click)="setFilter('TOUS')">Tous</button>
-    @for (t of allTypes; track t) {
+    @for (t of allTypes(); track t.id) {
       <button class="fchip"
-        [class.active]="activeFilter() === t"
-        [style.border-color]="activeFilter() === t ? typeColor(t) : 'transparent'"
-        [style.background]="activeFilter() === t ? typeColor(t) : 'transparent'"
-        [style.color]="activeFilter() === t ? '#fff' : typeColor(t)"
-        (click)="setFilter(t)">
-        {{ t }}
+        [class.active]="activeFilter() === t.id"
+        [style.border-color]="activeFilter() === t.id ? typeColor(t.id) : 'transparent'"
+        [style.background]="activeFilter() === t.id ? typeColor(t.id) : 'transparent'"
+        [style.color]="activeFilter() === t.id ? '#fff' : typeColor(t.id)"
+        (click)="setFilter(t.id)">
+        {{ t.label || t.code || t.name }}
       </button>
     }
   </div>

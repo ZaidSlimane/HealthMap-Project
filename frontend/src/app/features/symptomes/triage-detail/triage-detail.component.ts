@@ -123,7 +123,8 @@ export class TriageDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.triage.set(this.mockData.getTriage(id) ?? null);
+    const triageData = this.mockData.getTriage(id);
+    this.triage.set(triageData ?? null);
   }
 
   urgenceLabel(n: NiveauUrgence): string {

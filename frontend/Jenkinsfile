@@ -11,11 +11,18 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
                 sh "cp -r ${WORKSPACE}/frontend/. ${DEPLOY_PATH}/frontend/"
+            }
+        }
+
+        stage('Verify Build') {
+            steps {
+                // This ensures the frontend compiles cleanly before attempting deployment.
+                // The Docker build will fail fast if the 'npm run build' fails.
+                sh "cd ${DEPLOY_PATH} && docker compose build frontend"
             }
         }
 

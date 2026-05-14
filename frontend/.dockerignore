@@ -1,0 +1,26 @@
+# Never bake secrets into the image
+.env
+.env.*
+
+# Dependencies (installed fresh via npm ci)
+node_modules/
+
+# Build output (rebuilt in container)
+dist/
+.angular/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Docker files (not needed inside the image)
+Dockerfile
+docker-compose.yml
+
+# Tests
+coverage/
+karma.conf.js

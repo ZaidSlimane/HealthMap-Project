@@ -7,11 +7,13 @@ export class ServicesStore {
   private api = inject(ServiceApiService);
 
   private _services = signal<ServiceConfig[]>([]);
+  private _serviceTypes = signal<any[]>([]);
   private _loading = signal<boolean>(false);
   private _loaded = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
   readonly services = this._services.asReadonly();
+  readonly serviceTypes = this._serviceTypes.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly loaded = this._loaded.asReadonly();
   readonly error = this._error.asReadonly();
@@ -30,11 +32,18 @@ export class ServicesStore {
 
     this._inflight = (async () => {
       try {
-        const response = await this.api.getAll().toPromise();
-        if (response && response.data) {
-          this._services.set(response.data.data ?? []);
-          this._loaded.set(true);
+        const [servicesRes, typesRes] = await Promise.all([
+          this.api.getAll().toPromise(),
+          this.api.getServiceTypes().toPromise()
+        ]);
+
+        if (servicesRes && servicesRes.data) {
+          this._services.set(servicesRes.data.data ?? []);
         }
+        if (typesRes && typesRes.data) {
+          this._serviceTypes.set(typesRes.data.data ?? []);
+        }
+        this._loaded.set(true);
       } catch (e: any) {
         this._error.set(e?.message || 'Failed to load services');
         console.error('[ServicesStore] loadServices failed:', e);

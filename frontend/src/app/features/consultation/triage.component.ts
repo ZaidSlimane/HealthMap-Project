@@ -18,7 +18,7 @@ interface Specialty { label: string; icon: string; }
 })
 export class TriageComponent {
   private patientService = inject(PatientService);
-  patient: Patient = this.patientService.getCurrentPatient();
+  patient: Patient | undefined = this.patientService.getCurrentPatient();
   selectedSpecialty = 0;
 
   specialties: Specialty[] = [

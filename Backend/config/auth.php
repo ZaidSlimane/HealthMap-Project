@@ -114,4 +114,19 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Bootstrap Admin Credentials
+    |--------------------------------------------------------------------------
+    |
+    | These credentials are used for the initial admin bootstrap login.
+    | They MUST be set via environment variables — never hardcode them.
+    | If bootstrap_admin_password is empty, the bootstrap login is disabled.
+    |
+    */
+
+    'bootstrap_admin_username' => env('BOOTSTRAP_ADMIN_USERNAME', 'Admin'),
+    'bootstrap_admin_email' => env('BOOTSTRAP_ADMIN_EMAIL', 'admin@healthmap.com'),
+    'bootstrap_admin_password' => env('BOOTSTRAP_ADMIN_PASSWORD'),
+
 ];

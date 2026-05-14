@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesStore } from '../services-config/services-store';
 import {
   ServiceConfig, ServiceType, computeStatus, totalLitsService, litsOccupesService,
-  STATUS_FILL, STATUS_STROKE, TYPE_FILL, TYPE_STROKE,
+  STATUS_FILL, STATUS_STROKE, TYPE_FILL, TYPE_STROKE, typeColorById, typeFillById,
   MapServiceStatus
 } from '../services-config/models/service-config.model';
 
@@ -167,11 +167,15 @@ export class ServiceMapComponent implements OnInit {
   }
 
   getServiceColor(svc: ChuService | ServiceConfig): string {
-    return TYPE_FILL[svc.type as ServiceType] ?? '#F5F5F5';
+    const t = svc.type;
+    if (typeof t === 'number') return typeFillById(t);
+    return TYPE_FILL[t as string] ?? '#F5F5F5';
   }
 
   getServiceStroke(svc: ChuService | ServiceConfig): string {
-    return TYPE_STROKE[svc.type as ServiceType] ?? '#9E9E9E';
+    const t = svc.type;
+    if (typeof t === 'number') return typeColorById(t);
+    return TYPE_STROKE[t as string] ?? '#9E9E9E';
   }
 
   getStatusColor(status: MapServiceStatus): string {

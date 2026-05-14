@@ -14,7 +14,7 @@ import { PatientService, Patient } from '../../core/services/patient.service';
 })
 export class QueueCallComponent {
   private patientService = inject(PatientService);
-  patient: Patient = this.patientService.getCurrentPatient();
+  patient: Patient | undefined = this.patientService.getCurrentPatient();
   queueList = [
     { number: 52, service: 'مكتب الفحص 1' },
     { number: 51, service: 'الإشعة' },

@@ -124,7 +124,7 @@
             <span>0</span>
           </div>
           <div class="chart-bars-container">
-            @for (point of chartData; track point.date) {
+            @for (point of chartData(); track point.date) {
               <div class="chart-group">
                 <div class="bar-group">
                   <div class="bar bar-admissions" [style.height.px]="barHeight(point.admissions)"></div>

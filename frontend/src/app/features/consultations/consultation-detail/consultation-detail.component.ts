@@ -102,7 +102,8 @@ export class ConsultationDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.consultation.set(this.mockData.getConsultation(id) ?? null);
+    const consultationData = this.mockData.getConsultation(id);
+    this.consultation.set(consultationData ?? null);
   }
 
   imprimer(): void { window.print(); }

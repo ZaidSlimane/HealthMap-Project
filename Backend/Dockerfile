@@ -1,3 +1,4 @@
+# Stage: PHP-FPM for Laravel
 FROM php:8.3-fpm-alpine
 
 # Install system dependencies
@@ -20,14 +21,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory permissions
+# Copy application code
 COPY . .
 
-# Run composer install
+# Install dependencies (no dev packages in production)
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Set permissions for Laravel
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Ensure storage and cache directories exist with correct permissions
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 9000
 

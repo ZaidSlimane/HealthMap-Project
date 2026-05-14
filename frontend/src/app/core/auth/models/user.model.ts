@@ -10,6 +10,7 @@ export interface User {
   name: string;
   email: string;
   roles: UserRoleDetail[];
+  role_names?: string[];
   /** Returned by the API; true on first login until the wizard completes. */
   must_change_password?: boolean;
   /** True once POST /onboarding/complete has succeeded for this user. */

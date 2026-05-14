@@ -45,12 +45,12 @@ export class AdminDashboardComponent implements OnInit {
   readonly criticalCount = signal(0);
 
   // Mocked placeholders for areas not yet wired to a backend.
-  readonly totalAlerts    = 0;
-  readonly criticalAlerts = 0;
-  readonly totalUsers     = 0;
-  readonly activeUsers    = 0;
-  readonly stockItems     = 0;
-  readonly stockLow       = 0;
+  readonly totalAlerts    = 12;
+  readonly criticalAlerts = 4;
+  readonly totalUsers     = 156;
+  readonly activeUsers    = 23;
+  readonly stockItems     = 842;
+  readonly stockLow       = 18;
 
   // ── KPI strip (computed so it tracks the live signals) ──────────────────
   readonly hospitalKpis = computed<HospitalKpi[]>(() => [
@@ -105,23 +105,32 @@ export class AdminDashboardComponent implements OnInit {
 
   // Placeholder until admissions/radiology/labo endpoints are wired.
   todaysStats: Stat[] = [
-    { label: 'Admissions',          value: 0, icon: 'person_add',      cls: 'admissions' },
-    { label: 'Patients en attente', value: 0, icon: 'hourglass_empty', cls: 'waiting' },
-    { label: 'Radiologies du jour', value: 0, icon: 'biotech',         cls: 'radiology' },
-    { label: 'Résultats labo',      value: 0, icon: 'science',         cls: 'labo' },
+    { label: 'Admissions',          value: 12, icon: 'person_add',      cls: 'admissions' },
+    { label: 'Patients en attente', value: 8, icon: 'hourglass_empty', cls: 'waiting' },
+    { label: 'Radiologies du jour', value: 24, icon: 'biotech',         cls: 'radiology' },
+    { label: 'Résultats labo',      value: 41, icon: 'science',         cls: 'labo' },
   ];
 
-  chartData: ChartPoint[] = Array.from({ length: 10 }, (_, i) => {
+  chartData = signal<ChartPoint[]>(Array.from({ length: 10 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (9 - i));
     return {
       date: d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }),
-      admissions: 0, radiologie: 0, labo: 0,
+      admissions: Math.floor(Math.random() * 20) + 5,
+      radiologie: Math.floor(Math.random() * 30) + 10,
+      labo: Math.floor(Math.random() * 40) + 15,
     };
+  }));
+
+  maxVal = computed(() => {
+    const data = this.chartData();
+    const allValues = data.flatMap(p => [p.admissions, p.radiologie, p.labo]);
+    return Math.max(1, ...allValues);
   });
 
-  maxVal = 1;
-  barHeight(val: number): number { return (val / this.maxVal) * 80; }
+  barHeight(val: number): number {
+    return (val / this.maxVal()) * 80;
+  }
 
   // ── Header date ─────────────────────────────────────────────────────────
   readonly today = new Date().toLocaleDateString('fr-FR', {

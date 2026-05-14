@@ -147,7 +147,7 @@ export class RechercheComponent {
   shortcuts = ['Hypertension', 'Diabète', 'Bronchite', 'Grippe', 'Douleur thoracique'];
 
   patientResults = signal<{ id: number; fullName: string; admissionNumber: number; dob: string }[]>([]);
-  consultResults = signal<{ id: string; motif: string; medecin: string; dateHeure: Date }[]>([]);
+  consultResults = signal<{ id: string; motif: string; medecin?: string; dateHeure: Date }[]>([]);
   cimResults = signal<{ code: string; libelle: string; chapitre: string }[]>([]);
 
   search(): void {
@@ -158,9 +158,19 @@ export class RechercheComponent {
       return;
     }
     const q = this.query.toLowerCase();
-    this.patientResults.set(this.patientSvc.getPatients().filter(p => p.fullName.toLowerCase().includes(q) || p.admissionNumber.toString().includes(q)).slice(0, 5));
-    this.consultResults.set(this.mockData.getConsultations().filter(c => c.motif.toLowerCase().includes(q) || (c.diagnosticPrincipal ?? '').toLowerCase().includes(q)).slice(0, 5) as any);
-    this.cimResults.set(this.mockData.searchCIM10(this.query).slice(0, 5));
+
+    const patients = this.patientSvc.getPatients();
+    this.patientResults.set(
+      patients.filter(p => p.fullName.toLowerCase().includes(q) || p.admissionNumber.toString().includes(q)).slice(0, 5)
+    );
+
+    const consults = this.mockData.getConsultations();
+    this.consultResults.set(
+      consults.filter(c => c.motif.toLowerCase().includes(q) || (c.diagnosticPrincipal ?? '').toLowerCase().includes(q)).slice(0, 5)
+    );
+
+    const cim = this.mockData.searchCIM10(this.query);
+    this.cimResults.set(cim.slice(0, 5));
   }
 
   clear(): void {

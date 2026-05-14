@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   ServiceConfig, Unit, Room, Bed, ServiceType, UnitType, BedStatus, User,
-  ALL_SERVICE_TYPES, ALL_UNIT_TYPES, TYPE_COLOR,
+  ALL_SERVICE_TYPES, ALL_UNIT_TYPES, TYPE_COLOR, typeColorById,
   totalLitsUnite, litsOccupesUnite
 } from '../../models/service-config.model';
 
@@ -38,7 +38,7 @@ export class ServiceDrawerComponent implements OnChanges {
   allTypes  = ALL_SERVICE_TYPES;
   allUnitTypes = ALL_UNIT_TYPES;
 
-  form = signal<DrawerForm>({ name: '', type: 'MEDECINE', code: '1' });
+  form = signal<DrawerForm>({ name: '', type: 1, code: '1' });
   chefNom = signal<string>('');
   coordinateurNom = signal<string>('');
   actif = signal<boolean>(true);
@@ -81,7 +81,7 @@ export class ServiceDrawerComponent implements OnChanges {
           this.unites.set(JSON.parse(JSON.stringify(s.units)));
           this.selectedUniteId.set(s.units[0]?.id ?? null);
         } else {
-          this.form.set({ name: '', type: 'MEDECINE', code: '1' });
+          this.form.set({ name: '', type: 1, code: '1' });
           this.chefNom.set('');
           this.coordinateurNom.set('');
           this.actif.set(true);
@@ -99,7 +99,8 @@ export class ServiceDrawerComponent implements OnChanges {
   }
 
   get typeColor(): string {
-    return TYPE_COLOR[(this.form().type as ServiceType) ?? 'MEDECINE'] ?? '#546E7A';
+    const t = this.form().type;
+    return typeof t === 'number' ? typeColorById(t) : (TYPE_COLOR[t] ?? '#546E7A');
   }
 
   private makeUser(name: string): User {

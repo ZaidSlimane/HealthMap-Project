@@ -10,7 +10,7 @@ import { OsmService } from '../../core/services/osm.service';
 import { ServicesStore } from '../services-config/services-store';
 import {
   ServiceConfig, ServiceType, MapServiceStatus,
-  TYPE_FILL, TYPE_STROKE, TYPE_LABEL,
+  TYPE_FILL, TYPE_STROKE, TYPE_LABEL, typeColorById, typeFillById,
   shortLabel, computeStatus, totalLitsService, litsOccupesService
 } from '../services-config/models/service-config.model';
 import { ServiceMiniCardComponent } from '../../shared/components/service-mini-card/service-mini-card.component';
@@ -56,7 +56,7 @@ export class CampusMapComponent implements OnInit, OnDestroy {
   searchQuery = signal('');
 
   readonly allSvcs = this.servicesStore.services;
-  readonly allTypes = Object.keys(TYPE_LABEL) as ServiceType[];
+  readonly allTypes = Object.keys(TYPE_LABEL) as (keyof typeof TYPE_LABEL)[];
   readonly typeLabels = TYPE_LABEL;
   readonly typeFills  = TYPE_FILL;
   readonly typeStrokes = TYPE_STROKE;
@@ -74,7 +74,7 @@ export class CampusMapComponent implements OnInit, OnDestroy {
     const q = this.searchQuery().toLowerCase();
     const f = this.activeFilter();
     return this.allSvcs().filter(s => {
-      const typeOk = f === 'ALL' || s.type === f;
+      const typeOk = f === 'ALL' || String(s.type) === f || s.type_label === f;
       const qOk    = !q || s.name.toLowerCase().includes(q) || shortLabel(s.name).toLowerCase().includes(q);
       return typeOk && qOk;
     });
@@ -198,8 +198,8 @@ export class CampusMapComponent implements OnInit, OnDestroy {
     document.querySelectorAll('.svc-marker-wrapper').forEach(el => el.remove());
 
     for (const svc of this.filteredSvcs()) {
-      const fill   = TYPE_FILL[svc.type]   ?? '#EEE';
-      const stroke = TYPE_STROKE[svc.type] ?? '#999';
+      const fill   = typeof svc.type === 'number' ? typeFillById(svc.type) : (TYPE_FILL[svc.type] ?? '#EEE');
+      const stroke = typeof svc.type === 'number' ? typeColorById(svc.type) : (TYPE_STROKE[svc.type] ?? '#999');
       const isCritique    = computeStatus(svc) === 'CRITIQUE';
       const isMaintenance = computeStatus(svc) === 'MAINTENANCE';
 
@@ -265,8 +265,14 @@ export class CampusMapComponent implements OnInit, OnDestroy {
     return map[s];
   }
 
-  getTypeColor(t: string): string  { return TYPE_FILL[t as ServiceType]   ?? '#EEE'; }
-  getTypeStroke(t: string): string { return TYPE_STROKE[t as ServiceType] ?? '#9E9E9E'; }
+  getTypeColor(t: string | number): string  {
+    if (typeof t === 'number') return typeFillById(t);
+    return TYPE_FILL[t] ?? '#EEE';
+  }
+  getTypeStroke(t: string | number): string {
+    if (typeof t === 'number') return typeColorById(t);
+    return TYPE_STROKE[t] ?? '#9E9E9E';
+  }
 
   flyToService(svc: ServiceConfig): void {
     this.selectedSvc.set(svc);

@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ServiceConfig, TYPE_COLOR, TYPE_FILL,
+  ServiceConfig, TYPE_COLOR, TYPE_FILL, typeColorById, typeFillById,
   totalLitsService, litsOccupesService, tauxOccupation,
   totalSallesService, computeStatus, STATUS_FILL, STATUS_STROKE,
   shortLabel, MapServiceStatus, ServiceType
@@ -28,8 +28,14 @@ export class ServiceMiniCardComponent {
   readonly typeFillMap = TYPE_FILL;
   readonly typeColorMap = TYPE_COLOR;
 
-  get typeColor(): string { return TYPE_COLOR[this.service.type] ?? '#546E7A'; }
-  get typeFill(): string  { return TYPE_FILL[this.service.type] ?? '#ECEFF1'; }
+  get typeColor(): string {
+    const t = this.service.type;
+    return typeof t === 'number' ? typeColorById(t) : (TYPE_COLOR[t] ?? '#546E7A');
+  }
+  get typeFill(): string {
+    const t = this.service.type;
+    return typeof t === 'number' ? typeFillById(t) : (TYPE_FILL[t] ?? '#ECEFF1');
+  }
   get lbl(): string       { return shortLabel(this.service.name); }
 
   get status(): MapServiceStatus { return computeStatus(this.service); }

@@ -23,7 +23,7 @@ export interface NavItem {
 
 const ALL_NAV_ITEMS: NavItem[] = [
   // ── SUPERADMIN ──
-  { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/admin/dashboard', roles: ['superadmin'] },
+  { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/admin/dashboard', roles: ['superadmin', 'Admin'] },
   { label: 'Alertes', icon: 'notifications_active', route: '/admin/alertes', roles: ['superadmin'], badge: 3 },
   { label: 'Tableau de bord BDE', icon: 'fact_check', route: '/bde/dashboard', roles: ['superadmin', 'bde'] },
   // Doctor-owned pages (Consultations, Sympt./Triage, Ordonnances, Avis,
@@ -66,35 +66,30 @@ const ALL_NAV_ITEMS: NavItem[] = [
   },
 
   // ── PERSONNEL & UTILISATEURS ───────────────────────────────────────────
-  // Hospital-wide staff/user configuration. "Administration → /admin/dashboard"
-  // was removed: it duplicated "Tableau de bord" already in CLINIQUE.
-  { sectionLabel: 'PERSONNEL & UTILISATEURS', label: 'Configuration (API)', icon: 'tune', route: '/admin/configuration', roles: ['superadmin', 'admin'] },
-  { label: 'Gestion des Services', icon: 'medical_services', route: '/admin/services', roles: ['superadmin', 'admin'] },
-  // Single 3-tab page (Personnel / Utilisateurs / Grades). The two old
-  // separate entries collapsed into this; /admin/utilisateurs still works
-  // (loads the same component on the Utilisateurs tab).
-  { label: 'Personnel & Utilisateurs', icon: 'badge', route: '/admin/personnel', roles: ['superadmin'] },
-  { label: 'Médecins', icon: 'people', route: '/admin/medecins', roles: ['superadmin', 'admin'] },
+  { sectionLabel: 'PERSONNEL & UTILISATEURS', label: 'Personnel & Utilisateurs', icon: 'badge', route: '/admin/personnel', roles: ['superadmin', 'Admin'] },
+  { label: 'Configuration (API)', icon: 'tune', route: '/admin/configuration', roles: ['superadmin', 'Admin'] },
+  { label: 'Gestion des Services', icon: 'medical_services', route: '/admin/services', roles: ['superadmin', 'Admin'] },
+  { label: 'Médecins', icon: 'people', route: '/admin/medecins', roles: ['superadmin', 'Admin'] },
 
   // ── PARAMÉTRAGES UNITÉS ────────────────────────────────────────────────
   // Per-unit config grouped as collapsibles to keep unit-scoped settings
   // visually distinct from hospital-wide user/staff config above.
   {
     sectionLabel: 'PARAMÉTRAGES UNITÉS',
-    label: 'Paramétrages Borne', icon: 'settings_input_component', roles: ['superadmin', 'admin'], expanded: false, children: [
-      { label: 'Médecins de tri', icon: 'medical_services', route: '/admin/borne/medecins', roles: ['superadmin', 'admin'] },
-      { label: 'Box', icon: 'meeting_room', route: '/admin/borne/box', roles: ['superadmin', 'admin'] },
-      { label: 'Borne', icon: 'tablet_android', route: '/admin/borne/config', roles: ['superadmin', 'admin'] },
+    label: 'Paramétrages Borne', icon: 'settings_input_component', roles: ['superadmin', 'Admin'], expanded: false, children: [
+      { label: 'Médecins de tri', icon: 'medical_services', route: '/admin/borne/medecins', roles: ['superadmin', 'Admin'] },
+      { label: 'Box', icon: 'meeting_room', route: '/admin/borne/box', roles: ['superadmin', 'Admin'] },
+      { label: 'Borne', icon: 'tablet_android', route: '/admin/borne/config', roles: ['superadmin', 'Admin'] },
     ]
   },
   {
-    label: 'Radiologie Config', icon: 'biotech', roles: ['superadmin', 'admin'], expanded: false, children: [
-      { label: 'Configuration', icon: 'tune', route: '/admin/radiologie/config', roles: ['superadmin', 'admin'] },
+    label: 'Radiologie Config', icon: 'biotech', roles: ['superadmin', 'Admin'], expanded: false, children: [
+      { label: 'Configuration', icon: 'tune', route: '/admin/radiologie/config', roles: ['superadmin', 'Admin'] },
     ]
   },
   {
-    label: 'Laboratoire Config', icon: 'science', roles: ['superadmin', 'admin'], expanded: false, children: [
-      { label: 'Configuration', icon: 'tune', route: '/admin/laboratoire/config', roles: ['superadmin', 'admin'] },
+    label: 'Laboratoire Config', icon: 'science', roles: ['superadmin', 'Admin'], expanded: false, children: [
+      { label: 'Configuration', icon: 'tune', route: '/admin/laboratoire/config', roles: ['superadmin', 'Admin'] },
     ]
   },
 
@@ -144,10 +139,18 @@ export class SidebarComponent {
   filteredItems = computed(() => {
     if (!this.auth.currentUser()) return [];
     const user = this.auth.currentUser()!;
-    const userRoles = user.roles.map(r => r.role);
+    // Build the effective role list from either roles[] or role_names[]
+    const userRoles: string[] = (user.roles && user.roles.length > 0)
+      ? user.roles.map(r => r.role.toLowerCase())
+      : (user.role_names ?? []).map(r => r.toLowerCase());
+
+    // Admin role is a wildcard — show all nav items (mirrors roleGuard behavior)
+    if (userRoles.includes('admin')) {
+      return this.navItems;
+    }
 
     return this.navItems.filter(item =>
-      item.roles.some(requiredRole => userRoles.includes(requiredRole))
+      item.roles.some(requiredRole => userRoles.includes(requiredRole.toLowerCase()))
     );
   });
 
@@ -160,7 +163,8 @@ export class SidebarComponent {
   );
 
   isActive(item: NavItem): boolean {
-    const route = this.currentRoute();
+    const fullRoute = this.currentRoute();
+    const route = fullRoute.split('?')[0];
     if (item.route) return route === item.route || route.startsWith(item.route + '/');
     if (item.children) return item.children.some(c => c.route && (route === c.route || route.startsWith(c.route + '/')));
     return false;

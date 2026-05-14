@@ -2,9 +2,9 @@
   <div class="queue-layout">
     <!-- LEFT: Current patient card -->
     <div class="current-patient-card card-surface">
-      <div class="patient-name">{{ patient.fullName }}</div>
-      <div class="patient-dob">{{ patient.dob }}</div>
-      <div class="queue-number"># {{ patient.queueNumber }}</div>
+      <div class="patient-name">{{ patient?.fullName }}</div>
+      <div class="patient-dob">{{ patient?.dob }}</div>
+      <div class="queue-number"># {{ patient?.queueNumber }}</div>
 
       <button mat-flat-button class="btn-start" data-testid="btn-start-consultation">
         Démarrer La consultation

@@ -1,7 +1,10 @@
-export type ServiceType =
+export type ServiceType = number;
+
+/** Legacy string-based type labels — used by map components and cards. */
+export type ServiceTypeName =
   | 'URGENCE' | 'CHIRURGIE' | 'MEDECINE' | 'CONSULTATION'
-  | 'LABORATOIRE' | 'IMAGERIE' | 'PHARMACIE'
-  | 'ADMINISTRATION' | 'LOGISTIQUE' | 'ENSEIGNEMENT';
+  | 'MATERNITE' | 'PEDIATRIE' | 'RADIOLOGIE' | 'LABORATOIRE'
+  | 'PHARMACIE' | 'HEMODIALYSE' | 'AUTRE';
 
 export type UnitType =
   | 'Admission Classique' | 'Soins Intensifs' | 'Réanimation'
@@ -42,6 +45,7 @@ export interface ServiceConfig {
   id: string;
   name: string;
   type: ServiceType;
+  type_label?: string;
   code: string;
   chief: User;
   medical_chief: User;
@@ -52,6 +56,84 @@ export interface ServiceConfig {
     lon: number;
   };
 }
+
+// ── Legacy string-based color maps (used by map & card components) ────────
+
+export const ALL_SERVICE_TYPES: ServiceTypeName[] = [
+  'URGENCE','CHIRURGIE','MEDECINE','CONSULTATION',
+  'MATERNITE','PEDIATRIE','RADIOLOGIE','LABORATOIRE',
+  'PHARMACIE','HEMODIALYSE','AUTRE',
+];
+
+export const TYPE_LABEL: Record<ServiceTypeName, string> = {
+  URGENCE:      'Urgences',
+  CHIRURGIE:    'Chirurgie',
+  MEDECINE:     'Médecine',
+  CONSULTATION: 'Consultation',
+  MATERNITE:    'Maternité',
+  PEDIATRIE:    'Pédiatrie',
+  RADIOLOGIE:   'Radiologie',
+  LABORATOIRE:  'Laboratoire',
+  PHARMACIE:    'Pharmacie',
+  HEMODIALYSE:  'Hémodialyse',
+  AUTRE:        'Autre',
+};
+
+export const TYPE_COLOR: Record<string, string> = {
+  URGENCE:      '#E53935',
+  CHIRURGIE:    '#F57C00',
+  MEDECINE:     '#1565C0',
+  CONSULTATION: '#BF360C',
+  MATERNITE:    '#AD1457',
+  PEDIATRIE:    '#00897B',
+  RADIOLOGIE:   '#5E35B1',
+  LABORATOIRE:  '#00838F',
+  PHARMACIE:    '#558B2F',
+  HEMODIALYSE:  '#6D4C41',
+  AUTRE:        '#546E7A',
+};
+
+export const TYPE_FILL: Record<string, string> = {
+  URGENCE:      '#FFCDD2',
+  CHIRURGIE:    '#FFE0B2',
+  MEDECINE:     '#BBDEFB',
+  CONSULTATION: '#FBE9E7',
+  MATERNITE:    '#F8BBD0',
+  PEDIATRIE:    '#B2DFDB',
+  RADIOLOGIE:   '#D1C4E9',
+  LABORATOIRE:  '#B2EBF2',
+  PHARMACIE:    '#DCEDC8',
+  HEMODIALYSE:  '#D7CCC8',
+  AUTRE:        '#ECEFF1',
+};
+
+export const TYPE_STROKE: Record<string, string> = {
+  URGENCE:      '#E53935',
+  CHIRURGIE:    '#F57C00',
+  MEDECINE:     '#1565C0',
+  CONSULTATION: '#BF360C',
+  MATERNITE:    '#AD1457',
+  PEDIATRIE:    '#00897B',
+  RADIOLOGIE:   '#5E35B1',
+  LABORATOIRE:  '#00838F',
+  PHARMACIE:    '#558B2F',
+  HEMODIALYSE:  '#6D4C41',
+  AUTRE:        '#546E7A',
+};
+
+/** Get a color for a numeric service type ID (cycles through a palette). */
+const ID_PALETTE = ['#E53935','#F57C00','#1565C0','#BF360C','#AD1457','#00897B','#5E35B1','#00838F','#558B2F','#6D4C41','#546E7A'];
+
+export function typeColorById(id: number): string {
+  return ID_PALETTE[(id - 1) % ID_PALETTE.length] ?? '#546E7A';
+}
+
+export function typeFillById(id: number): string {
+  const fills = ['#FFCDD2','#FFE0B2','#BBDEFB','#FBE9E7','#F8BBD0','#B2DFDB','#D1C4E9','#B2EBF2','#DCEDC8','#D7CCC8','#ECEFF1'];
+  return fills[(id - 1) % fills.length] ?? '#ECEFF1';
+}
+
+// ── Utility functions ─────────────────────────────────────────────────────
 
 export function totalLitsUnite(u: Unit): number {
   return u.rooms.reduce((s, r) => s + r.capacity, 0);
@@ -87,36 +169,10 @@ export function initials(name: string): string {
 
 export type MapServiceStatus = 'LIBRE' | 'OCCUPE' | 'CRITIQUE' | 'MAINTENANCE';
 
-export const ALL_SERVICE_TYPES: ServiceType[] = [
-  'URGENCE','CHIRURGIE','MEDECINE','CONSULTATION',
-  'LABORATOIRE','IMAGERIE','PHARMACIE',
-  'ADMINISTRATION','LOGISTIQUE','ENSEIGNEMENT',
-];
-
 export const ALL_UNIT_TYPES: UnitType[] = [
   'Admission Classique','Soins Intensifs','Réanimation',
   'Pédiatrie','Maternité','Chirurgie Ambulatoire','Autre',
 ];
-
-export const TYPE_COLOR: Record<ServiceType, string> = {
-  URGENCE:'#E53935', CHIRURGIE:'#F57C00', MEDECINE:'#1565C0', CONSULTATION:'#BF360C',
-  LABORATOIRE:'#6A1B9A', IMAGERIE:'#00838F', PHARMACIE:'#2E7D32',
-  ADMINISTRATION:'#546E7A', LOGISTIQUE:'#F9A825', ENSEIGNEMENT:'#283593',
-};
-
-export const TYPE_FILL: Record<ServiceType, string> = {
-  URGENCE:'#FFCDD2', CHIRURGIE:'#FFE0B2', MEDECINE:'#BBDEFB', CONSULTATION:'#FBE9E7',
-  LABORATOIRE:'#E1BEE7', IMAGERIE:'#B2EBF2', PHARMACIE:'#C8E6C9',
-  ADMINISTRATION:'#ECEFF1', LOGISTIQUE:'#FFF9C4', ENSEIGNEMENT:'#E8EAF6',
-};
-
-export const TYPE_STROKE: Record<ServiceType, string> = { ...TYPE_COLOR };
-
-export const TYPE_LABEL: Record<ServiceType, string> = {
-  URGENCE:'Urgences', CHIRURGIE:'Chirurgie', MEDECINE:'Médecine', CONSULTATION:'Consultations',
-  LABORATOIRE:'Laboratoires', IMAGERIE:'Imagerie', PHARMACIE:'Pharmacie',
-  ADMINISTRATION:'Administration', LOGISTIQUE:'Logistique', ENSEIGNEMENT:'Enseignement',
-};
 
 export const STATUS_FILL: Record<MapServiceStatus, string> = {
   LIBRE:'#C8E6C9', OCCUPE:'#FFE0B2', CRITIQUE:'#FFCDD2', MAINTENANCE:'#ECEFF1',

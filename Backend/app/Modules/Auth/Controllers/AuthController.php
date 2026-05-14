@@ -23,8 +23,10 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // 1) Bootstrap shortcut for the seeded admin (kept for back-compat).
-        if ($request->username === 'Admin' && $request->password === 'root') {
+        // 1) Bootstrap shortcut for the seeded admin (credentials from .env).
+        $bootstrapUser = config('auth.bootstrap_admin_username', 'Admin');
+        $bootstrapPass = config('auth.bootstrap_admin_password');
+        if ($bootstrapPass && $request->username === $bootstrapUser && $request->password === $bootstrapPass) {
             return $this->authenticateAdmin();
         }
 
@@ -53,11 +55,11 @@ class AuthController extends Controller
     {
         // Find or create the Admin user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@healthmap.com'],
+            ['email' => config('auth.bootstrap_admin_email', 'admin@healthmap.com')],
             [
                 'name' => 'Administrator',
-                'email' => 'admin@healthmap.com',
-                'password' => Hash::make('root'),
+                'email' => config('auth.bootstrap_admin_email', 'admin@healthmap.com'),
+                'password' => Hash::make(config('auth.bootstrap_admin_password')),
                 // Force the bootstrap admin through the onboarding wizard the
                 // first time they sign in.
                 'must_change_password' => true,

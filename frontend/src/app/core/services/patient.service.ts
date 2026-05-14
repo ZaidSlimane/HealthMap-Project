@@ -152,31 +152,30 @@ export class PatientService {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
 
-  // ── Legacy compat shims (return Observables; map ApiPatient → Patient) ─
+  // ── Legacy compat shims (return synchronous placeholder data) ───────
 
   /**
-   * @deprecated Use `list()` for paginated `ApiPatient` data. This shim
-   * fetches one page and projects it onto the old shape so old callers
-   * stop type-erroring; admissionNumber/service/medecin/etc. are filled
-   * with placeholders since they no longer live on the patient row.
+   * @deprecated Use `list()` for paginated `ApiPatient` data.
+   * Returns an empty array synchronously — callers that need real data
+   * should migrate to `list()` which returns Observable<Paginated<ApiPatient>>.
    */
-  getPatients(): Observable<Patient[]> {
-    return this.list(50).pipe(map(p => p.data.map(mapApiToLegacy)));
+  getPatients(): Patient[] {
+    return [];
   }
 
   /** @deprecated Use `get(id)`. */
-  getPatient(id: number): Observable<Patient | undefined> {
-    return this.get(id).pipe(map(p => p ? mapApiToLegacy(p) : undefined));
+  getPatient(id: number): Patient | undefined {
+    return undefined;
   }
 
   /** @deprecated Radiology/lab endpoints have moved out of PatientService. */
-  getRadioRequests(): Observable<RadioRequest[]> { return of([]); }
+  getRadioRequests(): RadioRequest[] { return []; }
   /** @deprecated */
-  getUrgentRadioRequests(): Observable<RadioRequest[]> { return of([]); }
+  getUrgentRadioRequests(): RadioRequest[] { return []; }
   /** @deprecated */
-  getLabRequests(): Observable<LabRequest[]> { return of([]); }
+  getLabRequests(): LabRequest[] { return []; }
   /** @deprecated There is no "current patient" concept on the new API. */
-  getCurrentPatient(): Observable<Patient | undefined> { return of(undefined); }
+  getCurrentPatient(): Patient | undefined { return undefined; }
 }
 
 /** Project a real backend patient onto the legacy mock shape. */

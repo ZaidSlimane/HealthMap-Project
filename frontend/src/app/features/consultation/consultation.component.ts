@@ -27,7 +27,7 @@ interface Medication {
 })
 export class ConsultationComponent {
   private patientService = inject(PatientService);
-  patient: Patient = this.patientService.getCurrentPatient();
+  patient: Patient | undefined = this.patientService.getCurrentPatient();
   compteRendu = 'Toux — Depuis quelques jours de type Grasse Nocturne intense';
   medications: Medication[] = [{ nom: '', qte: 1, forme: 'CP', frequency: 'par jour', qsp: '', jours: 7 }];
   selectedModele = '';

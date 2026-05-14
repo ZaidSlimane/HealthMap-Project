@@ -100,15 +100,17 @@ export class AvisListComponent {
     { id: 'externes', label: 'Externes (autre établissement)' },
   ];
 
+  private allAvis = signal(this.mockData.getAvis());
+
   filteredAvis = computed(() => {
-    const all = this.mockData.getAvis();
+    const all = this.allAvis();
     if (this.activeTab() === 'envoyes') return all.filter(a => !a.externe);
     if (this.activeTab() === 'externes') return all.filter(a => a.externe);
     return all;
   });
 
   tabCount(id: string): number {
-    const all = this.mockData.getAvis();
+    const all = this.allAvis();
     if (id === 'envoyes') return all.filter(a => !a.externe).length;
     if (id === 'externes') return all.filter(a => a.externe).length;
     return all.length;

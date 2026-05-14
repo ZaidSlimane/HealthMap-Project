@@ -14,6 +14,10 @@ export class ServiceApiService {
     return this.http.get<{ data: { data: ServiceConfig[], current_page: number, last_page: number } }>(this.apiUrl);
   }
 
+  getServiceTypes(): Observable<{ data: { data: any[], current_page: number, last_page: number } }> {
+    return this.http.get<{ data: { data: any[], current_page: number, last_page: number } }>(`${environment.baseUrl}/service-types`);
+  }
+
   getById(id: string): Observable<ServiceConfig> {
     return this.http.get<ServiceConfig>(`${this.apiUrl}/${id}`);
   }

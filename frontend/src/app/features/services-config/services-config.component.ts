@@ -9,7 +9,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { ServiceCardComponent } from './components/service-card/service-card.component';
 import { ServiceDrawerComponent } from './components/service-drawer/service-drawer.component';
 import {
-  ServiceConfig, ServiceType, ALL_SERVICE_TYPES, TYPE_COLOR,
+  ServiceConfig, ServiceType, ALL_SERVICE_TYPES, TYPE_COLOR, typeColorById,
   totalLitsService, litsOccupesService, totalSallesService
 } from './models/service-config.model';
 import { ServicesStore } from './services-store';
@@ -60,8 +60,12 @@ export class ServicesConfigComponent {
     return t > 0 ? Math.round((this.totalOccupes() / t) * 100) : 0;
   });
 
-  allTypes = ALL_SERVICE_TYPES;
-  typeColor(t: ServiceType): string { return TYPE_COLOR[t] ?? '#546E7A'; }
+  allTypes = computed(() => this.store.serviceTypes());
+  typeColor(type: any): string {
+    const colors = ['#00BCD4', '#43A047', '#1E88E5', '#FB8C00', '#8E24AA', '#E53935', '#607D8B', '#CDDC39', '#FFEB3B', '#FF9800'];
+    const id = typeof type === 'number' ? type : 0;
+    return colors[id % colors.length];
+  }
 
   get userRole(): 'superadmin' | 'admin' | 'medecin' {
     const r = this.auth.getUserRole();

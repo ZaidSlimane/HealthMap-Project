@@ -388,25 +388,29 @@ export class ConsultationListComponent {
     { id: 'ordonnances', label: 'Ordonnances' },
   ];
 
-  allConsultations = this.mockData.getConsultations().filter(c => c.statut !== 'ANNULEE');
+  allConsultations = signal(
+    this.mockData.getConsultations().filter(c => c.statut !== 'ANNULEE')
+  );
 
   filteredQueue = computed(() => {
     const q = this.searchText.toLowerCase();
-    return this.allConsultations.filter(c => {
-      const name = this.getPatientName(c.patientId).toLowerCase();
-      return !q || name.includes(q) || c.motif.toLowerCase().includes(q);
+    const list = this.allConsultations();
+    return list.filter(c => {
+      // Note: search on patient name is now tricky because it's async.
+      // For now, we search on motif. Full patient search requires a different approach.
+      return !q || c.motif.toLowerCase().includes(q);
     }).sort((a, b) => {
       const urgOrder = (c: Consultation) => c.statut === 'EN_COURS' ? 0 : c.statut === 'EN_ATTENTE' ? 1 : 2;
       return urgOrder(a) - urgOrder(b);
     });
   });
 
-  enAttenteCount = computed(() => this.allConsultations.filter(c => c.statut === 'EN_ATTENTE').length);
-  enCoursCount = computed(() => this.allConsultations.filter(c => c.statut === 'EN_COURS').length);
+  enAttenteCount = computed(() => this.allConsultations().filter(c => c.statut === 'EN_ATTENTE').length);
+  enCoursCount = computed(() => this.allConsultations().filter(c => c.statut === 'EN_COURS').length);
 
   activeConsultation = computed(() => {
     const id = this.activeConsultationId();
-    return id ? this.allConsultations.find(c => c.id === id) ?? null : null;
+    return id ? this.allConsultations().find(c => c.id === id) ?? null : null;
   });
 
   getPatientName(patientId: string): string {
@@ -435,7 +439,7 @@ export class ConsultationListComponent {
   }
 
   appellerSuivant(): void {
-    const next = this.allConsultations.find(c => c.statut === 'EN_ATTENTE');
+    const next = this.allConsultations().find(c => c.statut === 'EN_ATTENTE');
     if (next) this.selectConsultation(next);
   }
 

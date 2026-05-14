@@ -1,0 +1,30 @@
+# Never bake secrets into the image
+.env
+.env.*
+!.env.example
+
+# Dependencies (installed fresh in the container)
+vendor/
+node_modules/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+
+# Docker files (not needed inside the image)
+docker/
+Dockerfile
+
+# Storage logs (runtime, not build-time)
+storage/logs/*
+storage/framework/sessions/*
+storage/framework/cache/*
+
+# Tests
+tests/
+phpunit.xml
