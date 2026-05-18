@@ -37,11 +37,28 @@ export class ServicesStore {
           this.api.getServiceTypes().toPromise()
         ]);
 
-        if (servicesRes && servicesRes.data) {
-          this._services.set(servicesRes.data.data ?? []);
+        if (servicesRes) {
+          const normalized = (servicesRes.data ?? []).map((s: any) => ({
+            ...s,
+            id: String(s.id),
+            type: s.service_type_id ?? s.type?.id ?? 0,
+            type_label: s.type?.label ?? '',
+            chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+            medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+            units: (s.units ?? []).map((u: any) => ({
+              ...u,
+              id: String(u.id),
+              rooms: (u.rooms ?? []).map((r: any) => ({
+                ...r,
+                id: String(r.id),
+                beds: (r.beds ?? []).map((b: any) => ({ ...b, id: String(b.id) })),
+              })),
+            })),
+          }));
+          this._services.set(normalized);
         }
-        if (typesRes && typesRes.data) {
-          this._serviceTypes.set(typesRes.data.data ?? []);
+        if (typesRes) {
+          this._serviceTypes.set(typesRes.data ?? []);
         }
         this._loaded.set(true);
       } catch (e: any) {
@@ -73,21 +90,66 @@ export class ServicesStore {
 
   async upsert(svc: ServiceConfig): Promise<void> {
     try {
-      const existing = svc.id && this._services().some(s => s.id === svc.id);
-      const updated = existing
-        ? await this.api.update(svc.id, svc).toPromise()
-        : await this.api.create(svc).toPromise();
+      // Transform frontend model to backend-compatible payload
+      const payload: any = {
+        name: svc.name,
+        code: svc.code,
+        is_active: svc.is_active,
+        service_type_id: svc.type,
+        chief_id: (svc as any).chief_id ?? null,
+        medical_chief_id: (svc as any).medical_chief_id ?? null,
+      };
 
-      this._services.update(list => {
-        if (!updated) return list;
-        return list.some(s => s.id === updated.id)
-          ? list.map(s => s.id === updated.id ? updated! : s)
-          : [...list, updated!];
-      });
+      // Only include units if they exist (avoids expensive nested sync on simple edits)
+      if (svc.units && svc.units.length > 0) {
+        payload.units = svc.units;
+      }
+
+      const existing = svc.id && this._services().some(s => s.id === svc.id);
+      let saved: any;
+      if (existing) {
+        saved = await this.api.update(svc.id, payload).toPromise();
+      } else {
+        saved = await this.api.create(payload).toPromise();
+      }
+
+      // Normalize and update local state directly from response
+      if (saved) {
+        const normalized = this.normalizeService(saved);
+        this._services.update(list => {
+          const idx = list.findIndex(s => s.id === normalized.id);
+          if (idx >= 0) {
+            const copy = [...list];
+            copy[idx] = normalized;
+            return copy;
+          }
+          return [...list, normalized];
+        });
+      }
     } catch (e: any) {
       this._error.set(e?.message || 'Failed to upsert service');
       throw new Error(e?.message || 'Failed to upsert service');
     }
+  }
+
+  private normalizeService(s: any): ServiceConfig {
+    return {
+      ...s,
+      id: String(s.id),
+      type: s.service_type_id ?? s.type?.id ?? 0,
+      type_label: s.type?.label ?? '',
+      chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+      medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+      units: (s.units ?? []).map((u: any) => ({
+        ...u,
+        id: String(u.id),
+        rooms: (u.rooms ?? []).map((r: any) => ({
+          ...r,
+          id: String(r.id),
+          beds: (r.beds ?? []).map((b: any) => ({ ...b, id: String(b.id) })),
+        })),
+      })),
+    };
   }
 
   async remove(id: string): Promise<void> {

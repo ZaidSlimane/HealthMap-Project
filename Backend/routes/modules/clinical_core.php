@@ -8,6 +8,7 @@ use App\Modules\ClinicalCore\Controllers\CompanionController;
 use App\Modules\ClinicalCore\Controllers\ConsultationController;
 use App\Modules\ClinicalCore\Controllers\ConsultationSymptomController;
 use App\Modules\ClinicalCore\Controllers\CountryController;
+use App\Modules\ClinicalCore\Controllers\EstablishmentController;
 use App\Modules\ClinicalCore\Controllers\EstablishmentTypeController;
 use App\Modules\ClinicalCore\Controllers\EstablishmentUnitController;
 use App\Modules\ClinicalCore\Controllers\IdentityDocumentController;
@@ -22,6 +23,7 @@ use App\Modules\ClinicalCore\Controllers\ProvinceController;
 use App\Modules\ClinicalCore\Controllers\RoomController;
 use App\Modules\ClinicalCore\Controllers\ServiceController;
 use App\Modules\ClinicalCore\Controllers\ServiceTypeController;
+use App\Modules\ClinicalCore\Controllers\TriageController;
 use App\Modules\ClinicalCore\Controllers\WaitingListController;
 
 /*
@@ -47,8 +49,21 @@ use App\Modules\ClinicalCore\Controllers\WaitingListController;
 
 Route::middleware(['auth'])->group(function () {
 
+    // ── Doctor: service boxes (for consultation selection flow) ──────
+    Route::middleware('role:Admin,Doctor,ChefService')->group(function () {
+        Route::get('services/{service}/boxes', function (int $service) {
+            return response()->json(
+                \App\Modules\ChefService\Models\Box::where('service_id', $service)
+                    ->where('is_active', true)
+                    ->get(['id', 'name', 'label_fr', 'type', 'is_active'])
+            );
+        });
+    });
+
     // ── Admin-only: tenant configuration ────────────────────────────
     Route::middleware('role:Admin')->group(function () {
+        Route::get('establishments/{id}', [EstablishmentController::class, 'show']);
+        Route::patch('establishments/{id}', [EstablishmentController::class, 'update']);
         Route::apiResource('establishment-types', EstablishmentTypeController::class);
         Route::apiResource('establishment-units', EstablishmentUnitController::class);
         Route::apiResource('services', ServiceController::class);
@@ -80,6 +95,13 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:Admin,BDE,Reception')->group(function () {
         Route::apiResource('companions', CompanionController::class);
         Route::apiResource('waiting-lists', WaitingListController::class);
+
+        // Waiting list state transitions
+        Route::post('waiting-lists/{id}/call', [WaitingListController::class, 'call']);
+        Route::post('waiting-lists/{id}/start', [WaitingListController::class, 'start']);
+        Route::post('waiting-lists/{id}/absent', [WaitingListController::class, 'absent']);
+        Route::post('waiting-lists/{id}/rappel', [WaitingListController::class, 'rappel']);
+        Route::post('waiting-lists/{id}/complete', [WaitingListController::class, 'complete']);
     });
 
     // ── Clinical: doctors and admins. Patients are co-managed by BDE
@@ -97,5 +119,17 @@ Route::middleware(['auth'])->group(function () {
         Route::apiResource('prescription-medications', PrescriptionMedicationController::class);
         Route::apiResource('medical-documents', MedicalDocumentController::class);
         Route::apiResource('observations', ObservationController::class);
+        Route::apiResource('triages', TriageController::class);
+
+        // Doctors can also transition waiting list entries
+        Route::post('waiting-lists/{id}/call', [WaitingListController::class, 'call']);
+        Route::post('waiting-lists/{id}/start', [WaitingListController::class, 'start']);
+        Route::post('waiting-lists/{id}/absent', [WaitingListController::class, 'absent']);
+        Route::post('waiting-lists/{id}/rappel', [WaitingListController::class, 'rappel']);
+        Route::post('waiting-lists/{id}/complete', [WaitingListController::class, 'complete']);
+
+        // Doctors need to see the queue for their box
+        Route::get('waiting-lists', [WaitingListController::class, 'index']);
+        Route::get('waiting-lists/{id}', [WaitingListController::class, 'show']);
     });
 });

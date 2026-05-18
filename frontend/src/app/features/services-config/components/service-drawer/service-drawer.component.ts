@@ -1,14 +1,23 @@
 import {
   Component, Input, Output, EventEmitter, OnChanges, SimpleChanges,
-  signal, computed, ChangeDetectionStrategy
+  signal, computed, inject, OnInit, ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 import {
   ServiceConfig, Unit, Room, Bed, ServiceType, UnitType, BedStatus, User,
   ALL_SERVICE_TYPES, ALL_UNIT_TYPES, TYPE_COLOR, typeColorById,
   totalLitsUnite, litsOccupesUnite
 } from '../../models/service-config.model';
+import { ServicesStore } from '../../services-store';
+
+interface DoctorOption {
+  id: number;
+  name: string;
+  first_name: string;
+}
 
 type Tab = 'general' | 'unites' | 'salles';
 
@@ -26,7 +35,7 @@ type DrawerForm = {
   templateUrl: './service-drawer.component.html',
   styleUrl: './service-drawer.component.scss',
 })
-export class ServiceDrawerComponent implements OnChanges {
+export class ServiceDrawerComponent implements OnChanges, OnInit {
   @Input() open  = false;
   @Input() mode: 'ADD' | 'EDIT' = 'ADD';
   @Input() service: ServiceConfig | null = null;
@@ -34,14 +43,34 @@ export class ServiceDrawerComponent implements OnChanges {
   @Output() saved   = new EventEmitter<ServiceConfig>();
   @Output() closed  = new EventEmitter<void>();
 
+  private store = inject(ServicesStore);
+  private http = inject(HttpClient);
+
   activeTab = signal<Tab>('general');
-  allTypes  = ALL_SERVICE_TYPES;
+  allTypes  = this.store.serviceTypes;
   allUnitTypes = ALL_UNIT_TYPES;
+  doctors = signal<DoctorOption[]>([]);
 
   form = signal<DrawerForm>({ name: '', type: 1, code: '1' });
-  chefNom = signal<string>('');
-  coordinateurNom = signal<string>('');
+  chefId = signal<number | null>(null);
+  coordinateurId = signal<number | null>(null);
   actif = signal<boolean>(true);
+
+  ngOnInit(): void {
+    this.loadDoctors();
+  }
+
+  private loadDoctors(): void {
+    this.http.get<{ data: DoctorOption[] }>(`${environment.baseUrl}/admin/doctors?per_page=100`)
+      .subscribe({
+        next: (res) => this.doctors.set(res.data ?? []),
+        error: () => {}
+      });
+  }
+
+  doctorLabel(d: DoctorOption): string {
+    return [d.name, d.first_name].filter(Boolean).join(' ');
+  }
 
   unites = signal<Unit[]>([]);
 
@@ -75,15 +104,15 @@ export class ServiceDrawerComponent implements OnChanges {
         if (this.service && this.mode === 'EDIT') {
           const s = this.service;
           this.form.set({ name: s.name, type: s.type, code: s.code });
-          this.chefNom.set(s.chief?.name ?? '');
-          this.coordinateurNom.set(s.medical_chief?.name ?? '');
+          this.chefId.set(s.chief?.id ? +s.chief.id : null);
+          this.coordinateurId.set(s.medical_chief?.id ? +s.medical_chief.id : null);
           this.actif.set(s.is_active);
           this.unites.set(JSON.parse(JSON.stringify(s.units)));
           this.selectedUniteId.set(s.units[0]?.id ?? null);
         } else {
           this.form.set({ name: '', type: 1, code: '1' });
-          this.chefNom.set('');
-          this.coordinateurNom.set('');
+          this.chefId.set(null);
+          this.coordinateurId.set(null);
           this.actif.set(true);
           this.unites.set([]);
           this.selectedUniteId.set(null);
@@ -103,8 +132,22 @@ export class ServiceDrawerComponent implements OnChanges {
     return typeof t === 'number' ? typeColorById(t) : (TYPE_COLOR[t] ?? '#546E7A');
   }
 
-  private makeUser(name: string): User {
-    return { id: '', name, first_name: '', email: '', is_active: true };
+  get typeLabel(): string {
+    const t = this.form().type;
+    const found = this.allTypes().find((x: any) => x.id === t);
+    return found?.label ?? String(t);
+  }
+
+  private makeUser(id: number | null): User {
+    if (!id) return { id: '', name: '', first_name: '', email: '', is_active: true };
+    const doc = this.doctors().find(d => d.id === id);
+    return {
+      id: String(id),
+      name: doc?.name ?? '',
+      first_name: doc?.first_name ?? '',
+      email: '',
+      is_active: true,
+    };
   }
 
   save(): void {
@@ -116,13 +159,15 @@ export class ServiceDrawerComponent implements OnChanges {
       return;
     }
 
-    const svc: ServiceConfig = {
+    const svc: any = {
       id:             this.mode === 'EDIT' ? this.service!.id : 'svc-' + Date.now(),
       name:           f.name.trim().toUpperCase(),
       type:           f.type as ServiceType,
       code:           String(code),
-      chief:          this.makeUser(this.chefNom().trim()),
-      medical_chief:  this.makeUser(this.coordinateurNom().trim()),
+      chief_id:       this.chefId(),
+      medical_chief_id: this.coordinateurId(),
+      chief:          this.makeUser(this.chefId()),
+      medical_chief:  this.makeUser(this.coordinateurId()),
       is_active:      this.actif(),
       units:          this.unites(),
     };

@@ -1,0 +1,47 @@
+<hm-page-header
+  title="Gestion des services"
+  [subtitle]="facade.establishmentName()"
+  icon="medical_services">
+  <button class="btn-add" (click)="openAdd()">
+    <span class="material-icons">add</span> Ajouter
+  </button>
+</hm-page-header>
+
+<!-- ── KPI Strip ── -->
+<div class="kpi-strip">
+  @for (k of kpiCards; track k.label) {
+    <hm-stat-card [label]="k.label" [value]="k.value()" [icon]="k.icon" [gradient]="k.gradient" />
+  }
+</div>
+
+<!-- ── Service Cards Grid ── -->
+@if (loading()) {
+  <div class="loading-row">
+    <span class="material-icons spin">sync</span> Chargement...
+  </div>
+} @else if (services().length === 0) {
+  <div class="empty-state">
+    <span class="material-icons">inbox</span>
+    <h3>Aucun service configuré</h3>
+    <p>Sélectionnez des types de services dans l'onglet "Services de l'établissement" pour les voir apparaître ici.</p>
+  </div>
+} @else {
+  <div class="cards-grid">
+    @for (svc of services(); track svc.id) {
+      <hm-service-card
+        [service]="svc"
+        [userRole]="userRole"
+        (editClicked)="openEdit($event)"
+        (litsClicked)="openLits($event)"
+        (deleteClicked)="onDelete($event)" />
+    }
+  </div>
+}
+
+<!-- ── Drawer ── -->
+<hm-service-drawer
+  [open]="drawerOpen()"
+  [mode]="drawerMode()"
+  [service]="selectedSvc()"
+  (saved)="onSave($event)"
+  (closed)="closeDrawer()" />

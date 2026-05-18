@@ -1,0 +1,76 @@
+<hm-page-header
+  title="Services de l'établissement"
+  [subtitle]="facade.establishmentName()"
+  icon="checklist">
+  <button class="btn-add" (click)="showAddForm.set(true)">
+    <span class="material-icons">add</span> Ajouter un type
+  </button>
+</hm-page-header>
+
+<!-- Add type form -->
+@if (showAddForm()) {
+  <div class="add-form-card">
+    <div class="add-form-row">
+      <input type="text" class="add-input"
+        placeholder="Nom du nouveau type de service..."
+        [ngModel]="newTypeLabel()" (ngModelChange)="newTypeLabel.set($event)"
+        (keydown.enter)="addType()" />
+      <button class="btn-confirm" (click)="addType()" [disabled]="adding() || !newTypeLabel().trim()">
+        <span class="material-icons">check</span> Confirmer
+      </button>
+      <button class="btn-cancel" (click)="showAddForm.set(false); newTypeLabel.set('')">
+        Annuler
+      </button>
+    </div>
+  </div>
+}
+
+<!-- Service types grid -->
+<div class="types-card">
+  @if (loading()) {
+    <div class="loading-row">
+      <span class="material-icons spin">sync</span> Chargement...
+    </div>
+  } @else if (allTypes().length === 0) {
+    <div class="empty-row">
+      <span class="material-icons">category</span>
+      <p>Aucun type de service défini. Ajoutez-en avec le bouton ci-dessus.</p>
+    </div>
+  } @else {
+    <p class="help-text">
+      Cochez un type pour créer le service correspondant dans votre établissement.
+      Il apparaîtra dans l'onglet "Gestion des services".
+    </p>
+    <div class="types-grid">
+      @for (t of allTypes(); track t.id) {
+        <label class="type-item"
+          [class.checked]="isSelected(t.id)"
+          [class.busy]="toggling() === t.id">
+          <input type="checkbox"
+            [checked]="isSelected(t.id)"
+            [disabled]="toggling() === t.id"
+            (change)="toggleType(t.id, $event)" />
+          @if (toggling() === t.id) {
+            <span class="material-icons spin-small">sync</span>
+          }
+          <span class="type-label">{{ t.label }}</span>
+          <button class="delete-type-btn"
+            (click)="$event.preventDefault(); $event.stopPropagation(); deleteType(t.id, t.label)"
+            title="Supprimer ce type">
+            <span class="material-icons">close</span>
+          </button>
+        </label>
+      }
+    </div>
+  }
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <span class="legend-item">
+    <span class="legend-check checked"></span> = Service créé (visible dans Gestion des services)
+  </span>
+  <span class="legend-item">
+    <span class="legend-check"></span> = Type disponible (pas encore de service)
+  </span>
+</div>

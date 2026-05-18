@@ -42,13 +42,16 @@ export const routes: Routes = [
       { path: 'radiology/requests/liste', loadComponent: () => import('./features/radiology/radiology-list.component').then(m => m.RadiologyListComponent) },
       { path: 'labo/results', loadComponent: () => import('./features/laboratory/labo-results.component').then(m => m.LaboResultsComponent) },
       { path: 'labo/reception', loadComponent: () => import('./features/laboratory/labo-results.component').then(m => m.LaboResultsComponent) },
-      { path: 'consultation', loadComponent: () => import('./features/consultation/consultation.component').then(m => m.ConsultationComponent) },
+      { path: 'consultation', loadComponent: () => import('./features/consultation/consultation-select.component').then(m => m.ConsultationSelectComponent) },
+      { path: 'consultation/active', loadComponent: () => import('./features/consultation/consultation.component').then(m => m.ConsultationComponent) },
       { path: 'consultation/tri', loadComponent: () => import('./features/consultation/triage.component').then(m => m.TriageComponent) },
       { path: 'queue/call', loadComponent: () => import('./features/queue/queue-call.component').then(m => m.QueueCallComponent) },
       { path: 'appointments', loadComponent: () => import('./features/appointments/appointments.component').then(m => m.AppointmentsComponent) },
       { path: 'services/:serviceId', loadComponent: () => import('./features/services/service.component').then(m => m.ServiceComponent) },
       { path: 'chimio/protocoles', loadComponent: () => import('./features/admin/stats.component').then(m => m.StatsComponent) },
       { path: 'chimio/sessions', loadComponent: () => import('./features/admin/stats.component').then(m => m.StatsComponent) },
+      // Chef de Service routes
+      { path: 'chef', loadChildren: () => import('./features/chef/chef.routes').then(m => m.CHEF_ROUTES), canActivate: [authGuard] },
       // Phase 2 routes
       { path: 'consultations', loadChildren: () => import('./features/consultations/consultations.routes').then(m => m.CONSULTATIONS_ROUTES), canActivate: [authGuard] },
       { path: 'ordonnances', loadChildren: () => import('./features/ordonnances/ordonnances.routes').then(m => m.ORDONNANCES_ROUTES), canActivate: [roleGuard(['ADMIN','MEDECIN'])] },
@@ -64,8 +67,7 @@ export const routes: Routes = [
       { path: 'migration', loadChildren: () => import('./features/migration/migration.routes').then(m => m.MIGRATION_ROUTES), canActivate: [roleGuard(['ADMIN'])] },
       { path: 'carte', loadComponent: () => import('./features/carte/campus-map.component').then(m => m.CampusMapComponent), canActivate: [authGuard] },
       { path: 'carte/service/:serviceId', loadComponent: () => import('./features/carte/service-map.component').then(m => m.ServiceMapComponent), canActivate: [authGuard] },
-      { path: 'admin/services', loadComponent: () => import('./features/services-config/services-config.component').then(m => m.ServicesConfigComponent), canActivate: [roleGuard(['superadmin','admin'])], title: 'Gestion des Services — HealthMap' },
-      { path: 'admin/services/:serviceId/lits', loadComponent: () => import('./features/services-config/components/bed-management-page/bed-management-page.component').then(m => m.BedManagementPageComponent), canActivate: [roleGuard(['superadmin','admin'])], title: 'Gestion des Lits — HealthMap' },
+      { path: 'admin/services', loadChildren: () => import('./features/services-config/services.routes').then(m => m.SERVICES_ROUTES), canActivate: [roleGuard(['superadmin','admin'])], title: 'Gestion des Services — HealthMap' },
       // Sidebar restructure stubs — new ADMIN sections (Personnel, Utilisateurs,
       // unit-scoped config). Real pages land here later; for now the sidebar
       // entries route to a labelled "à venir" placeholder so clicks don't

@@ -134,27 +134,17 @@ class AuthController extends Controller
     /**
      * Standard user payload returned from /login, /me, /change-password.
      *
-     * Multi-role: a user can hold any combination of roles. The response
-     * exposes both the full pivot collection (`roles`) and a flat array
-     * of role names (`role_names`) — the frontend should use the latter
-     * for guards/sidebar filtering and only fall back to `roles` when it
-     * needs role metadata.
-     *
-     * Specialization: a Doctor's clinical assignment is exposed via
-     * `service` (BelongsTo Service), `poste` (BelongsTo Poste) and
-     * `is_consultant` so the UI can filter service-specific routes
-     * (/services/cardio, /consultation/<svc>, etc.) to the doctor's
-     * own service instead of a hardcoded list.
+     * Slim version: only loads critical relationships needed for routing
+     * and sidebar rendering. Heavy metadata (establishment.type, province,
+     * service.type, poste) is loaded on-demand via /me/profile.
      */
     protected function presentUser(User $user): array
     {
         $user->load([
-            'roles',
-            'establishment.type',
-            'establishment.province',
-            'service:id,name,code,service_type_id',
-            'service.type:id,code,label',
-            'poste:id,label,label_ar',
+            'roles:id,role',
+            'service:id,name,code',
+            'services:id,name,code',
+            'establishment:id,slug,name',
         ]);
 
         $roleNames = $user->roles->pluck('role')->values()->all();
@@ -173,7 +163,7 @@ class AuthController extends Controller
             'role_names' => $roleNames,
             // Specialization (null for non-clinical staff)
             'service' => $user->service,
-            'poste' => $user->poste,
+            'services' => $user->services,
             // Auth lifecycle
             'must_change_password' => (bool) $user->must_change_password,
             'onboarding_completed_at' => $user->onboarding_completed_at,
@@ -181,4 +171,29 @@ class AuthController extends Controller
             'establishment' => $user->establishment,
         ];
     }
+
+    /**
+     * Full user profile with heavy relationships (establishment.type,
+     * province, service.type, poste). Loaded on-demand to keep /login fast.
+     */
+    public function profile(Request $request)
+    {
+        $user = $request->user();
+        $user->load([
+            'roles',
+            'establishment.type',
+            'establishment.province',
+            'service:id,name,code,service_type_id',
+            'service.type:id,label',
+            'services:id,name,code',
+            'poste:id,label,label_ar',
+        ]);
+
+        return response()->json([
+            'service' => $user->service,
+            'poste' => $user->poste,
+            'establishment' => $user->establishment,
+        ]);
+    }
+
 }

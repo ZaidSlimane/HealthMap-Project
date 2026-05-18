@@ -26,16 +26,9 @@ const ALL_NAV_ITEMS: NavItem[] = [
   { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/admin/dashboard', roles: ['superadmin', 'Admin'] },
   { label: 'Alertes', icon: 'notifications_active', route: '/admin/alertes', roles: ['superadmin'], badge: 3 },
   { label: 'Tableau de bord BDE', icon: 'fact_check', route: '/bde/dashboard', roles: ['superadmin', 'bde'] },
-  // Doctor-owned pages (Consultations, Sympt./Triage, Ordonnances, Avis,
-  // CIM-10, Rapports) were removed from the superadmin sidebar. They now
-  // appear only under the MEDECIN ('consultation') role. Routes and files
-  // are intentionally left in place — wiring will be revisited later.
-  { label: 'Consultations', icon: 'medical_services', route: '/consultations', roles: ['consultation'] },
-  { label: 'Symptômes / Triage', icon: 'monitor_heart', route: '/symptomes', roles: ['consultation'] },
+  // Doctor-owned pages moved to Doctor sidebar only.
 
-  { sectionLabel: 'EXAMENS', label: 'Ordonnances', icon: 'description', route: '/ordonnances', roles: ['consultation'] },
-  {
-    label: 'Radiologie', icon: 'biotech', roles: ['superadmin', 'radio'], expanded: false, children: [
+  { sectionLabel: 'EXAMENS', label: 'Radiologie', icon: 'biotech', roles: ['superadmin', 'radio'], expanded: false, children: [
       { label: 'Demandes', icon: 'assignment', route: '/radiology/requests', roles: ['superadmin', 'radio'] },
       { label: 'Résultats', icon: 'article', route: '/radiology/results', roles: ['superadmin', 'radio'] },
     ]
@@ -54,12 +47,10 @@ const ALL_NAV_ITEMS: NavItem[] = [
   },
 
   { sectionLabel: 'PLANNING', label: 'Rendez-vous', icon: 'calendar_today', route: '/appointments', roles: ['superadmin', 'radio'] },
-  { label: 'Avis Externes', icon: 'forum', route: '/avis-externes', roles: ['consultation'] },
   { label: 'File d\'attente', icon: 'phone_in_talk', route: '/queue/call', roles: ['superadmin', 'radio', 'labo'] },
 
-  { sectionLabel: 'CODAGE & STATS', label: 'Codage CIM-10', icon: 'local_hospital', route: '/diagnostics', roles: ['consultation'] },
-  { label: 'Rapports', icon: 'bar_chart', route: '/rapports', roles: ['consultation'] },
   {
+    sectionLabel: 'STATISTIQUES',
     label: 'Statistiques', icon: 'insert_chart', roles: ['superadmin'], expanded: false, children: [
       { label: 'Rapports', icon: 'description', route: '/admin/stats', roles: ['superadmin'] },
     ]
@@ -113,12 +104,7 @@ const ALL_NAV_ITEMS: NavItem[] = [
   { sectionLabel: 'CLINIQUE', label: 'Saisie résultats', icon: 'science', route: '/labo/results', roles: ['labo'] },
 
   // ── CONSULTATION ──
-  { sectionLabel: 'CLINIQUE', label: 'Tri', icon: 'filter_list', route: '/consultation/tri', roles: ['consultation'] },
-  { label: 'Consultation', icon: 'medical_services', route: '/consultation', roles: ['consultation'] },
-  { label: 'URGENCES MEDICO-CHIR.', icon: 'emergency', route: '/services/urgences', roles: ['consultation'], orangeDot: true },
-  { label: 'CARDIOLOGIE', icon: 'favorite', route: '/services/cardio', roles: ['consultation'], orangeDot: true },
-  { label: 'HEMODIALYSE', icon: 'water_drop', route: '/services/hemodialyse', roles: ['consultation'], orangeDot: true },
-  { label: 'GYNECOLOGIE OBSTETRIQUE', icon: 'pregnant_woman', route: '/services/gyneco', roles: ['consultation'], orangeDot: true },
+  // Tri/Consultation/Services moved to Doctor sidebar only.
 ];
 
 @Component({
@@ -147,6 +133,100 @@ export class SidebarComponent {
     // Admin role is a wildcard — show all nav items (mirrors roleGuard behavior)
     if (userRoles.includes('admin')) {
       return this.navItems;
+    }
+
+    // ChefService role — dedicated sidebar for service management
+    if (userRoles.includes('chefservice')) {
+      const chefItems: NavItem[] = [];
+
+      chefItems.push({
+        sectionLabel: 'CHEF DE SERVICE',
+        label: 'Tableau de bord',
+        icon: 'dashboard',
+        route: '/chef/dashboard',
+        roles: ['ChefService'],
+      });
+      chefItems.push({
+        label: 'Boxes',
+        icon: 'meeting_room',
+        route: '/chef/boxes',
+        roles: ['ChefService'],
+      });
+      chefItems.push({
+        label: 'Médecins',
+        icon: 'people',
+        route: '/chef/medecins',
+        roles: ['ChefService'],
+      });
+
+      chefItems.push({
+        sectionLabel: 'COMPTE',
+        label: 'Mon profil',
+        icon: 'account_circle',
+        route: '/profil',
+        roles: ['ChefService'],
+      });
+
+      return chefItems;
+    }
+
+    // Doctor role — build a custom sidebar with their services
+    if (userRoles.includes('doctor')) {
+      const doctorItems: NavItem[] = [];
+
+      // Section: Clinique
+      // "Tri" is a triage doctor-only feature; only show it if the user
+      // explicitly holds the "tri" role (or "triage").
+      const hasTriRole = userRoles.some(r => r === 'tri' || r === 'triage');
+      if (hasTriRole) {
+        doctorItems.push({
+          sectionLabel: 'CLINIQUE',
+          label: 'Tri',
+          icon: 'filter_list',
+          route: '/consultation/tri',
+          roles: ['Doctor'],
+        });
+      }
+
+      // The Consultation entry takes the section label when Tri is hidden
+      doctorItems.push({
+        sectionLabel: hasTriRole ? undefined : 'CLINIQUE',
+        label: 'Consultation',
+        icon: 'medical_services',
+        route: '/consultation',
+        roles: ['Doctor'],
+      } as NavItem);
+
+      // Section: Services
+      const services = user.services ?? [];
+      if (services.length > 0) {
+        doctorItems.push({
+          sectionLabel: 'MES SERVICES',
+          label: services[0].name,
+          icon: 'local_hospital',
+          route: `/services/${services[0].id}`,
+          roles: ['Doctor'],
+        });
+        for (let i = 1; i < services.length; i++) {
+          doctorItems.push({
+            label: services[i].name,
+            icon: 'local_hospital',
+            route: `/services/${services[i].id}`,
+            roles: ['Doctor'],
+          });
+        }
+      }
+
+      // Section: Profil
+      doctorItems.push({
+        sectionLabel: 'COMPTE',
+        label: 'Mon profil',
+        icon: 'account_circle',
+        route: '/profil',
+        roles: ['Doctor'],
+      });
+
+      return doctorItems;
     }
 
     return this.navItems.filter(item =>

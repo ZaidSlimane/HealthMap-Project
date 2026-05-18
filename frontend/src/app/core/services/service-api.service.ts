@@ -6,16 +6,16 @@ import { ServiceConfig } from '../../features/services-config/models/service-con
 
 @Injectable({ providedIn: 'root' })
 export class ServiceApiService {
-  private readonly apiUrl = `${environment.baseUrl}/services`;
+  private readonly apiUrl = `${environment.baseUrl}/clinical-core/services`;
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<{ data: { data: ServiceConfig[], current_page: number, last_page: number } }> {
-    return this.http.get<{ data: { data: ServiceConfig[], current_page: number, last_page: number } }>(this.apiUrl);
+  getAll(): Observable<{ data: ServiceConfig[], current_page: number, last_page: number }> {
+    return this.http.get<{ data: ServiceConfig[], current_page: number, last_page: number }>(this.apiUrl);
   }
 
-  getServiceTypes(): Observable<{ data: { data: any[], current_page: number, last_page: number } }> {
-    return this.http.get<{ data: { data: any[], current_page: number, last_page: number } }>(`${environment.baseUrl}/service-types`);
+  getServiceTypes(): Observable<{ data: any[], current_page: number, last_page: number }> {
+    return this.http.get<{ data: any[], current_page: number, last_page: number }>(`${environment.baseUrl}/clinical-core/service-types`);
   }
 
   getById(id: string): Observable<ServiceConfig> {
@@ -32,5 +32,15 @@ export class ServiceApiService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // ── Service Types CRUD ──
+
+  createServiceType(data: { label: string }): Observable<any> {
+    return this.http.post(`${environment.baseUrl}/clinical-core/service-types`, data);
+  }
+
+  deleteServiceType(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.baseUrl}/clinical-core/service-types/${id}`);
   }
 }

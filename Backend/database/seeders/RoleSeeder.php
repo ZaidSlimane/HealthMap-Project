@@ -21,11 +21,12 @@ use App\Modules\Auth\Models\Role;
 class RoleSeeder extends Seeder
 {
     public const ROLES = [
-        'Admin',      // Establishment administrator (configuration + management)
-        'Doctor',     // Clinical staff (consultations, prescriptions, observations)
-        'BDE',        // Bureau des Entrées (patient registration, admissions intake)
-        'Pharmacy',   // Pharmacy desk (dispense prescriptions)
-        'Reception',  // Reception / borne d'accueil
+        'Admin',        // Establishment administrator (configuration + management)
+        'Doctor',       // Clinical staff (consultations, prescriptions, observations)
+        'BDE',          // Bureau des Entrées (patient registration, admissions intake)
+        'Pharmacy',     // Pharmacy desk (dispense prescriptions)
+        'Reception',    // Reception / borne d'accueil
+        'ChefService',  // Chef de Service (service-level management, box config, shift assignments)
     ];
 
     public function run(): void

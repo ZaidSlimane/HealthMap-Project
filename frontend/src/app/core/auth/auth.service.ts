@@ -80,6 +80,11 @@ export class AuthService {
   getUserRole(): UserRole {
     const user = this.currentUser();
     if (!user || !user.roles || user.roles.length === 0) return 'service'; // fallback
+
+    // ChefService takes priority when user has multiple roles (e.g. Doctor + ChefService)
+    const chefRole = user.roles.find(r => r.role === 'ChefService');
+    if (chefRole) return 'ChefService';
+
     return user.roles[0].role;
   }
 

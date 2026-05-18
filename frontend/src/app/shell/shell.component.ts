@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
+import { LoadingService } from '../core/services/loading.service';
 
 @Component({
   selector: 'app-shell',
@@ -9,6 +10,13 @@ import { HeaderComponent } from './header/header.component';
   imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   template: `
     <div class="shell-layout">
+      <!-- Global loading bar -->
+      @if (loading.isLoading()) {
+        <div class="global-progress">
+          <div class="global-progress-bar"></div>
+        </div>
+      }
+
       <app-sidebar [collapsed]="sidebarCollapsed()"></app-sidebar>
       <div class="shell-main" [class.sidebar-collapsed]="sidebarCollapsed()">
         <app-header (toggleSidebar)="sidebarCollapsed.set(!sidebarCollapsed())"></app-header>
@@ -23,6 +31,7 @@ import { HeaderComponent } from './header/header.component';
       display: flex;
       height: 100vh;
       overflow: hidden;
+      position: relative;
     }
     .shell-main {
       flex: 1;
@@ -41,8 +50,35 @@ import { HeaderComponent } from './header/header.component';
       background: var(--color-bg);
       padding: var(--space-6);
     }
+
+    /* === Global progress bar === */
+    .global-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(0, 188, 212, 0.1);
+      z-index: 10000;
+      overflow: hidden;
+    }
+
+    .global-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--color-primary, #00BCD4) 50%,
+        transparent 100%);
+      animation: progress-slide 1.2s ease-in-out infinite;
+    }
+
+    @keyframes progress-slide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
   `]
 })
 export class ShellComponent {
   sidebarCollapsed = signal(false);
+  loading = inject(LoadingService);
 }

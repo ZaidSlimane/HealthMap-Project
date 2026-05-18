@@ -83,10 +83,8 @@ class PersonnelController extends Controller
     {
         $data = $this->validatePersonnel($request);
         $roleIds = $request->input('role_ids');
+        $serviceIds = $request->input('service_ids');
 
-        // Stamp the new personnel with the active admin's establishment_id
-        // so they're locked to the same tenant. Bootstrap super-admin has
-        // none and isn't expected to create personnel directly.
         $data['establishment_id'] = $this->currentEstablishmentId();
 
         $user = User::create($data);
@@ -95,8 +93,13 @@ class PersonnelController extends Controller
             $user->roles()->sync($roleIds);
         }
 
+        // Sync many-to-many services for doctors
+        if (is_array($serviceIds)) {
+            $user->services()->sync($serviceIds);
+        }
+
         return response()->json(
-            $user->load(['poste:id,label,label_ar', 'service:id,name', 'roles:id,role']),
+            $user->load(['poste:id,label,label_ar', 'service:id,name', 'services:id,name', 'roles:id,role']),
             201
         );
     }
@@ -256,6 +259,26 @@ class PersonnelController extends Controller
         $user = $this->tenantQuery()->findOrFail($id);
         $user->forceFill(['is_active' => $data['is_active']])->save();
         return response()->json($user);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Doctors list
+    // ─────────────────────────────────────────────────────────────────────
+
+    /**
+     * List all users with the "Doctor" role for the current establishment.
+     * Returns: name, service, poste, is_consultant, is_active.
+     */
+    public function indexDoctors(Request $request): JsonResponse
+    {
+        $perPage = (int) $request->query('per_page', 50);
+
+        $query = $this->tenantQuery()
+            ->with(['service:id,name', 'services:id,name', 'poste:id,label,label_ar', 'establishment:id,name'])
+            ->whereHas('roles', fn($q) => $q->where('role', 'Doctor'))
+            ->orderBy('name');
+
+        return response()->json($query->paginate($perPage));
     }
 
     // ─────────────────────────────────────────────────────────────────────

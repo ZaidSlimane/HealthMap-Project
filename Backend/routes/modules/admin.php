@@ -27,4 +27,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     // Reference data for the form dropdowns
     Route::get('/roles', [PersonnelController::class, 'rolesList']);
     Route::get('/services', [PersonnelController::class, 'servicesList']);
+
+    // Doctors list — users with the Doctor role, scoped to establishment
+    Route::get('/doctors', [PersonnelController::class, 'indexDoctors']);
 });

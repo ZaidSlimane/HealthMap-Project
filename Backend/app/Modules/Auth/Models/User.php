@@ -60,6 +60,14 @@ class User extends Authenticatable
     }
 
     /**
+     * A doctor can belong to multiple services.
+     */
+    public function services(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Service::class)->withPivot('is_chef');
+    }
+
+    /**
      * "Online" derived from the latest session activity for this user.
      * Considered online if last_activity is within the last 5 minutes.
      */

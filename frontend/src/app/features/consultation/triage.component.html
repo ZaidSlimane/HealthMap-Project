@@ -1,14 +1,18 @@
 <div class="triage-page page-fade-in">
   <!-- Patient context bar -->
-  <div class="patient-context-bar">
-    <div class="patient-info">
-      <mat-icon class="patient-avatar">account_circle</mat-icon>
-      <div>
-        <span class="patient-name">{{ patient?.fullName }}</span>
-        <span class="patient-dob">Date de naissance : {{ patient?.dob }}</span>
+  @if (patient(); as p) {
+    <div class="patient-context-bar">
+      <div class="patient-info">
+        <mat-icon class="patient-avatar">account_circle</mat-icon>
+        <div>
+          <span class="patient-name">{{ p.name }} {{ p.first_name }}</span>
+          @if (p.date_of_birth) {
+            <span class="patient-dob">Date de naissance : {{ p.date_of_birth | date:'dd/MM/yyyy' }}</span>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  }
 
   <div class="triage-content page-container">
     <div class="main-area">
@@ -62,8 +66,8 @@
         <p class="text-muted">{{ checkedCount }} symptôme(s) sélectionné(s)</p>
       </div>
       <div class="synthesis-actions">
-        <button mat-stroked-button>Annuler</button>
-        <button mat-flat-button color="primary">Suivant</button>
+        <button mat-stroked-button (click)="cancel()">Annuler</button>
+        <button mat-flat-button color="primary" (click)="next()">Suivant</button>
       </div>
     </div>
   </div>

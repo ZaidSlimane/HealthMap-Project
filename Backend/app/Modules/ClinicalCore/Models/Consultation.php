@@ -12,7 +12,23 @@ class Consultation extends Model
 {
     use BelongsToEstablishment;
 
-    protected $fillable = ['patient_id', 'user_id', 'admission_id', 'consultation_date', 'notes', 'establishment_id'];
+    protected $fillable = [
+        'patient_id', 'user_id', 'box_id', 'admission_id', 'consultation_date', 'notes',
+        'motif', 'anamnese', 'examen_clinique', 'compte_rendu', 'diagnostic',
+        'cim10_code', 'status', 'waiting_list_id', 'started_at', 'completed_at',
+        'establishment_id',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'consultation_date' => 'datetime',
+            'started_at' => 'datetime',
+            'completed_at' => 'datetime',
+        ];
+    }
+
+    public const STATUSES = ['in_progress', 'completed', 'recalled', 'observation', 'admitted'];
 
     public function patient(): BelongsTo
     {
@@ -27,6 +43,11 @@ class Consultation extends Model
     public function admission(): BelongsTo
     {
         return $this->belongsTo(Admission::class);
+    }
+
+    public function waitingList(): BelongsTo
+    {
+        return $this->belongsTo(WaitingList::class);
     }
 
     public function symptoms(): HasMany
