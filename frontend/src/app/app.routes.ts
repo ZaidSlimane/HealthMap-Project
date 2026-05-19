@@ -42,12 +42,16 @@ export const routes: Routes = [
       { path: 'radiology/requests/liste', loadComponent: () => import('./features/radiology/radiology-list.component').then(m => m.RadiologyListComponent) },
       { path: 'labo/results', loadComponent: () => import('./features/laboratory/labo-results.component').then(m => m.LaboResultsComponent) },
       { path: 'labo/reception', loadComponent: () => import('./features/laboratory/labo-results.component').then(m => m.LaboResultsComponent) },
+      // Lab & Radiology module routes (worklist + detail)
+      { path: 'radiology', loadChildren: () => import('./features/radiology/radiology.routes').then(m => m.RADIOLOGY_ROUTES), canActivate: [roleGuard(['RadioTech', 'Admin'])] },
+      { path: 'laboratory', loadChildren: () => import('./features/laboratory/laboratory.routes').then(m => m.LABORATORY_ROUTES), canActivate: [roleGuard(['LabTech', 'Admin'])] },
       { path: 'consultation', loadComponent: () => import('./features/consultation/consultation-select.component').then(m => m.ConsultationSelectComponent) },
       { path: 'consultation/active', loadComponent: () => import('./features/consultation/consultation.component').then(m => m.ConsultationComponent) },
       { path: 'consultation/tri', loadComponent: () => import('./features/consultation/triage.component').then(m => m.TriageComponent) },
       { path: 'queue/call', loadComponent: () => import('./features/queue/queue-call.component').then(m => m.QueueCallComponent) },
       { path: 'appointments', loadComponent: () => import('./features/appointments/appointments.component').then(m => m.AppointmentsComponent) },
       { path: 'services/:serviceId', loadComponent: () => import('./features/services/service.component').then(m => m.ServiceComponent) },
+      { path: 'services/:serviceId/admission/:admissionId', loadComponent: () => import('./features/services/dossier/dossier-page.component').then(m => m.DossierPageComponent), canActivate: [roleGuard(['Doctor', 'Admin'])], title: 'Dossier Patient — HealthMap' },
       { path: 'chimio/protocoles', loadComponent: () => import('./features/admin/stats.component').then(m => m.StatsComponent) },
       { path: 'chimio/sessions', loadComponent: () => import('./features/admin/stats.component').then(m => m.StatsComponent) },
       // Chef de Service routes
