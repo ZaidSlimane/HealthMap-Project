@@ -86,6 +86,16 @@ docker-compose.override.yml
 db_data/
 
 # =====================
+# Kiro specs & discussions
+# =====================
+.kiro/discussion/
+
+# =====================
+# Database dumps
+# =====================
+*.sql
+
+# =====================
 # Misc
 # =====================
 *.tsbuildinfo
