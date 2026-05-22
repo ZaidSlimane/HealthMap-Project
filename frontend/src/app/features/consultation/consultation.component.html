@@ -15,7 +15,7 @@
       <button mat-stroked-button class="action-btn" data-testid="btn-observation">
         <mat-icon>visibility</mat-icon> Garder en observation
       </button>
-      <button mat-stroked-button class="action-btn" data-testid="btn-admission">
+      <button mat-stroked-button class="action-btn" data-testid="btn-admission" (click)="showAdmissionModal.set(true)">
         <mat-icon>local_hospital</mat-icon> Admission (Service)
       </button>
       <button mat-stroked-button class="action-btn" data-testid="btn-suivant">
@@ -101,10 +101,16 @@
       <div class="card-surface sidebar-card">
         <h4 class="card-title">Rédiger un document</h4>
         <ul class="documents-list">
-          @for (doc of documents; track doc) {
+          @for (doc of documents; track doc; let i = $index) {
             <li class="document-link">
               <mat-icon>arrow_right</mat-icon>
-              <a>{{ doc }}</a>
+              @if (i === 0) {
+                <a (click)="showRadioModal.set(true)" style="cursor:pointer">{{ doc }}</a>
+              } @else if (i === 1) {
+                <a (click)="showLaboModal.set(true)" style="cursor:pointer">{{ doc }}</a>
+              } @else {
+                <a>{{ doc }}</a>
+              }
             </li>
           }
         </ul>
@@ -117,7 +123,17 @@
           <span>Consultations</span>
           <span class="badge-urgence" style="margin-left:auto">1</span>
         </div>
+        <!-- Radiology & Laboratory result panels -->
+        <app-radio-result-panel [consultationId]="consultationId()!" />
+        <app-labo-result-panel [consultationId]="consultationId()!" />
       </div>
     </div>
   </div>
 </div>
+
+<!-- Exam Request Modals -->
+<app-exam-request-modal [mode]="'radiology'" [consultationId]="consultationId()!" [visible]="showRadioModal()" (visibleChange)="showRadioModal.set($event)" (requestSubmitted)="onExamRequestSubmitted()" />
+<app-exam-request-modal [mode]="'laboratory'" [consultationId]="consultationId()!" [visible]="showLaboModal()" (visibleChange)="showLaboModal.set($event)" (requestSubmitted)="onExamRequestSubmitted()" />
+
+<!-- Admission Modal -->
+<app-admission-modal [consultationId]="consultationId()!" [serviceId]="session.session()?.serviceId!" [diagnostic]="compteRendu" [visible]="showAdmissionModal()" (visibleChange)="showAdmissionModal.set($event)" (admitted)="onAdmitted($event)" />

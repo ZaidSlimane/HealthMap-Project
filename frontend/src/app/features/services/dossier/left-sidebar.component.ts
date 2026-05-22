@@ -154,24 +154,6 @@ export interface SidebarExamRequest {
         </section>
       }
 
-      <!-- Exam/Bilan requests -->
-      @if (examRequests().length > 0) {
-        <section class="sidebar-section">
-          <div class="sidebar-label">Examen/Bilan demandé</div>
-          <ul class="exam-list">
-            @for (req of examRequests(); track req.id) {
-              <li class="exam-item">
-                <span class="exam-badge" [class]="'status-' + req.status">
-                  {{ req.status === 'pending' ? '⏳' : req.status === 'in_progress' ? '🔄' : req.status === 'completed' ? '✅' : '❌' }}
-                </span>
-                <span class="exam-label">{{ req.label }}</span>
-                <span class="exam-type">({{ req.type === 'radio' ? 'Radio' : 'Labo' }})</span>
-              </li>
-            }
-          </ul>
-        </section>
-      }
-
       <!-- Admission history -->
       @if (sortedAdmissionHistory().length > 0) {
         <section class="sidebar-section">

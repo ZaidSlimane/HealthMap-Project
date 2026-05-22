@@ -74,7 +74,6 @@ export interface SecondaryData {
             [admission]="sidebarAdmission()"
             [companion]="dossierData()?.companion ?? null"
             [companions]="dossierData()?.companions ?? []"
-            [examRequests]="examRequests()"
             [admissionHistory]="dossierData()?.admissionHistory ?? []"
             [treatingDoctor]="treatingDoctorName()"
           />
@@ -84,10 +83,13 @@ export interface SecondaryData {
         <main class="dossier-main">
           @if (secondaryLoading()) {
             <hm-spinner label="Chargement des données secondaires..." [inline]="true" [size]="20" />
-          } @else if (secondaryError()) {
+          } @else if (secondaryError() && !errorDismissed()) {
             <div class="section-error">
               <span class="material-icons">warning</span>
               <span>{{ secondaryError() }}</span>
+              <button class="btn-dismiss" (click)="dismissError()">
+                <span class="material-icons">close</span>
+              </button>
             </div>
           }
           <app-main-tabbed-area
@@ -217,6 +219,34 @@ export interface SecondaryData {
     .section-error .material-icons {
       font-size: 18px;
     }
+
+    .section-error span:nth-child(2) {
+      flex: 1;
+    }
+
+    .btn-dismiss {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: #dc2626;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+
+    .btn-dismiss:hover {
+      opacity: 1;
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .btn-dismiss .material-icons {
+      font-size: 16px;
+    }
   `]
 })
 export class DossierPageComponent implements OnInit {
@@ -235,6 +265,7 @@ export class DossierPageComponent implements OnInit {
   readonly secondaryData = signal<SecondaryData | null>(null);
   readonly secondaryLoading = signal(false);
   readonly secondaryError = signal<string | null>(null);
+  readonly errorDismissed = signal(false);
 
   // Extracted signals for child components
   readonly vitalSigns = signal<any[]>([]);
@@ -316,6 +347,10 @@ export class DossierPageComponent implements OnInit {
   goBack(): void {
     const serviceId = this.route.snapshot.paramMap.get('serviceId');
     this.router.navigate(['/services', serviceId]);
+  }
+
+  dismissError(): void {
+    this.errorDismissed.set(true);
   }
 
   /**
@@ -426,6 +461,8 @@ export class DossierPageComponent implements OnInit {
       error: () => {
         this.secondaryLoading.set(false);
         this.secondaryError.set('Certaines données secondaires n\'ont pas pu être chargées.');
+        // Auto-dismiss after 8 seconds
+        setTimeout(() => this.errorDismissed.set(true), 8000);
       }
     });
   }

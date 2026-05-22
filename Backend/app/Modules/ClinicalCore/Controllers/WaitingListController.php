@@ -80,6 +80,15 @@ class WaitingListController extends BaseResourceController
             'consultation_at' => now(),
         ]);
 
+        // GUARD: prevent orphan consultations — check if one already exists
+        $existing = Consultation::where('waiting_list_id', $entry->id)->first();
+        if ($existing) {
+            return response()->json([
+                'waiting_list' => $entry->load($this->with),
+                'consultation' => $existing->load(['patient']),
+            ]);
+        }
+
         // Create the consultation record
         $consultation = Consultation::create([
             'patient_id' => $entry->patient_id,
@@ -140,8 +149,9 @@ class WaitingListController extends BaseResourceController
             'consultation_at' => $entry->consultation_at ?? now(),
         ]);
 
-        // Also mark the linked consultation as completed
-        if ($consultation = $entry->consultation) {
+        // Mark the linked consultation as completed (fail loudly if missing)
+        $consultation = $entry->consultation;
+        if ($consultation) {
             $consultation->update([
                 'status' => 'completed',
                 'completed_at' => now(),

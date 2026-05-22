@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ConsultationSessionService, SessionPatient } from '../../core/services/consultation-session.service';
+import { ExamRequestModalComponent } from './exam-request/exam-request-modal.component';
+import { AdmissionModalComponent } from './admission-modal/admission-modal.component';
+import { RadioResultPanelComponent } from '../radiology/result-panel/radio-result-panel.component';
+import { LaboResultPanelComponent } from '../laboratory/result-panel/labo-result-panel.component';
 
 interface Medication {
   nom: string;
@@ -22,15 +26,24 @@ interface Medication {
 @Component({
   selector: 'app-consultation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, ExamRequestModalComponent, AdmissionModalComponent, RadioResultPanelComponent, LaboResultPanelComponent],
   templateUrl: './consultation.component.html',
   styleUrl: './consultation.component.scss'
 })
 export class ConsultationComponent implements OnInit {
-  private readonly session = inject(ConsultationSessionService);
+  readonly session = inject(ConsultationSessionService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   patient: SessionPatient | null = null;
+
+  /** Consultation ID from the session service */
+  readonly consultationId = computed(() => this.session.consultationId());
+
+  /** Modal visibility signals */
+  readonly showRadioModal = signal(false);
+  readonly showLaboModal = signal(false);
+  readonly showAdmissionModal = signal(false);
 
   ngOnInit(): void {
     // Resume session from query params if needed
@@ -62,5 +75,14 @@ export class ConsultationComponent implements OnInit {
 
   removeMedication(i: number) {
     this.medications.splice(i, 1);
+  }
+
+  onExamRequestSubmitted(): void {
+    // Refresh result panels after a new exam request is submitted
+  }
+
+  onAdmitted(admission: any): void {
+    // Stay on the consultation page — just show a success notification
+    // The doctor continues the consultation process without interruption
   }
 }
