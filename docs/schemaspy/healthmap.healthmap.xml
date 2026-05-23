@@ -1,0 +1,1850 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="healthmap" schema="healthmap" type="MySQL - 8.0.46">
+   <tables>
+      <table catalog="healthmap" name="admissions" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="admission_id" foreignKey="consultations_admission_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="deaths_admission_id_foreign" implied="false" onDeleteCascade="true" table="deaths"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="discharges_admission_id_foreign" implied="false" onDeleteCascade="true" table="discharges"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="labo_demande_admission_id_foreign" implied="false" onDeleteCascade="false" table="labo_demande"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="patient_diagnoses_admission_id_foreign" implied="false" onDeleteCascade="true" table="patient_diagnoses"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="patient_insurances_admission_id_foreign" implied="false" onDeleteCascade="true" table="patient_insurances"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="patient_movements_admission_id_foreign" implied="false" onDeleteCascade="true" table="patient_movements"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="performed_procedures_admission_id_foreign" implied="false" onDeleteCascade="true" table="performed_procedures"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="radio_demande_admission_id_foreign" implied="false" onDeleteCascade="false" table="radio_demande"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="surgical_procedures_admission_id_foreign" implied="false" onDeleteCascade="true" table="surgical_procedures"/>
+            <child catalog="healthmap" column="admission_id" foreignKey="vital_signs_admission_id_foreign" implied="false" onDeleteCascade="true" table="vital_signs"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="admissions_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="admissions_service_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="bed_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="admissions_bed_id_foreign" implied="false" onDeleteCascade="false" table="beds"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="companion_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="admissions_companion_id_foreign" implied="false" onDeleteCascade="false" table="companions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="date_admission" nullable="false" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="date_sortie" nullable="true" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="motif_admission" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="normale" digits="0" id="8" name="mode" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="active" digits="0" id="9" name="status" nullable="false" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="admissions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="admissions_bed_id_foreign" unique="false">
+            <column ascending="true" name="bed_id"/>
+         </index>
+         <index name="admissions_companion_id_foreign" unique="false">
+            <column ascending="true" name="companion_id"/>
+         </index>
+         <index name="admissions_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="admissions_mode_index" unique="false">
+            <column ascending="true" name="mode"/>
+         </index>
+         <index name="admissions_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="admissions_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="beds" numRows="22" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="bed_id" foreignKey="admissions_bed_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+            <child catalog="healthmap" column="bed_id" foreignKey="patient_movements_bed_id_foreign" implied="false" onDeleteCascade="true" table="patient_movements"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="room_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="beds_room_id_foreign" implied="false" onDeleteCascade="true" table="rooms"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="bed_number" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="free" digits="0" id="3" name="status" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="beds_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="beds_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="beds_room_id_index" unique="false">
+            <column ascending="true" name="room_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="bornes" numRows="2" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="borne_id" foreignKey="doctor_shift_assignments_borne_id_foreign" implied="false" onDeleteCascade="true" table="doctor_shift_assignments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label_fr" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="consultation" digits="0" id="3" name="type" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="4" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="service_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="bornes_service_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="location" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="active" digits="0" id="7" name="status" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="bornes_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="bornes_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="bornes_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="boxes" numRows="2" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="box_id" foreignKey="consultations_box_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+            <child catalog="healthmap" column="box_id" foreignKey="doctor_shift_assignments_box_id_foreign" implied="false" onDeleteCascade="true" table="doctor_shift_assignments"/>
+            <child catalog="healthmap" column="box_id" foreignKey="waiting_lists_box_id_foreign" implied="false" onDeleteCascade="false" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label_fr" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="consultation" digits="0" id="3" name="type" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="4" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="service_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="boxes_service_id_foreign" implied="false" onDeleteCascade="true" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="boxes_establishment_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="boxes_establishment_id_foreign" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="boxes_service_id_index" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="cache" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="key" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="value" nullable="false" remarks="" size="16777215" type="MEDIUMTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="expiration" nullable="false" remarks="" size="19" type="BIGINT" typeCode="-5"/>
+         <primaryKey column="key" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="key"/>
+         </index>
+         <index name="cache_expiration_index" unique="false">
+            <column ascending="true" name="expiration"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="cache_locks" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="key" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="owner" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="expiration" nullable="false" remarks="" size="19" type="BIGINT" typeCode="-5"/>
+         <primaryKey column="key" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="key"/>
+         </index>
+         <index name="cache_locks_expiration_index" unique="false">
+            <column ascending="true" name="expiration"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="companions" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="companion_id" foreignKey="admissions_companion_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="first_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="address" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="phone" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="identity_document_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="companions_identity_document_id_foreign" implied="false" onDeleteCascade="false" table="identity_documents"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="companions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="companions_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="companions_identity_document_id_foreign" unique="false">
+            <column ascending="true" name="identity_document_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultation_categories" numRows="7" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="category_id" foreignKey="consultation_elements_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_elements"/>
+            <child catalog="healthmap" column="category_id" foreignKey="consultation_sub_categories_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_sub_categories"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="icon" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="sort_order" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultation_categories_code_unique" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultation_elements" numRows="18" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="element_id" foreignKey="consultation_findings_element_id_foreign" implied="false" onDeleteCascade="true" table="consultation_findings"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="sub_category_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_elements_sub_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_sub_categories"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="category_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_elements_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_categories"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="label_positive" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="label_negative" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="label_neutral" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="symptom" digits="0" id="6" name="type" nullable="false" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="sort_order" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultation_elements_category_id_sub_category_id_index" unique="false">
+            <column ascending="true" name="category_id"/>
+            <column ascending="true" name="sub_category_id"/>
+         </index>
+         <index name="consultation_elements_sub_category_id_foreign" unique="false">
+            <column ascending="true" name="sub_category_id"/>
+         </index>
+         <index name="consultation_elements_type_index" unique="false">
+            <column ascending="true" name="type"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultation_findings" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="consultation_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_findings_consultation_id_foreign" implied="false" onDeleteCascade="true" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="element_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_findings_element_id_foreign" implied="false" onDeleteCascade="true" table="consultation_elements"/>
+         </column>
+         <column autoUpdated="false" defaultValue="positive" digits="0" id="3" name="value" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="note" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultation_findings_consultation_id_element_id_unique" unique="true">
+            <column ascending="true" name="consultation_id"/>
+            <column ascending="true" name="element_id"/>
+         </index>
+         <index name="consultation_findings_element_id_foreign" unique="false">
+            <column ascending="true" name="element_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultation_sub_categories" numRows="10" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="sub_category_id" foreignKey="consultation_elements_sub_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_elements"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="category_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_sub_categories_category_id_foreign" implied="false" onDeleteCascade="true" table="consultation_categories"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="sort_order" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultation_sub_categories_category_id_foreign" unique="false">
+            <column ascending="true" name="category_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultation_symptoms" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="consultation_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_symptoms_consultation_id_foreign" implied="false" onDeleteCascade="true" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="symptom_name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="severity" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultation_symptoms_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultation_symptoms_consultation_id_foreign" unique="false">
+            <column ascending="true" name="consultation_id"/>
+         </index>
+         <index name="consultation_symptoms_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="consultations" numRows="1" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="consultation_id" foreignKey="consultation_findings_consultation_id_foreign" implied="false" onDeleteCascade="true" table="consultation_findings"/>
+            <child catalog="healthmap" column="consultation_id" foreignKey="consultation_symptoms_consultation_id_foreign" implied="false" onDeleteCascade="true" table="consultation_symptoms"/>
+            <child catalog="healthmap" column="consultation_id" foreignKey="labo_demande_consultation_id_foreign" implied="false" onDeleteCascade="false" table="labo_demande"/>
+            <child catalog="healthmap" column="consultation_id" foreignKey="patient_diagnoses_consultation_id_foreign" implied="false" onDeleteCascade="true" table="patient_diagnoses"/>
+            <child catalog="healthmap" column="consultation_id" foreignKey="prescriptions_consultation_id_foreign" implied="false" onDeleteCascade="false" table="prescriptions"/>
+            <child catalog="healthmap" column="consultation_id" foreignKey="radio_demande_consultation_id_foreign" implied="false" onDeleteCascade="false" table="radio_demande"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_patient_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="box_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_box_id_foreign" implied="false" onDeleteCascade="false" table="boxes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="admission_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_admission_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="consultation_date" nullable="false" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="notes" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="motif" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="anamnese" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="examen_clinique" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="compte_rendu" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="diagnostic" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="cim10_code" nullable="true" remarks="" size="10" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="in_progress" digits="0" id="13" name="status" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="waiting_list_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_waiting_list_id_foreign" implied="false" onDeleteCascade="false" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="started_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="completed_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="consultations_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="consultations_admission_id_foreign" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="consultations_box_id_index" unique="false">
+            <column ascending="true" name="box_id"/>
+         </index>
+         <index name="consultations_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="consultations_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="consultations_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+         <index name="consultations_waiting_list_id_foreign" unique="false">
+            <column ascending="true" name="waiting_list_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="countries" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="nationality_id" foreignKey="patients_nationality_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="alpha2" nullable="false" remarks="" size="6" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="alpha3" nullable="false" remarks="" size="9" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="name_ar" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="name_fr" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="countries_alpha2_unique" unique="true">
+            <column ascending="true" name="alpha2"/>
+         </index>
+         <index name="countries_alpha3_unique" unique="true">
+            <column ascending="true" name="alpha3"/>
+         </index>
+         <index name="countries_code_unique" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="deaths" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="deaths_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="deaths_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="date_deces" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="cause" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="declared_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="deaths_declared_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="deaths_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="deaths_declared_by_foreign" unique="false">
+            <column ascending="true" name="declared_by"/>
+         </index>
+         <index name="deaths_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="diagnosis_catalog" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="diagnosis_id" foreignKey="patient_diagnoses_diagnosis_id_foreign" implied="false" onDeleteCascade="false" table="patient_diagnoses"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="true" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="chapter" nullable="true" remarks="" size="100" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="diagnosis_catalog_code_index" unique="false">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="discharge_modes" numRows="6" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="discharge_mode_id" foreignKey="discharges_discharge_mode_id_foreign" implied="false" onDeleteCascade="false" table="discharges"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="discharge_modes_code_unique" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="discharges" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="discharges_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="discharge_mode_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="discharges_discharge_mode_id_foreign" implied="false" onDeleteCascade="false" table="discharge_modes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="date_medical" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="date_administrative" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="doctor_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="discharges_doctor_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="diagnostic_sortie" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="discharges_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="discharges_discharge_mode_id_foreign" unique="false">
+            <column ascending="true" name="discharge_mode_id"/>
+         </index>
+         <index name="discharges_doctor_id_foreign" unique="false">
+            <column ascending="true" name="doctor_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="doctor_shift_assignments" numRows="1" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="doctor_shift_assignments_user_id_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="doctor_shift_assignments_service_id_foreign" implied="false" onDeleteCascade="true" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="borne_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="doctor_shift_assignments_borne_id_foreign" implied="false" onDeleteCascade="true" table="bornes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="box_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="doctor_shift_assignments_box_id_foreign" implied="false" onDeleteCascade="true" table="boxes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="day_of_week" nullable="false" remarks="" size="1073741824" type="JSON" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="start_time" nullable="false" remarks="" size="8" type="TIME" typeCode="92"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="end_time" nullable="false" remarks="" size="8" type="TIME" typeCode="92"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="assigned_by" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="doctor_shift_assignments_assigned_by_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="9" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="doctor_shift_assignments_assigned_by_foreign" unique="false">
+            <column ascending="true" name="assigned_by"/>
+         </index>
+         <index name="doctor_shift_assignments_borne_id_foreign" unique="false">
+            <column ascending="true" name="borne_id"/>
+         </index>
+         <index name="doctor_shift_assignments_box_id_foreign" unique="false">
+            <column ascending="true" name="box_id"/>
+         </index>
+         <index name="doctor_shift_assignments_service_id_borne_id_index" unique="false">
+            <column ascending="true" name="service_id"/>
+            <column ascending="true" name="borne_id"/>
+         </index>
+         <index name="doctor_shift_assignments_user_id_is_active_index" unique="false">
+            <column ascending="true" name="user_id"/>
+            <column ascending="true" name="is_active"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="establishment_types" numRows="8" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="establishment_type_id" foreignKey="establishments_establishment_type_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="true" remarks="" size="32" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="establishment_types_code_unique" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="establishment_units" numRows="3" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="establishment_unit_id" foreignKey="rooms_establishment_unit_id_foreign" implied="false" onDeleteCascade="true" table="rooms"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="service_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishment_units_service_id_foreign" implied="false" onDeleteCascade="true" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="unit_type" nullable="true" remarks="" size="40" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishment_units_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="establishment_units_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="establishment_units_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="establishments" numRows="147" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="establishment_id" foreignKey="admissions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="beds_establishment_id_foreign" implied="false" onDeleteCascade="true" table="beds"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="bornes_establishment_id_foreign" implied="false" onDeleteCascade="true" table="bornes"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="boxes_establishment_id_foreign" implied="false" onDeleteCascade="false" table="boxes"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="companions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="companions"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="consultation_symptoms_establishment_id_foreign" implied="false" onDeleteCascade="true" table="consultation_symptoms"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="consultations_establishment_id_foreign" implied="false" onDeleteCascade="true" table="consultations"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="establishment_units_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishment_units"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="medical_documents_establishment_id_foreign" implied="false" onDeleteCascade="true" table="medical_documents"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="observations_establishment_id_foreign" implied="false" onDeleteCascade="true" table="observations"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="patients_establishment_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="prescription_medications_establishment_id_foreign" implied="false" onDeleteCascade="true" table="prescription_medications"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="prescriptions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="prescriptions"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="rooms_establishment_id_foreign" implied="false" onDeleteCascade="true" table="rooms"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="services_establishment_id_foreign" implied="false" onDeleteCascade="true" table="services"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="triages_establishment_id_foreign" implied="false" onDeleteCascade="true" table="triages"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="users_establishment_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+            <child catalog="healthmap" column="establishment_id" foreignKey="waiting_lists_establishment_id_foreign" implied="false" onDeleteCascade="true" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="slug" nullable="false" remarks="" size="96" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="" size="180" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name_ar" nullable="true" remarks="" size="180" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="establishment_type_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishments_establishment_type_id_foreign" implied="false" onDeleteCascade="false" table="establishment_types"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="province_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishments_province_id_foreign" implied="false" onDeleteCascade="false" table="provinces"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="municipality_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishments_municipality_id_foreign" implied="false" onDeleteCascade="false" table="municipalities"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="address" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="phone" nullable="true" remarks="" size="32" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="fax" nullable="true" remarks="" size="32" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="email" nullable="true" remarks="" size="180" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="directeur" nullable="true" remarks="" size="180" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="seeded" digits="0" id="12" name="source" nullable="false" remarks="" size="6" type="enum('seeded', 'custom')" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="active" digits="0" id="13" name="status" nullable="false" remarks="" size="8" type="enum('active', 'inactive')" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="created_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishments_created_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="admin_user_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="establishments_admin_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="deleted_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="establishments_admin_user_id_foreign" unique="false">
+            <column ascending="true" name="admin_user_id"/>
+         </index>
+         <index name="establishments_created_by_foreign" unique="false">
+            <column ascending="true" name="created_by"/>
+         </index>
+         <index name="establishments_establishment_type_id_foreign" unique="false">
+            <column ascending="true" name="establishment_type_id"/>
+         </index>
+         <index name="establishments_municipality_id_foreign" unique="false">
+            <column ascending="true" name="municipality_id"/>
+         </index>
+         <index name="establishments_province_id_establishment_type_id_index" unique="false">
+            <column ascending="true" name="province_id"/>
+            <column ascending="true" name="establishment_type_id"/>
+         </index>
+         <index name="establishments_slug_unique" unique="true">
+            <column ascending="true" name="slug"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="failed_jobs" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="uuid" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="connection" nullable="false" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="queue" nullable="false" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="payload" nullable="false" remarks="" size="2147483647" type="LONGTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="exception" nullable="false" remarks="" size="2147483647" type="LONGTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="0" id="6" name="failed_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="failed_jobs_uuid_unique" unique="true">
+            <column ascending="true" name="uuid"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="identity_documents" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="identity_document_id" foreignKey="companions_identity_document_id_foreign" implied="false" onDeleteCascade="false" table="companions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="type" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="number" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="insurance_companies" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="insurance_company_id" foreignKey="patient_insurances_insurance_company_id_foreign" implied="false" onDeleteCascade="false" table="patient_insurances"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="2" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="job_batches" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="total_jobs" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="pending_jobs" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="failed_jobs" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="failed_job_ids" nullable="false" remarks="" size="2147483647" type="LONGTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="options" nullable="true" remarks="" size="16777215" type="MEDIUMTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="cancelled_at" nullable="true" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="finished_at" nullable="true" remarks="" size="10" type="INT" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="jobs" numRows="2" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="queue" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="payload" nullable="false" remarks="" size="2147483647" type="LONGTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="attempts" nullable="false" remarks="" size="3" type="TINYINT UNSIGNED" typeCode="-6"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="reserved_at" nullable="true" remarks="" size="10" type="INT UNSIGNED" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="available_at" nullable="false" remarks="" size="10" type="INT UNSIGNED" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="false" remarks="" size="10" type="INT UNSIGNED" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="jobs_queue_index" unique="false">
+            <column ascending="true" name="queue"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="labo_demande" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="labo_demande_id" foreignKey="labo_demande_item_labo_demande_id_foreign" implied="false" onDeleteCascade="true" table="labo_demande_item"/>
+            <child catalog="healthmap" column="labo_demande_id" foreignKey="labo_result_labo_demande_id_foreign" implied="false" onDeleteCascade="true" table="labo_result"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="consultation_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_demande_consultation_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="admission_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_demande_admission_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="normal" digits="0" id="3" name="urgency" nullable="false" remarks="" size="10" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="pending" digits="0" id="4" name="status" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="date_recep" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="notes" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="requested_by" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_demande_requested_by_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="labo_demande_admission_id_foreign" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="labo_demande_consultation_id_index" unique="false">
+            <column ascending="true" name="consultation_id"/>
+         </index>
+         <index name="labo_demande_requested_by_index" unique="false">
+            <column ascending="true" name="requested_by"/>
+         </index>
+         <index name="labo_demande_status_index" unique="false">
+            <column ascending="true" name="status"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="labo_demande_item" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="labo_demande_item_id" foreignKey="labo_result_labo_demande_item_id_foreign" implied="false" onDeleteCascade="true" table="labo_result"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="labo_demande_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_demande_item_labo_demande_id_foreign" implied="false" onDeleteCascade="true" table="labo_demande"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="item_type" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="item_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="pending" digits="0" id="4" name="status" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="labo_demande_item_labo_demande_id_index" unique="false">
+            <column ascending="true" name="labo_demande_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="labo_result" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="labo_demande_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_result_labo_demande_id_foreign" implied="false" onDeleteCascade="true" table="labo_demande"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="labo_demande_item_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_result_labo_demande_item_id_foreign" implied="false" onDeleteCascade="true" table="labo_demande_item"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="sub_analysis_name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="4" name="numeric_value" nullable="true" remarks="" size="10" type="DECIMAL" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="text_value" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="unit" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="reference_range" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="performed_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="labo_result_performed_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="labo_result_labo_demande_id_index" unique="false">
+            <column ascending="true" name="labo_demande_id"/>
+         </index>
+         <index name="labo_result_labo_demande_item_id_foreign" unique="false">
+            <column ascending="true" name="labo_demande_item_id"/>
+         </index>
+         <index name="labo_result_performed_by_foreign" unique="false">
+            <column ascending="true" name="performed_by"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="marital_statuses" numRows="2" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="marital_status_id" foreignKey="patients_marital_status_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="medical_documents" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="medical_documents_patient_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="medical_documents_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="document_type" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="file_path" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="0" id="5" name="uploaded_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="medical_documents_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="medical_documents_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="medical_documents_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="medical_documents_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="migrations" numRows="53" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT UNSIGNED" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="migration" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="batch" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="municipalities" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="municipality_id" foreignKey="establishments_municipality_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+            <child catalog="healthmap" column="birth_place_id" foreignKey="patients_birth_place_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="province_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="municipalities_province_id_foreign" implied="false" onDeleteCascade="false" table="provinces"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="municipalities_province_id_foreign" unique="false">
+            <column ascending="true" name="province_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="observations" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="observations_patient_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="observations_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="observation_date" nullable="false" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="observation_text" nullable="false" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="medical" digits="0" id="5" name="type" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="observations_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="idx_observations_type" unique="false">
+            <column ascending="true" name="type"/>
+         </index>
+         <index name="observations_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="observations_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="observations_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="password_reset_tokens" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="email" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12">
+            <child catalog="healthmap" column="email" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="token" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="email" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patient_antecedents" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_antecedents_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="recorded_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_antecedents_recorded_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="content" nullable="false" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="type" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patient_antecedents_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="patient_antecedents_recorded_by_foreign" unique="false">
+            <column ascending="true" name="recorded_by"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patient_diagnoses" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_diagnoses_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="consultation_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_diagnoses_consultation_id_foreign" implied="false" onDeleteCascade="true" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_diagnoses_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="diagnosis_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_diagnoses_diagnosis_id_foreign" implied="false" onDeleteCascade="false" table="diagnosis_catalog"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="diagnosed_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_diagnoses_diagnosed_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="type" nullable="true" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="diagnosed_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patient_diagnoses_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="patient_diagnoses_consultation_id_index" unique="false">
+            <column ascending="true" name="consultation_id"/>
+         </index>
+         <index name="patient_diagnoses_diagnosed_by_foreign" unique="false">
+            <column ascending="true" name="diagnosed_by"/>
+         </index>
+         <index name="patient_diagnoses_diagnosis_id_foreign" unique="false">
+            <column ascending="true" name="diagnosis_id"/>
+         </index>
+         <index name="patient_diagnoses_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patient_insurances" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_insurances_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_insurances_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="insurance_company_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_insurances_insurance_company_id_foreign" implied="false" onDeleteCascade="false" table="insurance_companies"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="numero_ss" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="matricule_carte" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="nom_assure" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="prenom_assure" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="date_naissance_assure" nullable="true" remarks="" size="10" type="DATE" typeCode="91"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="employeur" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="active" digits="0" id="10" name="status" nullable="false" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patient_insurances_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="patient_insurances_insurance_company_id_foreign" unique="false">
+            <column ascending="true" name="insurance_company_id"/>
+         </index>
+         <index name="patient_insurances_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patient_movements" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_movements_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_movements_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="bed_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_movements_bed_id_foreign" implied="false" onDeleteCascade="true" table="beds"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="moved_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="left_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="reason" nullable="true" remarks="" size="100" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patient_movements_admission_id_bed_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+            <column ascending="true" name="bed_id"/>
+         </index>
+         <index name="patient_movements_bed_id_foreign" unique="false">
+            <column ascending="true" name="bed_id"/>
+         </index>
+         <index name="patient_movements_patient_id_moved_at_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+            <column ascending="true" name="moved_at"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patient_social_history" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_social_history_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="recorded_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patient_social_history_recorded_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="content" nullable="false" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patient_social_history_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="patient_social_history_recorded_by_foreign" unique="false">
+            <column ascending="true" name="recorded_by"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="patients" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="patient_id" foreignKey="admissions_patient_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="consultations_patient_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="deaths_patient_id_foreign" implied="false" onDeleteCascade="true" table="deaths"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="medical_documents_patient_id_foreign" implied="false" onDeleteCascade="false" table="medical_documents"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="observations_patient_id_foreign" implied="false" onDeleteCascade="false" table="observations"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="patient_antecedents_patient_id_foreign" implied="false" onDeleteCascade="true" table="patient_antecedents"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="patient_diagnoses_patient_id_foreign" implied="false" onDeleteCascade="true" table="patient_diagnoses"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="patient_insurances_patient_id_foreign" implied="false" onDeleteCascade="true" table="patient_insurances"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="patient_movements_patient_id_foreign" implied="false" onDeleteCascade="true" table="patient_movements"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="patient_social_history_patient_id_foreign" implied="false" onDeleteCascade="true" table="patient_social_history"/>
+            <child catalog="healthmap" column="spouse_id" foreignKey="patients_spouse_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="performed_procedures_patient_id_foreign" implied="false" onDeleteCascade="true" table="performed_procedures"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="surgical_procedures_patient_id_foreign" implied="false" onDeleteCascade="true" table="surgical_procedures"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="triages_patient_id_foreign" implied="false" onDeleteCascade="false" table="triages"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="vital_signs_patient_id_foreign" implied="false" onDeleteCascade="true" table="vital_signs"/>
+            <child catalog="healthmap" column="patient_id" foreignKey="waiting_lists_patient_id_foreign" implied="false" onDeleteCascade="true" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_matricule" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="nin" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="first_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="first_name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="gender" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="date_of_birth" nullable="true" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="birth_place_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patients_birth_place_id_foreign" implied="false" onDeleteCascade="false" table="municipalities"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="father_first_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="mother_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="mother_first_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="father_first_name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="mother_name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="mother_first_name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="nationality_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patients_nationality_id_foreign" implied="false" onDeleteCascade="false" table="countries"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="marital_status_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patients_marital_status_id_foreign" implied="false" onDeleteCascade="false" table="marital_statuses"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="spouse_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patients_spouse_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="ins" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="20" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="21" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="22" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="patients_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="patients_birth_place_id_foreign" unique="false">
+            <column ascending="true" name="birth_place_id"/>
+         </index>
+         <index name="patients_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="patients_marital_status_id_foreign" unique="false">
+            <column ascending="true" name="marital_status_id"/>
+         </index>
+         <index name="patients_nationality_id_foreign" unique="false">
+            <column ascending="true" name="nationality_id"/>
+         </index>
+         <index name="patients_patient_matricule_unique" unique="true">
+            <column ascending="true" name="patient_matricule"/>
+         </index>
+         <index name="patients_spouse_id_foreign" unique="false">
+            <column ascending="true" name="spouse_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="performed_procedures" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="performed_procedures_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="performed_procedures_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="procedure_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="performed_procedures_procedure_id_foreign" implied="false" onDeleteCascade="false" table="procedure_catalog"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="performed_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="performed_procedures_performed_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="label" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="details" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="7" name="cost" nullable="true" remarks="" size="10" type="DECIMAL" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="8" name="is_external" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="performed_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="performed_procedures_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="performed_procedures_patient_id_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="performed_procedures_performed_by_foreign" unique="false">
+            <column ascending="true" name="performed_by"/>
+         </index>
+         <index name="performed_procedures_procedure_id_foreign" unique="false">
+            <column ascending="true" name="procedure_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="permission_role" numRows="23" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="permission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="permission_role_permission_id_foreign" implied="false" onDeleteCascade="true" table="permissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="permission_role_role_id_foreign" implied="false" onDeleteCascade="true" table="roles"/>
+         </column>
+         <primaryKey column="permission_id" sequenceNumberInPK="1"/>
+         <primaryKey column="role_id" sequenceNumberInPK="2"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="permission_id"/>
+            <column ascending="true" name="role_id"/>
+         </index>
+         <index name="permission_role_role_id_foreign" unique="false">
+            <column ascending="true" name="role_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="permission_user" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="permission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="permission_user_permission_id_foreign" implied="false" onDeleteCascade="true" table="permissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="permission_user_user_id_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <primaryKey column="permission_id" sequenceNumberInPK="1"/>
+         <primaryKey column="user_id" sequenceNumberInPK="2"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="permission_id"/>
+            <column ascending="true" name="user_id"/>
+         </index>
+         <index name="permission_user_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="permissions" numRows="23" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="permission_id" foreignKey="permission_role_permission_id_foreign" implied="false" onDeleteCascade="true" table="permission_role"/>
+            <child catalog="healthmap" column="permission_id" foreignKey="permission_user_permission_id_foreign" implied="false" onDeleteCascade="true" table="permission_user"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="slug" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="permissions_slug_unique" unique="true">
+            <column ascending="true" name="slug"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="postes" numRows="11" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="poste_id" foreignKey="users_poste_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label_ar" nullable="true" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="postes_label_unique" unique="true">
+            <column ascending="true" name="label"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="prescription_medications" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="prescription_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="prescription_medications_prescription_id_foreign" implied="false" onDeleteCascade="true" table="prescriptions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="medication_name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="dosage" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="frequency" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="duration" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="prescription_medications_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="prescription_medications_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="prescription_medications_prescription_id_foreign" unique="false">
+            <column ascending="true" name="prescription_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="prescriptions" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="prescription_id" foreignKey="prescription_medications_prescription_id_foreign" implied="false" onDeleteCascade="true" table="prescription_medications"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="consultation_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="prescriptions_consultation_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="prescriptions_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="prescription_date" nullable="false" remarks="" size="19" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="notes" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="prescriptions_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="prescriptions_consultation_id_foreign" unique="false">
+            <column ascending="true" name="consultation_id"/>
+         </index>
+         <index name="prescriptions_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="prescriptions_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="procedure_catalog" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="procedure_id" foreignKey="performed_procedures_procedure_id_foreign" implied="false" onDeleteCascade="false" table="performed_procedures"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="true" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="category" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="4" name="cost" nullable="true" remarks="" size="10" type="DECIMAL" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="5" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="provinces" numRows="58" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="province_id" foreignKey="establishments_province_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+            <child catalog="healthmap" column="province_id" foreignKey="municipalities_province_id_foreign" implied="false" onDeleteCascade="false" table="municipalities"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="provinces_code_unique" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="radio_demande" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="radio_demande_id" foreignKey="radio_resultat_radio_demande_id_foreign" implied="false" onDeleteCascade="true" table="radio_resultat"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="consultation_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_demande_consultation_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="admission_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_demande_admission_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="radiology_exam_type_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_demande_radiology_exam_type_id_foreign" implied="false" onDeleteCascade="true" table="radiology_exam_types"/>
+         </column>
+         <column autoUpdated="false" defaultValue="normal" digits="0" id="4" name="urgency" nullable="false" remarks="" size="10" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="pending" digits="0" id="5" name="status" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="scheduled_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="notes" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="requested_by" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_demande_requested_by_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="radio_demande_admission_id_foreign" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="radio_demande_consultation_id_index" unique="false">
+            <column ascending="true" name="consultation_id"/>
+         </index>
+         <index name="radio_demande_radiology_exam_type_id_foreign" unique="false">
+            <column ascending="true" name="radiology_exam_type_id"/>
+         </index>
+         <index name="radio_demande_requested_by_index" unique="false">
+            <column ascending="true" name="requested_by"/>
+         </index>
+         <index name="radio_demande_status_index" unique="false">
+            <column ascending="true" name="status"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="radio_resultat" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="radio_demande_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_resultat_radio_demande_id_foreign" implied="false" onDeleteCascade="true" table="radio_demande"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="file_path" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="file_uploaded_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="compte_rendu" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="performed_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="radio_resultat_performed_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="pending" digits="0" id="6" name="status" nullable="false" remarks="" size="20" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="radio_resultat_performed_by_foreign" unique="false">
+            <column ascending="true" name="performed_by"/>
+         </index>
+         <index name="radio_resultat_radio_demande_id_index" unique="false">
+            <column ascending="true" name="radio_demande_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="radiology_exam_types" numRows="56" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="radiology_exam_type_id" foreignKey="radio_demande_radiology_exam_type_id_foreign" implied="false" onDeleteCascade="true" table="radio_demande"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="2" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="role_user" numRows="12" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="role_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="role_user_role_id_foreign" implied="false" onDeleteCascade="true" table="roles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="role_user_user_id_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <primaryKey column="role_id" sequenceNumberInPK="1"/>
+         <primaryKey column="user_id" sequenceNumberInPK="2"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="role_id"/>
+            <column ascending="true" name="user_id"/>
+         </index>
+         <index name="role_user_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="roles" numRows="12" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="role_id" foreignKey="permission_role_role_id_foreign" implied="false" onDeleteCascade="true" table="permission_role"/>
+            <child catalog="healthmap" column="role_id" foreignKey="role_user_role_id_foreign" implied="false" onDeleteCascade="true" table="role_user"/>
+            <child catalog="healthmap" column="parent_id" foreignKey="roles_parent_id_foreign" implied="false" onDeleteCascade="false" table="roles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="parent_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="roles_parent_id_foreign" implied="false" onDeleteCascade="false" table="roles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="roles_parent_id_foreign" unique="false">
+            <column ascending="true" name="parent_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="rooms" numRows="3" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="room_id" foreignKey="beds_room_id_foreign" implied="false" onDeleteCascade="true" table="beds"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="establishment_unit_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="rooms_establishment_unit_id_foreign" implied="false" onDeleteCascade="true" table="establishment_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="establishment_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="rooms_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="" size="80" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="type" nullable="true" remarks="" size="40" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="capacity" nullable="false" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="rooms_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="rooms_establishment_unit_id_index" unique="false">
+            <column ascending="true" name="establishment_unit_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="service_types" numRows="98" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="service_type_id" foreignKey="services_service_type_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="service_user" numRows="2" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="service_user_user_id_foreign" implied="false" onDeleteCascade="true" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="service_user_service_id_foreign" implied="false" onDeleteCascade="true" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="is_chef" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="service_user_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+         <index name="service_user_user_id_service_id_unique" unique="true">
+            <column ascending="true" name="user_id"/>
+            <column ascending="true" name="service_id"/>
+         </index>
+         <index name="service_user_user_is_chef_index" unique="false">
+            <column ascending="true" name="user_id"/>
+            <column ascending="true" name="is_chef"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="services" numRows="1" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="service_id" foreignKey="admissions_service_id_foreign" implied="false" onDeleteCascade="false" table="admissions"/>
+            <child catalog="healthmap" column="service_id" foreignKey="bornes_service_id_foreign" implied="false" onDeleteCascade="false" table="bornes"/>
+            <child catalog="healthmap" column="service_id" foreignKey="boxes_service_id_foreign" implied="false" onDeleteCascade="true" table="boxes"/>
+            <child catalog="healthmap" column="service_id" foreignKey="doctor_shift_assignments_service_id_foreign" implied="false" onDeleteCascade="true" table="doctor_shift_assignments"/>
+            <child catalog="healthmap" column="service_id" foreignKey="establishment_units_service_id_foreign" implied="false" onDeleteCascade="true" table="establishment_units"/>
+            <child catalog="healthmap" column="service_id" foreignKey="service_user_service_id_foreign" implied="false" onDeleteCascade="true" table="service_user"/>
+            <child catalog="healthmap" column="service_id" foreignKey="users_service_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+            <child catalog="healthmap" column="service_id" foreignKey="waiting_lists_service_id_foreign" implied="false" onDeleteCascade="false" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="135" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="true" remarks="" size="32" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="3" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="chief_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="services_chief_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="medical_chief_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="services_medical_chief_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="service_type_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="services_service_type_id_foreign" implied="false" onDeleteCascade="false" table="service_types"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="max_duration" nullable="true" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="services_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="services_chief_id_foreign" unique="false">
+            <column ascending="true" name="chief_id"/>
+         </index>
+         <index name="services_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="services_medical_chief_id_foreign" unique="false">
+            <column ascending="true" name="medical_chief_id"/>
+         </index>
+         <index name="services_service_type_id_foreign" unique="false">
+            <column ascending="true" name="service_type_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="sessions" numRows="5" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="ip_address" nullable="true" remarks="" size="45" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="user_agent" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="payload" nullable="false" remarks="" size="2147483647" type="LONGTEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="last_activity" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="sessions_last_activity_index" unique="false">
+            <column ascending="true" name="last_activity"/>
+         </index>
+         <index name="sessions_user_id_index" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="surgical_procedures" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="surgical_procedures_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="surgical_procedures_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="performed_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="surgical_procedures_performed_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="details" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="performed_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="surgical_procedures_admission_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+         </index>
+         <index name="surgical_procedures_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="surgical_procedures_performed_by_foreign" unique="false">
+            <column ascending="true" name="performed_by"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="triages" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="waiting_list_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="triages_waiting_list_id_foreign" implied="false" onDeleteCascade="false" table="waiting_lists"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="user_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="triages_user_id_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="patient_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="triages_patient_id_foreign" implied="false" onDeleteCascade="false" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="triages_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="1" id="5" name="temperature" nullable="true" remarks="" size="4" type="DECIMAL" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="tension_sys" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="tension_dia" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="heart_rate" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="spo2" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="weight" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="pain_score" nullable="true" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="green" digits="0" id="12" name="urgency_level" nullable="false" remarks="" size="10" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="orientation" nullable="true" remarks="" size="60" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="symptoms" nullable="true" remarks="" size="1073741824" type="JSON" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="notes" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="triages_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="triages_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="triages_user_id_foreign" unique="false">
+            <column ascending="true" name="user_id"/>
+         </index>
+         <index name="triages_waiting_list_id_index" unique="false">
+            <column ascending="true" name="waiting_list_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="users" numRows="9" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="user_id" foreignKey="consultations_user_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+            <child catalog="healthmap" column="declared_by" foreignKey="deaths_declared_by_foreign" implied="false" onDeleteCascade="false" table="deaths"/>
+            <child catalog="healthmap" column="doctor_id" foreignKey="discharges_doctor_id_foreign" implied="false" onDeleteCascade="false" table="discharges"/>
+            <child catalog="healthmap" column="assigned_by" foreignKey="doctor_shift_assignments_assigned_by_foreign" implied="false" onDeleteCascade="true" table="doctor_shift_assignments"/>
+            <child catalog="healthmap" column="user_id" foreignKey="doctor_shift_assignments_user_id_foreign" implied="false" onDeleteCascade="true" table="doctor_shift_assignments"/>
+            <child catalog="healthmap" column="admin_user_id" foreignKey="establishments_admin_user_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+            <child catalog="healthmap" column="created_by" foreignKey="establishments_created_by_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+            <child catalog="healthmap" column="requested_by" foreignKey="labo_demande_requested_by_foreign" implied="false" onDeleteCascade="true" table="labo_demande"/>
+            <child catalog="healthmap" column="performed_by" foreignKey="labo_result_performed_by_foreign" implied="false" onDeleteCascade="false" table="labo_result"/>
+            <child catalog="healthmap" column="user_id" foreignKey="medical_documents_user_id_foreign" implied="false" onDeleteCascade="false" table="medical_documents"/>
+            <child catalog="healthmap" column="user_id" foreignKey="observations_user_id_foreign" implied="false" onDeleteCascade="false" table="observations"/>
+            <child catalog="healthmap" column="recorded_by" foreignKey="patient_antecedents_recorded_by_foreign" implied="false" onDeleteCascade="false" table="patient_antecedents"/>
+            <child catalog="healthmap" column="diagnosed_by" foreignKey="patient_diagnoses_diagnosed_by_foreign" implied="false" onDeleteCascade="false" table="patient_diagnoses"/>
+            <child catalog="healthmap" column="recorded_by" foreignKey="patient_social_history_recorded_by_foreign" implied="false" onDeleteCascade="false" table="patient_social_history"/>
+            <child catalog="healthmap" column="performed_by" foreignKey="performed_procedures_performed_by_foreign" implied="false" onDeleteCascade="false" table="performed_procedures"/>
+            <child catalog="healthmap" column="user_id" foreignKey="permission_user_user_id_foreign" implied="false" onDeleteCascade="true" table="permission_user"/>
+            <child catalog="healthmap" column="user_id" foreignKey="prescriptions_user_id_foreign" implied="false" onDeleteCascade="false" table="prescriptions"/>
+            <child catalog="healthmap" column="requested_by" foreignKey="radio_demande_requested_by_foreign" implied="false" onDeleteCascade="true" table="radio_demande"/>
+            <child catalog="healthmap" column="performed_by" foreignKey="radio_resultat_performed_by_foreign" implied="false" onDeleteCascade="false" table="radio_resultat"/>
+            <child catalog="healthmap" column="user_id" foreignKey="role_user_user_id_foreign" implied="false" onDeleteCascade="true" table="role_user"/>
+            <child catalog="healthmap" column="user_id" foreignKey="service_user_user_id_foreign" implied="false" onDeleteCascade="true" table="service_user"/>
+            <child catalog="healthmap" column="chief_id" foreignKey="services_chief_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+            <child catalog="healthmap" column="medical_chief_id" foreignKey="services_medical_chief_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+            <child catalog="healthmap" column="performed_by" foreignKey="surgical_procedures_performed_by_foreign" implied="false" onDeleteCascade="false" table="surgical_procedures"/>
+            <child catalog="healthmap" column="user_id" foreignKey="triages_user_id_foreign" implied="false" onDeleteCascade="false" table="triages"/>
+            <child catalog="healthmap" column="measured_by" foreignKey="vital_signs_measured_by_foreign" implied="false" onDeleteCascade="false" table="vital_signs"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="matricule" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="first_name" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="first_name_ar" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="poste_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="users_poste_id_foreign" implied="false" onDeleteCascade="false" table="postes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="service_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="users_service_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="email" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12">
+            <parent catalog="healthmap" column="email" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" table="password_reset_tokens"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="username" nullable="true" remarks="" size="60" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="10" name="is_active" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="email_verified_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="password" nullable="true" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="13" name="is_consultant" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="users_establishment_id_foreign" implied="false" onDeleteCascade="false" table="establishments"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="15" name="must_change_password" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="password_changed_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="onboarding_completed_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="remember_token" nullable="true" remarks="" size="100" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="20" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="users_email_unique" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="users_establishment_id_foreign" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="users_poste_id_foreign" unique="false">
+            <column ascending="true" name="poste_id"/>
+         </index>
+         <index name="users_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+         <index name="users_username_is_active_index" unique="false">
+            <column ascending="true" name="username"/>
+            <column ascending="true" name="is_active"/>
+         </index>
+         <index name="users_username_unique" unique="true">
+            <column ascending="true" name="username"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="vital_sign_types" numRows="9" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="vital_sign_type_id" foreignKey="vital_signs_vital_sign_type_id_foreign" implied="false" onDeleteCascade="true" table="vital_signs"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="label" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="unit" nullable="true" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="icon" nullable="true" remarks="" size="50" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="color" nullable="true" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="sort_order" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="vital_signs" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="vital_sign_type_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="vital_signs_vital_sign_type_id_foreign" implied="false" onDeleteCascade="true" table="vital_sign_types"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="admission_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="vital_signs_admission_id_foreign" implied="false" onDeleteCascade="true" table="admissions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="vital_signs_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="4" name="value" nullable="false" remarks="" size="8" type="DECIMAL" typeCode="3"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="measured_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="measured_by" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="vital_signs_measured_by_foreign" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="vital_signs_admission_id_vital_sign_type_id_index" unique="false">
+            <column ascending="true" name="admission_id"/>
+            <column ascending="true" name="vital_sign_type_id"/>
+         </index>
+         <index name="vital_signs_measured_by_foreign" unique="false">
+            <column ascending="true" name="measured_by"/>
+         </index>
+         <index name="vital_signs_patient_id_measured_at_index" unique="false">
+            <column ascending="true" name="patient_id"/>
+            <column ascending="true" name="measured_at"/>
+         </index>
+         <index name="vital_signs_vital_sign_type_id_foreign" unique="false">
+            <column ascending="true" name="vital_sign_type_id"/>
+         </index>
+      </table>
+      <table catalog="healthmap" name="waiting_lists" numRows="1" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <child catalog="healthmap" column="waiting_list_id" foreignKey="consultations_waiting_list_id_foreign" implied="false" onDeleteCascade="false" table="consultations"/>
+            <child catalog="healthmap" column="waiting_list_id" foreignKey="triages_waiting_list_id_foreign" implied="false" onDeleteCascade="false" table="triages"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="patient_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="waiting_lists_patient_id_foreign" implied="false" onDeleteCascade="true" table="patients"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_id" nullable="false" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="waiting_lists_service_id_foreign" implied="false" onDeleteCascade="false" table="services"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="box_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="waiting_lists_box_id_foreign" implied="false" onDeleteCascade="false" table="boxes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="green" digits="0" id="4" name="priority" nullable="false" remarks="" size="10" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="0" id="5" name="added_at" nullable="false" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="waiting" digits="0" id="6" name="status" nullable="false" remarks="" size="30" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="called_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="consultation_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="9" name="called_count" nullable="false" remarks="" size="5" type="SMALLINT UNSIGNED" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="created_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="updated_at" nullable="true" remarks="" size="19" type="TIMESTAMP" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="establishment_id" nullable="true" remarks="" size="20" type="BIGINT UNSIGNED" typeCode="-5">
+            <parent catalog="healthmap" column="id" foreignKey="waiting_lists_establishment_id_foreign" implied="false" onDeleteCascade="true" table="establishments"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="waiting_lists_box_id_status_index" unique="false">
+            <column ascending="true" name="box_id"/>
+            <column ascending="true" name="status"/>
+         </index>
+         <index name="waiting_lists_establishment_id_index" unique="false">
+            <column ascending="true" name="establishment_id"/>
+         </index>
+         <index name="waiting_lists_patient_id_foreign" unique="false">
+            <column ascending="true" name="patient_id"/>
+         </index>
+         <index name="waiting_lists_service_id_foreign" unique="false">
+            <column ascending="true" name="service_id"/>
+         </index>
+      </table>
+   </tables>
+</database>

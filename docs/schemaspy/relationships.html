@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>healthmap.healthmap</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>healthmap</b></a><span class="navbar-brand" style="padding-left: 0">.healthmap</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>All Relationships</h1>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 class="box-title">Diagrams</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <h5>By default only columns that are primary keys, foreign keys or indexes are shown.</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#compactDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact</a></li>
+                                    <li class=""><a href="#largeDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large</a></li>
+                                    <li class=""><a href="#compactimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact Implied</a></li>
+                                    <li class=""><a href="#largeimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large Implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="compactDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactRelationshipsDiagram" name="compactRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/admissions.html" target="_top" title="admissions" alt="" coords="2638,1907,2853,2200">
+<area shape="rect" id="node5" href="tables/services.html" target="_top" title="services" alt="" coords="1230,2304,1445,2539">
+<area shape="rect" id="node9" href="tables/beds.html" target="_top" title="beds" alt="" coords="2256,875,2471,1051">
+<area shape="rect" id="node36" href="tables/companions.html" target="_top" title="companions" alt="" coords="2235,1880,2492,2056">
+<area shape="rect" id="node41" href="tables/patients.html" target="_top" title="patients" alt="" coords="1515,1871,1775,2164">
+<area shape="rect" id="node48" href="tables/establishments.html" target="_top" title="establishments" alt="" coords="557,1123,825,1416">
+<area shape="rect" id="node2" href="tables/vital_sign_types.html" target="_top" title="vital_sign_types" alt="" coords="2626,2460,2865,2577">
+<area shape="rect" id="node3" href="tables/prescription_medications.html" target="_top" title="prescription_medications" alt="" coords="3677,559,4007,735">
+<area shape="rect" id="node37" href="tables/prescriptions.html" target="_top" title="prescriptions" alt="" coords="3366,737,3586,943">
+<area shape="rect" id="node4" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="919,1513,1121,1660">
+<area shape="rect" id="node20" href="tables/service_types.html" target="_top" title="service_types" alt="" coords="912,2327,1128,2444">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="869,2764,1171,3057">
+<area shape="rect" id="node6" href="tables/labo_result.html" target="_top" title="labo_result" alt="" coords="4051,2096,4320,2301">
+<area shape="rect" id="node28" href="tables/labo_demande.html" target="_top" title="labo_demande" alt="" coords="3364,2079,3588,2313">
+<area shape="rect" id="node34" href="tables/labo_demande_item.html" target="_top" title="labo_demande_item" alt="" coords="3703,2155,3981,2301">
+<area shape="rect" id="node7" href="tables/surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="2982,2624,3262,2829">
+<area shape="rect" id="node8" href="tables/deaths.html" target="_top" title="deaths" alt="" coords="3035,1897,3209,2103">
+<area shape="rect" id="node64" href="tables/rooms.html" target="_top" title="rooms" alt="" coords="1864,809,2127,985">
+<area shape="rect" id="node10" href="tables/consultations.html" target="_top" title="consultations" alt="" coords="3011,947,3233,1240">
+<area shape="rect" id="node35" href="tables/waiting_lists.html" target="_top" title="waiting_lists" alt="" coords="1888,1039,2103,1303">
+<area shape="rect" id="node56" href="tables/boxes.html" target="_top" title="boxes" alt="" coords="1537,1199,1752,1375">
+<area shape="rect" id="node11" href="tables/permission_user.html" target="_top" title="permission_user" alt="" coords="1216,1631,1459,1753">
+<area shape="rect" id="node12" href="tables/radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="3729,3872,3955,4048">
+<area shape="rect" id="node44" href="tables/radio_demande.html" target="_top" title="radio_demande" alt="" coords="3335,3781,3617,4045">
+<area shape="rect" id="node13" href="tables/consultation_sub_categories.html" target="_top" title="consultation_sub_categories" alt="" coords="2565,3604,2925,3751">
+<area shape="rect" id="node43" href="tables/consultation_categories.html" target="_top" title="consultation_categories" alt="" coords="2205,3643,2521,3789">
+<area shape="rect" id="node14" href="tables/patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="2986,2120,3258,2325">
+<area shape="rect" id="node21" href="tables/insurance_companies.html" target="_top" title="insurance_companies" alt="" coords="2599,2325,2891,2443">
+<area shape="rect" id="node15" href="tables/role_user.html" target="_top" title="role_user" alt="" coords="1251,1771,1424,1893">
+<area shape="rect" id="node32" href="tables/roles.html" target="_top" title="roles" alt="" coords="941,1747,1099,1893">
+<area shape="rect" id="node16" href="tables/failed_jobs.html" target="_top" title="failed_jobs" alt="" coords="5,35,193,181">
+<area shape="rect" id="node17" href="tables/medical_documents.html" target="_top" title="medical_documents" alt="" coords="1857,1500,2133,1705">
+<area shape="rect" id="node18" href="tables/migrations.html" target="_top" title="migrations" alt="" coords="1701,4304,1891,4421">
+<area shape="rect" id="node19" href="tables/procedure_catalog.html" target="_top" title="procedure_catalog" alt="" coords="2613,3383,2877,3500">
+<area shape="rect" id="node22" href="tables/countries.html" target="_top" title="countries" alt="" coords="1250,1947,1425,2152">
+<area shape="rect" id="node23" href="tables/patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1853,2627,2137,2803">
+<area shape="rect" id="node24" href="tables/bornes.html" target="_top" title="bornes" alt="" coords="1537,2263,1752,2439">
+<area shape="rect" id="node25" href="tables/cache.html" target="_top" title="cache" alt="" coords="429,35,579,181">
+<area shape="rect" id="node26" href="tables/vital_signs.html" target="_top" title="vital_signs" alt="" coords="3011,2343,3233,2607">
+<area shape="rect" id="node27" href="tables/discharges.html" target="_top" title="discharges" alt="" coords="3000,3083,3244,3288">
+<area shape="rect" id="node49" href="tables/discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="2619,3147,2871,3293">
+<area shape="rect" id="node29" href="tables/performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="2969,3305,3275,3540">
+<area shape="rect" id="node30" href="tables/patient_movements.html" target="_top" title="patient_movements" alt="" coords="2984,1323,3260,1557">
+<area shape="rect" id="node31" href="tables/consultation_elements.html" target="_top" title="consultation_elements" alt="" coords="2970,3593,3274,3799">
+<area shape="rect" id="node33" href="tables/radiology_exam_types.html" target="_top" title="radiology_exam_types" alt="" coords="2972,3852,3272,3969">
+<area shape="rect" id="node39" href="tables/identity_documents.html" target="_top" title="identity_documents" alt="" coords="1857,2011,2133,2128">
+<area shape="rect" id="node47" href="tables/postes.html" target="_top" title="postes" alt="" coords="612,2793,771,2940">
+<area shape="rect" id="node40" href="tables/password_reset_tokens.html" target="_top" title="password_reset_tokens" alt="" coords="2125,4304,2436,4421">
+<area shape="rect" id="node57" href="tables/marital_statuses.html" target="_top" title="marital_statuses" alt="" coords="1215,2169,1460,2287">
+<area shape="rect" id="node58" href="tables/municipalities.html" target="_top" title="municipalities" alt="" coords="261,1335,481,1481">
+<area shape="rect" id="node42" href="tables/triages.html" target="_top" title="triages" alt="" coords="2256,1104,2471,1339">
+<area shape="rect" id="node45" href="tables/establishment_units.html" target="_top" title="establishment_units" alt="" coords="1504,969,1785,1145">
+<area shape="rect" id="node46" href="tables/doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="1829,2820,2161,3113">
+<area shape="rect" id="node51" href="tables/establishment_types.html" target="_top" title="establishment_types" alt="" coords="228,1135,513,1281">
+<area shape="rect" id="node55" href="tables/provinces.html" target="_top" title="provinces" alt="" coords="5,1312,184,1459">
+<area shape="rect" id="node50" href="tables/consultation_symptoms.html" target="_top" title="consultation_symptoms" alt="" coords="3319,544,3633,720">
+<area shape="rect" id="node52" href="tables/permission_role.html" target="_top" title="permission_role" alt="" coords="1219,1491,1456,1613">
+<area shape="rect" id="node53" href="tables/cache_locks.html" target="_top" title="cache_locks" alt="" coords="853,35,1052,181">
+<area shape="rect" id="node54" href="tables/job_batches.html" target="_top" title="job_batches" alt="" coords="1277,4304,1477,4421">
+<area shape="rect" id="node59" href="tables/diagnosis_catalog.html" target="_top" title="diagnosis_catalog" alt="" coords="2993,2919,3251,3065">
+<area shape="rect" id="node60" href="tables/consultation_findings.html" target="_top" title="consultation_findings" alt="" coords="3329,3267,3623,3443">
+<area shape="rect" id="node61" href="tables/observations.html" target="_top" title="observations" alt="" coords="1887,1723,2104,1957">
+<area shape="rect" id="node62" href="tables/service_user.html" target="_top" title="service_user" alt="" coords="1542,2456,1747,2661">
+<area shape="rect" id="node63" href="tables/patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1847,2433,2143,2609">
+<area shape="rect" id="node65" href="tables/patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="3345,2719,3607,2983">
+<area shape="rect" id="node66" href="tables/jobs.html" target="_top" title="jobs" alt="" coords="1277,35,1443,181">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="1701,5,1868,181">
+</map>
+                                        <a name='diagram'><img id="compactDegreeImg" src="diagrams/summary/relationships.real.compact.png" usemap="#compactRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeRelationshipsDiagram" name="largeRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/admissions.html" target="_top" title="admissions" alt="" coords="2638,2104,2853,2549">
+<area shape="rect" id="node5" href="tables/services.html" target="_top" title="services" alt="" coords="1230,2609,1445,2996">
+<area shape="rect" id="node9" href="tables/beds.html" target="_top" title="beds" alt="" coords="2256,572,2471,841">
+<area shape="rect" id="node36" href="tables/companions.html" target="_top" title="companions" alt="" coords="2235,2104,2492,2432">
+<area shape="rect" id="node41" href="tables/patients.html" target="_top" title="patients" alt="" coords="1515,1801,1775,2540">
+<area shape="rect" id="node48" href="tables/establishments.html" target="_top" title="establishments" alt="" coords="557,967,825,1588">
+<area shape="rect" id="node2" href="tables/vital_sign_types.html" target="_top" title="vital_sign_types" alt="" coords="2626,2903,2865,3201">
+<area shape="rect" id="node3" href="tables/prescription_medications.html" target="_top" title="prescription_medications" alt="" coords="3677,221,4007,549">
+<area shape="rect" id="node37" href="tables/prescriptions.html" target="_top" title="prescriptions" alt="" coords="3366,535,3586,833">
+<area shape="rect" id="node4" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="919,1653,1121,1864">
+<area shape="rect" id="node20" href="tables/service_types.html" target="_top" title="service_types" alt="" coords="912,2744,1128,2925">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="869,3376,1171,4056">
+<area shape="rect" id="node6" href="tables/labo_result.html" target="_top" title="labo_result" alt="" coords="4051,2376,4320,2763">
+<area shape="rect" id="node28" href="tables/labo_demande.html" target="_top" title="labo_demande" alt="" coords="3364,2359,3588,2716">
+<area shape="rect" id="node34" href="tables/labo_demande_item.html" target="_top" title="labo_demande_item" alt="" coords="3703,2435,3981,2704">
+<area shape="rect" id="node7" href="tables/surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="2982,3103,3262,3431">
+<area shape="rect" id="node8" href="tables/deaths.html" target="_top" title="deaths" alt="" coords="3035,1979,3209,2277">
+<area shape="rect" id="node64" href="tables/rooms.html" target="_top" title="rooms" alt="" coords="1864,572,2127,871">
+<area shape="rect" id="node10" href="tables/consultations.html" target="_top" title="consultations" alt="" coords="3011,737,3233,1388">
+<area shape="rect" id="node35" href="tables/waiting_lists.html" target="_top" title="waiting_lists" alt="" coords="1888,924,2103,1369">
+<area shape="rect" id="node56" href="tables/boxes.html" target="_top" title="boxes" alt="" coords="1537,1113,1752,1441">
+<area shape="rect" id="node11" href="tables/permission_user.html" target="_top" title="permission_user" alt="" coords="1216,1779,1459,1901">
+<area shape="rect" id="node12" href="tables/radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="3729,5073,3955,5401">
+<area shape="rect" id="node44" href="tables/radio_demande.html" target="_top" title="radio_demande" alt="" coords="3335,4964,3617,5351">
+<area shape="rect" id="node13" href="tables/consultation_sub_categories.html" target="_top" title="consultation_sub_categories" alt="" coords="2565,4636,2925,4876">
+<area shape="rect" id="node43" href="tables/consultation_categories.html" target="_top" title="consultation_categories" alt="" coords="2205,4687,2521,4956">
+<area shape="rect" id="node14" href="tables/patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="2986,2295,3258,2740">
+<area shape="rect" id="node21" href="tables/insurance_companies.html" target="_top" title="insurance_companies" alt="" coords="2599,2675,2891,2885">
+<area shape="rect" id="node15" href="tables/role_user.html" target="_top" title="role_user" alt="" coords="1251,1919,1424,2041">
+<area shape="rect" id="node32" href="tables/roles.html" target="_top" title="roles" alt="" coords="941,1912,1099,2123">
+<area shape="rect" id="node16" href="tables/failed_jobs.html" target="_top" title="failed_jobs" alt="" coords="4577,601,4765,871">
+<area shape="rect" id="node17" href="tables/medical_documents.html" target="_top" title="medical_documents" alt="" coords="1857,1567,2133,1895">
+<area shape="rect" id="node18" href="tables/migrations.html" target="_top" title="migrations" alt="" coords="4577,1057,4767,1209">
+<area shape="rect" id="node19" href="tables/procedure_catalog.html" target="_top" title="procedure_catalog" alt="" coords="2613,4039,2877,4337">
+<area shape="rect" id="node22" href="tables/countries.html" target="_top" title="countries" alt="" coords="1250,2095,1425,2393">
+<area shape="rect" id="node23" href="tables/patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1853,3067,2137,3336">
+<area shape="rect" id="node24" href="tables/bornes.html" target="_top" title="bornes" alt="" coords="1537,2629,1752,3016">
+<area shape="rect" id="node25" href="tables/cache.html" target="_top" title="cache" alt="" coords="4577,1396,4727,1548">
+<area shape="rect" id="node26" href="tables/vital_signs.html" target="_top" title="vital_signs" alt="" coords="3011,2757,3233,3085">
+<area shape="rect" id="node27" href="tables/discharges.html" target="_top" title="discharges" alt="" coords="3000,3807,3244,4135">
+<area shape="rect" id="node49" href="tables/discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="2619,3739,2871,3949">
+<area shape="rect" id="node29" href="tables/performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="2969,4152,3275,4568">
+<area shape="rect" id="node30" href="tables/patient_movements.html" target="_top" title="patient_movements" alt="" coords="2984,1471,3260,1799">
+<area shape="rect" id="node31" href="tables/consultation_elements.html" target="_top" title="consultation_elements" alt="" coords="2970,4621,3274,4979">
+<area shape="rect" id="node33" href="tables/radiology_exam_types.html" target="_top" title="radiology_exam_types" alt="" coords="2972,5032,3272,5243">
+<area shape="rect" id="node39" href="tables/identity_documents.html" target="_top" title="identity_documents" alt="" coords="1857,2293,2133,2504">
+<area shape="rect" id="node47" href="tables/postes.html" target="_top" title="postes" alt="" coords="612,3552,771,3763">
+<area shape="rect" id="node40" href="tables/password_reset_tokens.html" target="_top" title="password_reset_tokens" alt="" coords="4577,1735,4888,1887">
+<area shape="rect" id="node57" href="tables/marital_statuses.html" target="_top" title="marital_statuses" alt="" coords="1215,2411,1460,2592">
+<area shape="rect" id="node58" href="tables/municipalities.html" target="_top" title="municipalities" alt="" coords="261,1269,481,1480">
+<area shape="rect" id="node42" href="tables/triages.html" target="_top" title="triages" alt="" coords="2256,895,2471,1487">
+<area shape="rect" id="node45" href="tables/establishment_units.html" target="_top" title="establishment_units" alt="" coords="1504,791,1785,1060">
+<area shape="rect" id="node46" href="tables/doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="1829,3353,2161,3769">
+<area shape="rect" id="node51" href="tables/establishment_types.html" target="_top" title="establishment_types" alt="" coords="228,1005,513,1216">
+<area shape="rect" id="node55" href="tables/provinces.html" target="_top" title="provinces" alt="" coords="5,1261,184,1472">
+<area shape="rect" id="node50" href="tables/consultation_symptoms.html" target="_top" title="consultation_symptoms" alt="" coords="3319,248,3633,517">
+<area shape="rect" id="node52" href="tables/permission_role.html" target="_top" title="permission_role" alt="" coords="1219,1639,1456,1761">
+<area shape="rect" id="node53" href="tables/cache_locks.html" target="_top" title="cache_locks" alt="" coords="4577,2073,4776,2225">
+<area shape="rect" id="node54" href="tables/job_batches.html" target="_top" title="job_batches" alt="" coords="4577,5,4777,363">
+<area shape="rect" id="node59" href="tables/diagnosis_catalog.html" target="_top" title="diagnosis_catalog" alt="" coords="2993,3520,3251,3789">
+<area shape="rect" id="node60" href="tables/consultation_findings.html" target="_top" title="consultation_findings" alt="" coords="3329,4128,3623,4397">
+<area shape="rect" id="node61" href="tables/observations.html" target="_top" title="observations" alt="" coords="1887,1912,2104,2240">
+<area shape="rect" id="node62" href="tables/service_user.html" target="_top" title="service_user" alt="" coords="1542,3033,1747,3273">
+<area shape="rect" id="node63" href="tables/patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1847,2809,2143,3049">
+<area shape="rect" id="node65" href="tables/patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="3345,3320,3607,3677">
+<area shape="rect" id="node66" href="tables/jobs.html" target="_top" title="jobs" alt="" coords="4577,2464,4743,2733">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="4577,3001,4744,3241">
+</map>
+                                        <a name='diagram'><img id="largeDegreeImg" src="diagrams/summary/relationships.real.large.png" usemap="#largeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="compactimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactImpliedRelationshipsDiagram" name="compactImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/admissions.html" target="_top" title="admissions" alt="" coords="2681,1993,2895,2287">
+<area shape="rect" id="node5" href="tables/services.html" target="_top" title="services" alt="" coords="1273,1664,1487,1899">
+<area shape="rect" id="node9" href="tables/beds.html" target="_top" title="beds" alt="" coords="2299,913,2513,1089">
+<area shape="rect" id="node36" href="tables/companions.html" target="_top" title="companions" alt="" coords="2277,1604,2535,1780">
+<area shape="rect" id="node41" href="tables/patients.html" target="_top" title="patients" alt="" coords="1557,2513,1817,2807">
+<area shape="rect" id="node48" href="tables/establishments.html" target="_top" title="establishments" alt="" coords="579,1060,847,1353">
+<area shape="rect" id="node2" href="tables/vital_sign_types.html" target="_top" title="vital_sign_types" alt="" coords="2669,2868,2907,2985">
+<area shape="rect" id="node3" href="tables/prescription_medications.html" target="_top" title="prescription_medications" alt="" coords="3720,551,4049,727">
+<area shape="rect" id="node37" href="tables/prescriptions.html" target="_top" title="prescriptions" alt="" coords="3409,681,3629,887">
+<area shape="rect" id="node4" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="962,1253,1163,1400">
+<area shape="rect" id="node20" href="tables/service_types.html" target="_top" title="service_types" alt="" coords="955,1687,1171,1804">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="912,2240,1213,2533">
+<area shape="rect" id="node6" href="tables/labo_result.html" target="_top" title="labo_result" alt="" coords="4093,1545,4363,1751">
+<area shape="rect" id="node28" href="tables/labo_demande.html" target="_top" title="labo_demande" alt="" coords="3407,1528,3631,1763">
+<area shape="rect" id="node34" href="tables/labo_demande_item.html" target="_top" title="labo_demande_item" alt="" coords="3746,1604,4023,1751">
+<area shape="rect" id="node7" href="tables/surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="3025,1964,3305,2169">
+<area shape="rect" id="node8" href="tables/deaths.html" target="_top" title="deaths" alt="" coords="3077,2321,3252,2527">
+<area shape="rect" id="node64" href="tables/rooms.html" target="_top" title="rooms" alt="" coords="1907,691,2169,867">
+<area shape="rect" id="node10" href="tables/consultations.html" target="_top" title="consultations" alt="" coords="3053,1251,3276,1544">
+<area shape="rect" id="node35" href="tables/waiting_lists.html" target="_top" title="waiting_lists" alt="" coords="1931,1064,2145,1328">
+<area shape="rect" id="node56" href="tables/boxes.html" target="_top" title="boxes" alt="" coords="1580,1116,1795,1292">
+<area shape="rect" id="node11" href="tables/permission_user.html" target="_top" title="permission_user" alt="" coords="1259,1348,1501,1471">
+<area shape="rect" id="node12" href="tables/radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="3772,2853,3997,3029">
+<area shape="rect" id="node44" href="tables/radio_demande.html" target="_top" title="radio_demande" alt="" coords="3378,2099,3659,2363">
+<area shape="rect" id="node13" href="tables/consultation_sub_categories.html" target="_top" title="consultation_sub_categories" alt="" coords="2608,619,2968,765">
+<area shape="rect" id="node43" href="tables/consultation_categories.html" target="_top" title="consultation_categories" alt="" coords="2248,641,2564,788">
+<area shape="rect" id="node14" href="tables/patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="3029,2544,3301,2749">
+<area shape="rect" id="node21" href="tables/insurance_companies.html" target="_top" title="insurance_companies" alt="" coords="2642,2733,2934,2851">
+<area shape="rect" id="node15" href="tables/role_user.html" target="_top" title="role_user" alt="" coords="1293,1488,1467,1611">
+<area shape="rect" id="node32" href="tables/roles.html" target="_top" title="roles" alt="" coords="983,1465,1142,1612">
+<area shape="rect" id="node16" href="tables/failed_jobs.html" target="_top" title="failed_jobs" alt="" coords="151,35,339,181">
+<area shape="rect" id="node17" href="tables/medical_documents.html" target="_top" title="medical_documents" alt="" coords="1900,2259,2176,2464">
+<area shape="rect" id="node18" href="tables/migrations.html" target="_top" title="migrations" alt="" coords="2185,4133,2375,4251">
+<area shape="rect" id="node19" href="tables/procedure_catalog.html" target="_top" title="procedure_catalog" alt="" coords="2656,3129,2920,3247">
+<area shape="rect" id="node22" href="tables/countries.html" target="_top" title="countries" alt="" coords="1293,2587,1467,2792">
+<area shape="rect" id="node23" href="tables/patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1896,2805,2180,2981">
+<area shape="rect" id="node24" href="tables/bornes.html" target="_top" title="bornes" alt="" coords="1580,1464,1795,1640">
+<area shape="rect" id="node25" href="tables/cache.html" target="_top" title="cache" alt="" coords="587,35,736,181">
+<area shape="rect" id="node26" href="tables/vital_signs.html" target="_top" title="vital_signs" alt="" coords="3054,2767,3275,3031">
+<area shape="rect" id="node27" href="tables/discharges.html" target="_top" title="discharges" alt="" coords="3043,3572,3287,3777">
+<area shape="rect" id="node49" href="tables/discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="2662,3572,2914,3719">
+<area shape="rect" id="node29" href="tables/performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="3012,3048,3317,3283">
+<area shape="rect" id="node30" href="tables/patient_movements.html" target="_top" title="patient_movements" alt="" coords="3027,1604,3303,1839">
+<area shape="rect" id="node31" href="tables/consultation_elements.html" target="_top" title="consultation_elements" alt="" coords="3013,655,3317,860">
+<area shape="rect" id="node33" href="tables/radiology_exam_types.html" target="_top" title="radiology_exam_types" alt="" coords="3015,2187,3315,2304">
+<area shape="rect" id="node39" href="tables/identity_documents.html" target="_top" title="identity_documents" alt="" coords="1900,1800,2176,1917">
+<area shape="rect" id="node40" href="tables/password_reset_tokens.html" target="_top" title="password_reset_tokens" alt="" coords="557,2372,868,2489">
+<area shape="rect" id="node47" href="tables/postes.html" target="_top" title="postes" alt="" coords="633,2208,792,2355">
+<area shape="rect" id="node57" href="tables/marital_statuses.html" target="_top" title="marital_statuses" alt="" coords="1257,2809,1503,2927">
+<area shape="rect" id="node58" href="tables/municipalities.html" target="_top" title="municipalities" alt="" coords="261,1272,481,1419">
+<area shape="rect" id="node42" href="tables/triages.html" target="_top" title="triages" alt="" coords="2299,1797,2513,2032">
+<area shape="rect" id="node45" href="tables/establishment_units.html" target="_top" title="establishment_units" alt="" coords="1547,691,1828,867">
+<area shape="rect" id="node46" href="tables/doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="1872,1381,2204,1675">
+<area shape="rect" id="node51" href="tables/establishment_types.html" target="_top" title="establishment_types" alt="" coords="228,1072,513,1219">
+<area shape="rect" id="node55" href="tables/provinces.html" target="_top" title="provinces" alt="" coords="5,1249,184,1396">
+<area shape="rect" id="node50" href="tables/consultation_symptoms.html" target="_top" title="consultation_symptoms" alt="" coords="3361,1167,3676,1343">
+<area shape="rect" id="node52" href="tables/permission_role.html" target="_top" title="permission_role" alt="" coords="1261,1208,1499,1331">
+<area shape="rect" id="node53" href="tables/cache_locks.html" target="_top" title="cache_locks" alt="" coords="1023,35,1221,181">
+<area shape="rect" id="node54" href="tables/job_batches.html" target="_top" title="job_batches" alt="" coords="1749,4133,1949,4251">
+<area shape="rect" id="node59" href="tables/diagnosis_catalog.html" target="_top" title="diagnosis_catalog" alt="" coords="3036,3372,3293,3519">
+<area shape="rect" id="node60" href="tables/consultation_findings.html" target="_top" title="consultation_findings" alt="" coords="3372,960,3665,1136">
+<area shape="rect" id="node61" href="tables/observations.html" target="_top" title="observations" alt="" coords="1929,2007,2147,2241">
+<area shape="rect" id="node62" href="tables/service_user.html" target="_top" title="service_user" alt="" coords="1585,1729,1790,1935">
+<area shape="rect" id="node63" href="tables/patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1890,2999,2186,3175">
+<area shape="rect" id="node65" href="tables/patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="3388,3172,3649,3436">
+<area shape="rect" id="node66" href="tables/jobs.html" target="_top" title="jobs" alt="" coords="1459,35,1624,181">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="1895,5,2061,181">
+</map>
+                                        <a name='diagram'><img id="compactimpliedDegreeImg" src="diagrams/summary/relationships.implied.compact.png" usemap="#compactImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeImpliedRelationshipsDiagram" name="largeImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/admissions.html" target="_top" title="admissions" alt="" coords="2681,2379,2895,2824">
+<area shape="rect" id="node5" href="tables/services.html" target="_top" title="services" alt="" coords="1273,1823,1487,2209">
+<area shape="rect" id="node9" href="tables/beds.html" target="_top" title="beds" alt="" coords="2299,911,2513,1180">
+<area shape="rect" id="node36" href="tables/companions.html" target="_top" title="companions" alt="" coords="2277,1779,2535,2107">
+<area shape="rect" id="node41" href="tables/patients.html" target="_top" title="patients" alt="" coords="1557,3067,1817,3805">
+<area shape="rect" id="node48" href="tables/establishments.html" target="_top" title="establishments" alt="" coords="579,1219,847,1840">
+<area shape="rect" id="node2" href="tables/vital_sign_types.html" target="_top" title="vital_sign_types" alt="" coords="2669,3587,2907,3885">
+<area shape="rect" id="node3" href="tables/prescription_medications.html" target="_top" title="prescription_medications" alt="" coords="3720,279,4049,607">
+<area shape="rect" id="node37" href="tables/prescriptions.html" target="_top" title="prescriptions" alt="" coords="3409,448,3629,747">
+<area shape="rect" id="node4" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="962,1375,1163,1585">
+<area shape="rect" id="node20" href="tables/service_types.html" target="_top" title="service_types" alt="" coords="955,1957,1171,2139">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="912,2551,1213,3231">
+<area shape="rect" id="node6" href="tables/labo_result.html" target="_top" title="labo_result" alt="" coords="4093,1779,4363,2165">
+<area shape="rect" id="node28" href="tables/labo_demande.html" target="_top" title="labo_demande" alt="" coords="3407,1761,3631,2119">
+<area shape="rect" id="node34" href="tables/labo_demande_item.html" target="_top" title="labo_demande_item" alt="" coords="3746,1837,4023,2107">
+<area shape="rect" id="node7" href="tables/surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="3025,2232,3305,2560">
+<area shape="rect" id="node8" href="tables/deaths.html" target="_top" title="deaths" alt="" coords="3077,2805,3252,3104">
+<area shape="rect" id="node64" href="tables/rooms.html" target="_top" title="rooms" alt="" coords="1907,580,2169,879">
+<area shape="rect" id="node10" href="tables/consultations.html" target="_top" title="consultations" alt="" coords="3053,1075,3276,1725">
+<area shape="rect" id="node35" href="tables/waiting_lists.html" target="_top" title="waiting_lists" alt="" coords="1931,1076,2145,1521">
+<area shape="rect" id="node56" href="tables/boxes.html" target="_top" title="boxes" alt="" coords="1580,1112,1795,1440">
+<area shape="rect" id="node11" href="tables/permission_user.html" target="_top" title="permission_user" alt="" coords="1259,1507,1501,1629">
+<area shape="rect" id="node12" href="tables/radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="3772,3627,3997,3955">
+<area shape="rect" id="node44" href="tables/radio_demande.html" target="_top" title="radio_demande" alt="" coords="3378,2489,3659,2876">
+<area shape="rect" id="node13" href="tables/consultation_sub_categories.html" target="_top" title="consultation_sub_categories" alt="" coords="2608,493,2968,733">
+<area shape="rect" id="node43" href="tables/consultation_categories.html" target="_top" title="consultation_categories" alt="" coords="2248,516,2564,785">
+<area shape="rect" id="node14" href="tables/patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="3029,3121,3301,3567">
+<area shape="rect" id="node21" href="tables/insurance_companies.html" target="_top" title="insurance_companies" alt="" coords="2642,3359,2934,3569">
+<area shape="rect" id="node15" href="tables/role_user.html" target="_top" title="role_user" alt="" coords="1293,1647,1467,1769">
+<area shape="rect" id="node32" href="tables/roles.html" target="_top" title="roles" alt="" coords="983,1640,1142,1851">
+<area shape="rect" id="node16" href="tables/failed_jobs.html" target="_top" title="failed_jobs" alt="" coords="4721,617,4909,887">
+<area shape="rect" id="node17" href="tables/medical_documents.html" target="_top" title="medical_documents" alt="" coords="1900,2761,2176,3089">
+<area shape="rect" id="node18" href="tables/migrations.html" target="_top" title="migrations" alt="" coords="4721,2132,4911,2284">
+<area shape="rect" id="node19" href="tables/procedure_catalog.html" target="_top" title="procedure_catalog" alt="" coords="2656,4011,2920,4309">
+<area shape="rect" id="node22" href="tables/countries.html" target="_top" title="countries" alt="" coords="1293,3301,1467,3600">
+<area shape="rect" id="node23" href="tables/patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1896,3431,2180,3700">
+<area shape="rect" id="node24" href="tables/bornes.html" target="_top" title="bornes" alt="" coords="1580,1529,1795,1916">
+<area shape="rect" id="node25" href="tables/cache.html" target="_top" title="cache" alt="" coords="4721,2831,4871,2983">
+<area shape="rect" id="node26" href="tables/vital_signs.html" target="_top" title="vital_signs" alt="" coords="3054,3584,3275,3912">
+<area shape="rect" id="node27" href="tables/discharges.html" target="_top" title="discharges" alt="" coords="3043,4757,3287,5085">
+<area shape="rect" id="node49" href="tables/discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="2662,4757,2914,4968">
+<area shape="rect" id="node29" href="tables/performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="3012,3929,3317,4345">
+<area shape="rect" id="node30" href="tables/patient_movements.html" target="_top" title="patient_movements" alt="" coords="3027,1779,3303,2107">
+<area shape="rect" id="node31" href="tables/consultation_elements.html" target="_top" title="consultation_elements" alt="" coords="3013,500,3317,857">
+<area shape="rect" id="node33" href="tables/radiology_exam_types.html" target="_top" title="radiology_exam_types" alt="" coords="3015,2577,3315,2788">
+<area shape="rect" id="node39" href="tables/identity_documents.html" target="_top" title="identity_documents" alt="" coords="1900,2116,2176,2327">
+<area shape="rect" id="node40" href="tables/password_reset_tokens.html" target="_top" title="password_reset_tokens" alt="" coords="557,2871,868,3023">
+<area shape="rect" id="node47" href="tables/postes.html" target="_top" title="postes" alt="" coords="633,2643,792,2853">
+<area shape="rect" id="node57" href="tables/marital_statuses.html" target="_top" title="marital_statuses" alt="" coords="1257,3617,1503,3799">
+<area shape="rect" id="node58" href="tables/municipalities.html" target="_top" title="municipalities" alt="" coords="261,1521,481,1732">
+<area shape="rect" id="node42" href="tables/triages.html" target="_top" title="triages" alt="" coords="2299,2124,2513,2716">
+<area shape="rect" id="node45" href="tables/establishment_units.html" target="_top" title="establishment_units" alt="" coords="1547,609,1828,879">
+<area shape="rect" id="node46" href="tables/doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="1872,1575,2204,1991">
+<area shape="rect" id="node51" href="tables/establishment_types.html" target="_top" title="establishment_types" alt="" coords="228,1257,513,1468">
+<area shape="rect" id="node55" href="tables/provinces.html" target="_top" title="provinces" alt="" coords="5,1513,184,1724">
+<area shape="rect" id="node50" href="tables/consultation_symptoms.html" target="_top" title="consultation_symptoms" alt="" coords="3361,1051,3676,1320">
+<area shape="rect" id="node52" href="tables/permission_role.html" target="_top" title="permission_role" alt="" coords="1261,1367,1499,1489">
+<area shape="rect" id="node53" href="tables/cache_locks.html" target="_top" title="cache_locks" alt="" coords="4721,2481,4920,2633">
+<area shape="rect" id="node54" href="tables/job_batches.html" target="_top" title="job_batches" alt="" coords="4721,5,4921,363">
+<area shape="rect" id="node59" href="tables/diagnosis_catalog.html" target="_top" title="diagnosis_catalog" alt="" coords="3036,4435,3293,4704">
+<area shape="rect" id="node60" href="tables/consultation_findings.html" target="_top" title="consultation_findings" alt="" coords="3372,764,3665,1033">
+<area shape="rect" id="node61" href="tables/observations.html" target="_top" title="observations" alt="" coords="1929,2416,2147,2744">
+<area shape="rect" id="node62" href="tables/service_user.html" target="_top" title="service_user" alt="" coords="1585,2005,1790,2245">
+<area shape="rect" id="node63" href="tables/patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1890,3717,2186,3957">
+<area shape="rect" id="node65" href="tables/patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="3388,4235,3649,4592">
+<area shape="rect" id="node66" href="tables/jobs.html" target="_top" title="jobs" alt="" coords="4721,1141,4887,1411">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="4721,1695,4888,1935">
+</map>
+                                        <a name='diagram'><img id="largeimpliedDegreeImg" src="diagrams/summary/relationships.implied.large.png" usemap="#largeImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 7.0.2</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="relationships.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
+</html>

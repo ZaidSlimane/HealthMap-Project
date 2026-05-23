@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>discharges - healthmap.healthmap</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>healthmap</b></a><span class="navbar-brand" style="padding-left: 0">.healthmap</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>discharges</h1><p><span id="recordNumber">0</span> rows</p><br />
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Columns</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="standard_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="10"
+                                    data-length-change="false">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th title='Are nulls allowed?'>Nulls</th>
+                                    <th title='Is column automatically updated?'>Auto</th>
+                                    <th title='Default value'>Default</th>
+                                    <th title='Columns in tables that reference this column'>Children</th>
+                                    <th title='Columns in tables that are referenced by this column'>Parents</th>
+                                    <th title='Comments' class="toggle"><span>Comments</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="id">id</span></td>
+                                    <td>BIGINT UNSIGNED</td>
+                                    <td>20</td>
+                                    <td title=''></td>
+                                    <td title='Automatically updated by the database'>√</td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="admission_id">admission_id</span></td>
+                                    <td>BIGINT UNSIGNED</td>
+                                    <td>20</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="discharges.admission_id references admissions.id via discharges_admission_id_foreign"><a href='admissions.html'>admissions</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">discharges_admission_id_foreign</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="discharge_mode_id">discharge_mode_id</span></td>
+                                    <td>BIGINT UNSIGNED</td>
+                                    <td>20</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="discharges.discharge_mode_id references discharge_modes.id via discharges_discharge_mode_id_foreign"><a href='discharge_modes.html'>discharge_modes</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">discharges_discharge_mode_id_foreign</td>
+                                                <td class="constraint detail"><span title='Null on delete:&#10;Foreign key to parent set to NULL when parent deleted'>N</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="date_medical">date_medical</span></td>
+                                    <td>TIMESTAMP</td>
+                                    <td>19</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="date_administrative">date_administrative</span></td>
+                                    <td>TIMESTAMP</td>
+                                    <td>19</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="doctor_id">doctor_id</span></td>
+                                    <td>BIGINT UNSIGNED</td>
+                                    <td>20</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="discharges.doctor_id references users.id via discharges_doctor_id_foreign"><a href='users.html'>users</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">discharges_doctor_id_foreign</td>
+                                                <td class="constraint detail"><span title='Null on delete:&#10;Foreign key to parent set to NULL when parent deleted'>N</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="diagnostic_sortie">diagnostic_sortie</span></td>
+                                    <td>TEXT</td>
+                                    <td>65535</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="created_at">created_at</span></td>
+                                    <td>TIMESTAMP</td>
+                                    <td>19</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="updated_at">updated_at</span></td>
+                                    <td>TIMESTAMP</td>
+                                    <td>19</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="indexes_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="10"
+                                    data-length-change="false">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> PRIMARY</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>id</td>
+                                </tr>
+                                <tr>
+                                    <td title='Indexed'>discharges_admission_id_index</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>admission_id</td>
+                                </tr>
+                                <tr>
+                                    <td title='Indexed'>discharges_discharge_mode_id_foreign</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>discharge_mode_id</td>
+                                </tr>
+                                <tr>
+                                    <td title='Indexed'>discharges_doctor_id_foreign</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>doctor_id</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 id="Relationships" class="box-title">Relationships</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
+                                <h5>Close relationships within degrees of separation</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
+                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" id="node1" href="discharges.html" target="_top" title="discharges" alt="" coords="351,255,751,588">
+<area shape="rect" id="node2" href="admissions.html" target="_top" title="admissions" alt="" coords="49,5,263,299">
+<area shape="rect" id="node3" href="discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="30,316,282,463">
+<area shape="rect" id="node4" href="users.html" target="_top" title="users" alt="" coords="5,480,307,773">
+</map>
+                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/discharges.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" id="node1" href="admissions.html" target="_top" title="admissions" alt="" coords="1221,1341,1436,1635">
+<area shape="rect" id="node2" href="beds.html" target="_top" title="beds" alt="" coords="961,1268,1113,1356">
+<area shape="rect" id="node3" href="companions.html" target="_top" title="companions" alt="" coords="937,1393,1137,1481">
+<area shape="rect" id="node4" href="establishments.html" target="_top" title="establishments" alt="" coords="610,1020,843,1108">
+<area shape="rect" id="node5" href="patients.html" target="_top" title="patients" alt="" coords="955,1160,1119,1248">
+<area shape="rect" id="node6" href="services.html" target="_top" title="services" alt="" coords="7,733,171,821">
+<area shape="rect" id="node8" href="users.html" target="_top" title="users" alt="" coords="215,731,517,1024">
+<area shape="rect" id="node7" href="consultations.html" target="_top" title="consultations" alt="" coords="1613,931,1828,1019">
+<area shape="rect" id="node31" href="postes.html" target="_top" title="postes" alt="" coords="15,839,163,927">
+<area shape="rect" id="node9" href="deaths.html" target="_top" title="deaths" alt="" coords="1645,1088,1796,1176">
+<area shape="rect" id="node10" href="discharges.html" target="_top" title="discharges" alt="" coords="1521,324,1921,657">
+<area shape="rect" id="node11" href="discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="1203,324,1455,471">
+<area shape="rect" id="node12" href="doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="561,111,893,199">
+<area shape="rect" id="node13" href="labo_demande.html" target="_top" title="labo_demande" alt="" coords="1983,1421,2207,1509">
+<area shape="rect" id="node14" href="labo_result.html" target="_top" title="labo_result" alt="" coords="2285,852,2475,940">
+<area shape="rect" id="node15" href="medical_documents.html" target="_top" title="medical_documents" alt="" coords="1191,809,1467,897">
+<area shape="rect" id="node16" href="observations.html" target="_top" title="observations" alt="" coords="1223,1020,1434,1108">
+<area shape="rect" id="node17" href="patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1187,668,1471,756">
+<area shape="rect" id="node18" href="patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="1965,1263,2226,1351">
+<area shape="rect" id="node19" href="patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="1587,1335,1855,1423">
+<area shape="rect" id="node20" href="patient_movements.html" target="_top" title="patient_movements" alt="" coords="1583,1229,1859,1317">
+<area shape="rect" id="node21" href="patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1181,915,1477,1003">
+<area shape="rect" id="node22" href="performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="1568,1548,1873,1636">
+<area shape="rect" id="node23" href="permission_user.html" target="_top" title="permission_user" alt="" coords="605,557,848,645">
+<area shape="rect" id="node24" href="prescriptions.html" target="_top" title="prescriptions" alt="" coords="1989,673,2201,761">
+<area shape="rect" id="node25" href="radio_demande.html" target="_top" title="radio_demande" alt="" coords="1979,880,2212,968">
+<area shape="rect" id="node26" href="radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="2270,529,2490,617">
+<area shape="rect" id="node27" href="role_user.html" target="_top" title="role_user" alt="" coords="640,915,813,1003">
+<area shape="rect" id="node28" href="service_user.html" target="_top" title="service_user" alt="" coords="624,5,829,93">
+<area shape="rect" id="node29" href="surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="1581,1759,1861,1847">
+<area shape="rect" id="node30" href="triages.html" target="_top" title="triages" alt="" coords="1253,1760,1405,1848">
+<area shape="rect" id="node32" href="vital_signs.html" target="_top" title="vital_signs" alt="" coords="1627,1653,1814,1741">
+</map>
+                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/discharges.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="discharges.html" target="_top" title="discharges" alt="" coords="351,255,751,588">
+<area shape="rect" id="node2" href="admissions.html" target="_top" title="admissions" alt="" coords="49,5,263,299">
+<area shape="rect" id="node3" href="discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="30,316,282,463">
+<area shape="rect" id="node4" href="users.html" target="_top" title="users" alt="" coords="5,480,307,773">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/discharges.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="admissions.html" target="_top" title="admissions" alt="" coords="1366,1233,1581,1526">
+<area shape="rect" id="node2" href="beds.html" target="_top" title="beds" alt="" coords="1105,1157,1257,1245">
+<area shape="rect" id="node3" href="companions.html" target="_top" title="companions" alt="" coords="1081,1282,1281,1370">
+<area shape="rect" id="node4" href="establishments.html" target="_top" title="establishments" alt="" coords="755,1051,988,1139">
+<area shape="rect" id="node5" href="patients.html" target="_top" title="patients" alt="" coords="1099,1051,1263,1139">
+<area shape="rect" id="node6" href="services.html" target="_top" title="services" alt="" coords="79,703,243,791">
+<area shape="rect" id="node8" href="users.html" target="_top" title="users" alt="" coords="360,777,661,1070">
+<area shape="rect" id="node7" href="consultations.html" target="_top" title="consultations" alt="" coords="1758,1579,1973,1667">
+<area shape="rect" id="node31" href="password_reset_tokens.html" target="_top" title="password_reset_tokens" alt="" coords="5,914,316,1002">
+<area shape="rect" id="node32" href="postes.html" target="_top" title="postes" alt="" coords="87,809,235,897">
+<area shape="rect" id="node9" href="deaths.html" target="_top" title="deaths" alt="" coords="1790,909,1941,997">
+<area shape="rect" id="node10" href="discharges.html" target="_top" title="discharges" alt="" coords="1665,323,2065,657">
+<area shape="rect" id="node11" href="discharge_modes.html" target="_top" title="discharge_modes" alt="" coords="1347,323,1599,470">
+<area shape="rect" id="node12" href="doctor_shift_assignments.html" target="_top" title="doctor_shift_assignments" alt="" coords="705,205,1037,293">
+<area shape="rect" id="node13" href="labo_demande.html" target="_top" title="labo_demande" alt="" coords="2128,1527,2352,1615">
+<area shape="rect" id="node14" href="labo_result.html" target="_top" title="labo_result" alt="" coords="2429,1434,2620,1522">
+<area shape="rect" id="node15" href="medical_documents.html" target="_top" title="medical_documents" alt="" coords="1335,701,1611,789">
+<area shape="rect" id="node16" href="observations.html" target="_top" title="observations" alt="" coords="1368,911,1579,999">
+<area shape="rect" id="node17" href="patient_antecedents.html" target="_top" title="patient_antecedents" alt="" coords="1331,595,1615,683">
+<area shape="rect" id="node18" href="patient_diagnoses.html" target="_top" title="patient_diagnoses" alt="" coords="2109,1153,2371,1241">
+<area shape="rect" id="node19" href="patient_insurances.html" target="_top" title="patient_insurances" alt="" coords="1731,1261,1999,1349">
+<area shape="rect" id="node20" href="patient_movements.html" target="_top" title="patient_movements" alt="" coords="1727,1155,2003,1243">
+<area shape="rect" id="node21" href="patient_social_history.html" target="_top" title="patient_social_history" alt="" coords="1325,806,1621,894">
+<area shape="rect" id="node22" href="performed_procedures.html" target="_top" title="performed_procedures" alt="" coords="1713,1050,2018,1138">
+<area shape="rect" id="node23" href="permission_user.html" target="_top" title="permission_user" alt="" coords="750,382,993,470">
+<area shape="rect" id="node24" href="prescriptions.html" target="_top" title="prescriptions" alt="" coords="2134,1935,2346,2023">
+<area shape="rect" id="node25" href="radio_demande.html" target="_top" title="radio_demande" alt="" coords="2123,1633,2357,1721">
+<area shape="rect" id="node26" href="radio_resultat.html" target="_top" title="radio_resultat" alt="" coords="2415,1726,2635,1814">
+<area shape="rect" id="node27" href="role_user.html" target="_top" title="role_user" alt="" coords="785,889,958,977">
+<area shape="rect" id="node28" href="service_user.html" target="_top" title="service_user" alt="" coords="769,99,974,187">
+<area shape="rect" id="node29" href="surgical_procedures.html" target="_top" title="surgical_procedures" alt="" coords="1725,1474,2005,1562">
+<area shape="rect" id="node30" href="triages.html" target="_top" title="triages" alt="" coords="1397,1687,1549,1775">
+<area shape="rect" id="node33" href="vital_signs.html" target="_top" title="vital_signs" alt="" coords="1772,1685,1959,1773">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/discharges.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 7.0.2</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="table.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>
