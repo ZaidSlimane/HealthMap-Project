@@ -27,6 +27,44 @@
   mat-icon { font-size: 22px; }
 }
 
+/* ── Institution brand ─────────────────────────────────────── */
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.topbar-brand-icon {
+  font-size: 20px;
+  color: var(--color-primary, #00BCD4);
+}
+
+.topbar-brand-text {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.topbar-brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text, #0f172a);
+  white-space: nowrap;
+}
+
+.topbar-brand-sep {
+  color: var(--color-text-faint, #cbd5e1);
+  font-size: 12px;
+}
+
+.topbar-brand-city {
+  font-size: 11px;
+  color: var(--color-text-muted, #64748b);
+  white-space: nowrap;
+}
+
 .search-btn {
   background: var(--color-primary); color: white;
   border: none; border-radius: var(--radius-md);
