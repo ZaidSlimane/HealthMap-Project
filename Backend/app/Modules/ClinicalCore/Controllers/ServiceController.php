@@ -59,7 +59,7 @@ class ServiceController extends BaseResourceController
     {
         $service = Service::findOrFail($id);
 
-        $data = $request->only(['name', 'code', 'is_active', 'service_type_id', 'chief_id', 'medical_chief_id', 'max_duration']);
+        $data = $request->only(['name', 'code', 'is_active', 'service_type_id', 'chief_id', 'medical_chief_id', 'max_duration', 'latitude', 'longitude']);
 
         DB::transaction(function () use ($service, $data, $request) {
             $oldChiefId = $service->chief_id;

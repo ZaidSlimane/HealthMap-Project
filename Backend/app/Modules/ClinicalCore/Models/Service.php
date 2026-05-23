@@ -20,12 +20,18 @@ class Service extends Model
         'medical_chief_id',
         'service_type_id',
         'max_duration',
+        'latitude',
+        'longitude',
         'establishment_id',
     ];
 
     protected function casts(): array
     {
-        return ['is_active' => 'boolean'];
+        return [
+            'is_active' => 'boolean',
+            'latitude' => 'float',
+            'longitude' => 'float',
+        ];
     }
 
     public function chief(): BelongsTo
