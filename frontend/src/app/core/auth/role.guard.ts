@@ -18,10 +18,12 @@ export const roleGuard = (roles: string[]): CanActivateFn => () => {
   const userRole = auth.getUserRole();
 
   // Backend Admin role is a wildcard: it grants access to every guarded route.
-  if (userRole === 'Admin') return true;
+  if (userRole.toLowerCase() === 'admin') return true;
 
+  // Case-insensitive comparison — DB may store 'BDE' while route uses 'bde'
   const allowed = roles.flatMap(r => ROLE_MAP[r] ?? [r]);
+  const userRoleLower = userRole.toLowerCase();
 
-  if (userRole && allowed.includes(userRole)) return true;
-  return router.parseUrl('/admin/dashboard');
+  if (allowed.some(r => r.toLowerCase() === userRoleLower)) return true;
+  return router.parseUrl(auth.getDefaultRoute());
 };

@@ -32,6 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')
                 ->prefix('api')
                 ->group(base_path('routes/modules/chef.php'));
+
+            Route::middleware('web')
+                ->prefix('api')
+                ->group(base_path('routes/modules/radiology_laboratory.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -46,6 +50,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/onboarding/*',
             'api/admin/*',
             'api/chef/*',
+            'api/radiology/*',
+            'api/laboratory/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

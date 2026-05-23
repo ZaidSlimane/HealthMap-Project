@@ -79,11 +79,11 @@ export class AuthService {
 
   getUserRole(): UserRole {
     const user = this.currentUser();
-    if (!user || !user.roles || user.roles.length === 0) return 'service'; // fallback
+    if (!user || !user.roles || user.roles.length === 0) return 'Doctor'; // fallback
 
     // ChefService takes priority when user has multiple roles (e.g. Doctor + ChefService)
-    const chefRole = user.roles.find(r => r.role === 'ChefService');
-    if (chefRole) return 'ChefService';
+    const chefRole = user.roles.find(r => r.role.toLowerCase() === 'chefservice');
+    if (chefRole) return chefRole.role;
 
     return user.roles[0].role;
   }
@@ -94,6 +94,8 @@ export class AuthService {
 
   getDefaultRoute(): string {
     const role = this.getUserRole();
-    return ROLE_DEFAULT_ROUTES[role] || '/admin/dashboard';
+    // Normalize to lowercase for lookup — ROLE_DEFAULT_ROUTES is keyed lowercase
+    const route = ROLE_DEFAULT_ROUTES[role.toLowerCase()];
+    return route || '/admin/dashboard';
   }
 }

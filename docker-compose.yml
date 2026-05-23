@@ -45,6 +45,16 @@ services:
     networks:
       - healthmap_network
 
+  # ─── Redis (real-time transport + queue layer) ───────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: healthmap_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - healthmap_network
+
   # ─── MySQL Database ─────────────────────────────────────────────────
   db:
     image: mysql:8.0

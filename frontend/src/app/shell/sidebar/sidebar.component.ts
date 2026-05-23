@@ -28,15 +28,15 @@ const ALL_NAV_ITEMS: NavItem[] = [
   { label: 'Tableau de bord BDE', icon: 'fact_check', route: '/bde/dashboard', roles: ['superadmin', 'bde'] },
   // Doctor-owned pages moved to Doctor sidebar only.
 
-  { sectionLabel: 'EXAMENS', label: 'Radiologie', icon: 'biotech', roles: ['superadmin', 'radio'], expanded: false, children: [
-      { label: 'Demandes', icon: 'assignment', route: '/radiology/requests', roles: ['superadmin', 'radio'] },
-      { label: 'Résultats', icon: 'article', route: '/radiology/results', roles: ['superadmin', 'radio'] },
+  { sectionLabel: 'EXAMENS', label: 'Radiologie', icon: 'biotech', roles: ['superadmin', 'radiotech'], expanded: false, children: [
+      { label: 'Demandes', icon: 'assignment', route: '/radiology/requests', roles: ['superadmin', 'radiotech'] },
+      { label: 'Résultats', icon: 'article', route: '/radiology/results', roles: ['superadmin', 'radiotech'] },
     ]
   },
   {
-    label: 'Laboratoire', icon: 'science', roles: ['superadmin', 'labo'], expanded: false, children: [
-      { label: 'Réception', icon: 'inbox', route: '/labo/reception', roles: ['superadmin', 'labo'] },
-      { label: 'Résultats', icon: 'article', route: '/labo/results', roles: ['superadmin', 'labo'] },
+    label: 'Laboratoire', icon: 'science', roles: ['superadmin', 'labtech'], expanded: false, children: [
+      { label: 'Réception', icon: 'inbox', route: '/labo/reception', roles: ['superadmin', 'labtech'] },
+      { label: 'Résultats', icon: 'article', route: '/labo/results', roles: ['superadmin', 'labtech'] },
     ]
   },
   {
@@ -46,8 +46,8 @@ const ALL_NAV_ITEMS: NavItem[] = [
     ]
   },
 
-  { sectionLabel: 'PLANNING', label: 'Rendez-vous', icon: 'calendar_today', route: '/appointments', roles: ['superadmin', 'radio'] },
-  { label: 'File d\'attente', icon: 'phone_in_talk', route: '/queue/call', roles: ['superadmin', 'radio', 'labo'] },
+  { sectionLabel: 'PLANNING', label: 'Rendez-vous', icon: 'calendar_today', route: '/appointments', roles: ['superadmin', 'radiotech'] },
+  { label: 'File d\'attente', icon: 'phone_in_talk', route: '/queue/call', roles: ['superadmin', 'radiotech', 'labtech'] },
 
   {
     sectionLabel: 'STATISTIQUES',
@@ -92,16 +92,18 @@ const ALL_NAV_ITEMS: NavItem[] = [
 
   { sectionLabel: 'OUTILS', label: 'Plan du CHU', icon: 'account_balance', route: '/carte', roles: ['superadmin', 'bde', 'consultation'] },
   { label: 'Borne d\'accueil', icon: 'tablet_android', route: '/borne', roles: ['superadmin', 'bde'] },
-  { label: 'Recherche', icon: 'search', route: '/recherche', roles: ['superadmin', 'consultation', 'radio', 'labo', 'bde'] },
-  { label: 'Mon profil', icon: 'account_circle', route: '/profil', roles: ['superadmin', 'consultation', 'radio', 'labo', 'bde'] },
+  { label: 'Recherche', icon: 'search', route: '/recherche', roles: ['superadmin', 'consultation', 'radiotech', 'labtech', 'bde'] },
+  { label: 'Mon profil', icon: 'account_circle', route: '/profil', roles: ['superadmin', 'consultation', 'radiotech', 'labtech', 'bde'] },
 
   // ── RADIO ──
-  { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/radiology/dashboard', roles: ['radio'] },
-  { label: 'Demandes examen', icon: 'assignment', route: '/radiology/requests', roles: ['radio'] },
-  { label: 'Gestion des RVD', icon: 'calendar_today', route: '/appointments', roles: ['radio'] },
+  { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/radiology/dashboard', roles: ['radiotech'] },
+  { label: 'Demandes examen', icon: 'assignment', route: '/radiology/requests', roles: ['radiotech'] },
+  { label: 'Gestion des RDV', icon: 'calendar_today', route: '/radiology/rdv', roles: ['radiotech'] },
 
   // ── LABO ──
-  { sectionLabel: 'CLINIQUE', label: 'Saisie résultats', icon: 'science', route: '/labo/results', roles: ['labo'] },
+  { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/laboratory/dashboard', roles: ['labtech'] },
+  { label: 'Worklist', icon: 'science', route: '/laboratory', roles: ['labtech'] },
+  { label: 'Saisie résultats', icon: 'edit_note', route: '/labo/results', roles: ['labtech'] },
 
   // ── CONSULTATION ──
   // Tri/Consultation/Services moved to Doctor sidebar only.

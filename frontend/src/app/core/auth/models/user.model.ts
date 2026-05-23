@@ -1,4 +1,8 @@
-export type UserRole = 'Admin' | 'superadmin' | 'Doctor' | 'ChefService' | 'bde' | 'radio' | 'labo' | 'consultation' | 'pharmacie' | 'service';
+/**
+ * Canonical role strings as stored in the database `roles.role` column.
+ * All comparisons must use these exact strings or a case-insensitive lookup.
+ */
+export type UserRole = 'Admin' | 'Doctor' | 'BDE' | 'Pharmacy' | 'Reception' | 'ChefService' | 'RadioTech' | 'LabTech' | string;
 
 export interface UserRoleDetail {
   id: number;
@@ -11,16 +15,11 @@ export interface User {
   email: string;
   roles: UserRoleDetail[];
   role_names?: string[];
-  /** Returned by the API; true on first login until the wizard completes. */
   must_change_password?: boolean;
-  /** True once POST /onboarding/complete has succeeded for this user. */
   onboarding_completed?: boolean;
   onboarding_completed_at?: string | null;
-  /** Single service (legacy BelongsTo) */
   service?: { id: number; name: string; code?: string } | null;
-  /** Multiple services (BelongsToMany — for doctors) */
   services?: { id: number; name: string; code?: string }[];
-  /** The establishment this user is linked to (set by onboarding). */
   establishment?: {
     id: number;
     slug: string;
@@ -30,15 +29,17 @@ export interface User {
   } | null;
 }
 
-export const ROLE_DEFAULT_ROUTES: Record<UserRole, string> = {
-  Admin: '/admin/dashboard',
-  superadmin: '/admin/dashboard',
-  Doctor: '/profil',
-  ChefService: '/chef/dashboard',
-  bde: '/bde/patients',
-  radio: '/radiology/requests',
-  labo: '/labo/results',
-  consultation: '/consultation',
-  pharmacie: '/admin/dashboard',
-  service: '/admin/dashboard',
+/**
+ * Default landing route per role. Keyed by LOWERCASE canonical form.
+ * getUserRole() normalizes to lowercase before lookup.
+ */
+export const ROLE_DEFAULT_ROUTES: Record<string, string> = {
+  admin: '/admin/dashboard',
+  doctor: '/profil',
+  chefservice: '/chef/dashboard',
+  bde: '/bde/dashboard',
+  radiotech: '/radiology',
+  labtech: '/laboratory/dashboard',
+  pharmacy: '/admin/dashboard',
+  reception: '/admin/dashboard',
 };
