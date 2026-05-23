@@ -13,6 +13,11 @@ export const LABORATORY_ROUTES: Routes = [
     canActivate: [roleGuard(['LabTech', 'Admin'])]
   },
   {
+    path: 'reception',
+    loadComponent: () => import('./reception/labo-reception.component').then(m => m.LaboReceptionComponent),
+    canActivate: [roleGuard(['LabTech', 'LabAssistant', 'LabHeadChief', 'Admin'])]
+  },
+  {
     path: 'requests/:id',
     loadComponent: () => import('./detail/labo-request-detail.component').then(m => m.LaboRequestDetailComponent),
     canActivate: [roleGuard(['LabTech', 'Admin'])]
