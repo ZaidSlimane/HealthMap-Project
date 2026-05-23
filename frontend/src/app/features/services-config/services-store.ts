@@ -45,6 +45,9 @@ export class ServicesStore {
             type_label: s.type?.label ?? '',
             chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
             medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+            coords: (s.latitude != null && s.longitude != null)
+              ? { lat: s.latitude, lon: s.longitude }
+              : undefined,
             units: (s.units ?? []).map((u: any) => ({
               ...u,
               id: String(u.id),
@@ -140,6 +143,9 @@ export class ServicesStore {
       type_label: s.type?.label ?? '',
       chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
       medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
+      coords: (s.latitude != null && s.longitude != null)
+        ? { lat: s.latitude, lon: s.longitude }
+        : undefined,
       units: (s.units ?? []).map((u: any) => ({
         ...u,
         id: String(u.id),

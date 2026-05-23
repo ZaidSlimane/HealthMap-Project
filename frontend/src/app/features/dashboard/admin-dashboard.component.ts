@@ -2,8 +2,10 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
 import { CampusMapComponent } from '../carte/campus-map.component';
 import { ConfigurationService } from '../admin/configuration/configuration.service';
+import { environment } from '../../../environments/environment';
 
 interface ChartPoint { date: string; admissions: number; radiologie: number; labo: number; }
 interface Stat        { label: string; value: number; icon: string; cls: string; }
@@ -29,6 +31,10 @@ interface HospitalKpi { label: string; value: number | string; sub: string; icon
 })
 export class AdminDashboardComponent implements OnInit {
   private cfg = inject(ConfigurationService);
+  private http = inject(HttpClient);
+
+  // ── Configured services list ────────────────────────────────────────────
+  readonly configuredServices = signal<{ id: number; name: string; type_label: string; hasCoords: boolean }[]>([]);
 
   // ── Live counts from the backend (start at 0, populated on init) ────────
   readonly servicesCount = signal(0);
@@ -96,6 +102,23 @@ export class AdminDashboardComponent implements OnInit {
         this.occupiedBeds.set(r.data.filter(b => b.status === 'occupied').length);
       },
       error: () => {/* leave at 0 */},
+    });
+
+    // Load services with geo-config status
+    this.http.get<any>(`${environment.baseUrl}/clinical-core/services`, {
+      params: { per_page: '200' }
+    }).subscribe({
+      next: (res) => {
+        const data = res.data ?? res ?? [];
+        const svcs = (Array.isArray(data) ? data : []).map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          type_label: s.type?.label ?? s.service_type_label ?? '',
+          hasCoords: s.latitude != null && s.longitude != null,
+        }));
+        this.configuredServices.set(svcs);
+      },
+      error: () => {},
     });
   }
 

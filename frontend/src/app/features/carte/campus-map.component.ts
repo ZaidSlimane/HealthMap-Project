@@ -198,24 +198,38 @@ export class CampusMapComponent implements OnInit, OnDestroy {
     document.querySelectorAll('.svc-marker-wrapper').forEach(el => el.remove());
 
     for (const svc of this.filteredSvcs()) {
-      const fill   = typeof svc.type === 'number' ? typeFillById(svc.type) : (TYPE_FILL[svc.type] ?? '#EEE');
       const stroke = typeof svc.type === 'number' ? typeColorById(svc.type) : (TYPE_STROKE[svc.type] ?? '#999');
-      const isCritique    = computeStatus(svc) === 'CRITIQUE';
-      const isMaintenance = computeStatus(svc) === 'MAINTENANCE';
+      const isCritique = computeStatus(svc) === 'CRITIQUE';
 
-      const bedText = svc.units && svc.units.length > 0
-        ? `<div class="svc-beds">🛏 ${litsOccupesService(svc)}/${totalLitsService(svc)}</div>` : '';
+      const totalBeds = totalLitsService(svc);
+      const occupiedBeds = litsOccupesService(svc);
+      const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
 
-      const critBadge = isCritique
-        ? `<div class="svc-critique-dot"></div>` : '';
+      // Status dot color: green (<60%), orange (60-89%), red (>=90%)
+      let statusDotColor = '#16a34a'; // green
+      if (occupancyPct >= 90 || isCritique) statusDotColor = '#dc2626'; // red
+      else if (occupancyPct >= 60) statusDotColor = '#f59e0b'; // orange
+
+      // Occupancy bar color
+      let barColor = '#16a34a';
+      if (occupancyPct >= 90) barColor = '#dc2626';
+      else if (occupancyPct >= 60) barColor = '#f59e0b';
+
+      const critPulse = isCritique ? 'svc-card--pulse' : '';
 
       const markerHtml = `
-        <div class="svc-marker ${isCritique ? 'svc-marker--critique' : ''} ${isMaintenance ? 'svc-marker--maintenance' : ''}"
-          style="border-color:${stroke}; background:${fill}">
-          ${critBadge}
-          <div class="svc-code" style="background:${stroke}">${svc.code}</div>
-          <div class="svc-label">${shortLabel(svc.name)}</div>
-          ${bedText}
+        <div class="svc-card ${critPulse}" style="border-left: 3px solid ${stroke}">
+          <div class="svc-card__row1">
+            <span class="svc-card__name">${svc.name}</span>
+            <span class="svc-card__dot" style="background:${statusDotColor}"></span>
+          </div>
+          <div class="svc-card__row2">
+            <span class="svc-card__beds">🛏 ${occupiedBeds} / ${totalBeds}</span>
+          </div>
+          <div class="svc-card__bar">
+            <div class="svc-card__bar-fill" style="width:${occupancyPct}%; background:${barColor}"></div>
+          </div>
+          <div class="svc-card__pointer"></div>
         </div>`;
 
       const el = document.createElement('div');
@@ -229,7 +243,7 @@ export class CampusMapComponent implements OnInit, OnDestroy {
       });
 
       if (svc.coords?.lon !== undefined && svc.coords?.lat !== undefined) {
-        new maplibregl.Marker({ element: el, anchor: 'center' })
+        new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([svc.coords.lon, svc.coords.lat])
           .addTo(this.map);
       }
