@@ -72,6 +72,7 @@ export const routes: Routes = [
       { path: 'carte', loadComponent: () => import('./features/carte/campus-map.component').then(m => m.CampusMapComponent), canActivate: [authGuard] },
       { path: 'carte/service/:serviceId', loadComponent: () => import('./features/carte/service-map.component').then(m => m.ServiceMapComponent), canActivate: [authGuard] },
       { path: 'admin/services', loadChildren: () => import('./features/services-config/services.routes').then(m => m.SERVICES_ROUTES), canActivate: [roleGuard(['superadmin','admin'])], title: 'Gestion des Services — HealthMap' },
+      { path: 'admin/map-config', loadComponent: () => import('./features/geospatial-service/map-config.component').then(m => m.MapConfigComponent), canActivate: [roleGuard(['Admin'])], title: 'Configuration Carte — HealthMap' },
       // Sidebar restructure stubs — new ADMIN sections (Personnel, Utilisateurs,
       // unit-scoped config). Real pages land here later; for now the sidebar
       // entries route to a labelled "à venir" placeholder so clicks don't

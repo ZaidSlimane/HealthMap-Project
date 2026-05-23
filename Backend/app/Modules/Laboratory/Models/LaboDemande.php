@@ -19,7 +19,15 @@ class LaboDemande extends Model
         'status',
         'notes',
         'requested_by',
+        'date_recep',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'date_recep' => 'datetime',
+        ];
+    }
 
     public function consultation(): BelongsTo
     {

@@ -3,6 +3,16 @@
     <mat-icon>menu</mat-icon>
   </button>
 
+  <!-- Institution brand -->
+  <div class="topbar-brand">
+    <mat-icon class="topbar-brand-icon">domain</mat-icon>
+    <div class="topbar-brand-text">
+      <span class="topbar-brand-name">{{ auth.currentUser()?.establishment?.name || 'HealthMap' }}</span>
+      <span class="topbar-brand-sep">·</span>
+      <span class="topbar-brand-city">{{ auth.currentUser()?.establishment?.province?.name || '' }}</span>
+    </div>
+  </div>
+
   <button class="search-btn">
     <mat-icon>search</mat-icon>
     <span>Rechercher...</span>

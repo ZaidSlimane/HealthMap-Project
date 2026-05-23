@@ -7,6 +7,7 @@ use App\Modules\Radiology\Controllers\RadioResultController;
 use App\Modules\Radiology\Controllers\RadioScheduleController;
 use App\Modules\Laboratory\Controllers\LaboCatalogController;
 use App\Modules\Laboratory\Controllers\LaboDashboardController;
+use App\Modules\Laboratory\Controllers\LaboReceptionController;
 use App\Modules\Laboratory\Controllers\LaboRequestController;
 use App\Modules\Laboratory\Controllers\LaboResultController;
 
@@ -64,6 +65,12 @@ Route::middleware(['auth'])->group(function () {
     // Laboratory dashboard (LabTech + Admin)
     Route::middleware('role:Admin,LabTech')->group(function () {
         Route::get('laboratory/dashboard', [LaboDashboardController::class, 'index']);
+    });
+
+    // Laboratory reception (LabTech + LabAssistant + LabHeadChief + Admin)
+    Route::middleware('role:Admin,LabTech,LabAssistant,LabHeadChief')->group(function () {
+        Route::get('laboratory/reception', [LaboReceptionController::class, 'index']);
+        Route::patch('laboratory/reception/{id}/receive', [LaboReceptionController::class, 'receive']);
     });
 
     // Laboratory worklist + results (LabTech + Admin)

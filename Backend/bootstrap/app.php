@@ -41,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => \App\Modules\Auth\Middleware\RoleMiddleware::class,
+            'permission' => \App\Modules\Auth\Middleware\PermissionMiddleware::class,
         ]);
 
         // Auth endpoints are consumed as JSON APIs, not browser forms.

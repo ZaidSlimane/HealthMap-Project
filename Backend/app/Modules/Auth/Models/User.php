@@ -99,16 +99,40 @@ class User extends Authenticatable
     }
 
     /**
-     * All effective permissions: directly assigned + inherited via roles.
+     * All effective permissions: directly assigned + inherited via roles
+     * (including hierarchical inheritance from descendant roles).
      */
     public function allPermissions(): \Illuminate\Support\Collection
     {
+        // Direct user permissions
         $direct = $this->permissions()->get();
-        $viaRoles = $this->roles()
-            ->with('permissions')
-            ->get()
-            ->flatMap->permissions;
+
+        // Permissions from all assigned roles (including hierarchy inheritance)
+        $viaRoles = collect();
+        foreach ($this->roles as $role) {
+            $viaRoles = $viaRoles->merge($role->allPermissions());
+        }
 
         return $direct->merge($viaRoles)->unique('id')->values();
+    }
+
+    /**
+     * Check if the user has a specific permission (supports wildcard implication).
+     */
+    public function hasPermission(string $permissionSlug): bool
+    {
+        // Direct permission check
+        if ($this->permissions()->where('slug', $permissionSlug)->exists()) {
+            return true;
+        }
+
+        // Check via roles (with hierarchy and wildcard support)
+        foreach ($this->roles as $role) {
+            if ($role->impliesPermission($permissionSlug)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

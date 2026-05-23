@@ -60,6 +60,7 @@ const ALL_NAV_ITEMS: NavItem[] = [
   { sectionLabel: 'PERSONNEL & UTILISATEURS', label: 'Personnel & Utilisateurs', icon: 'badge', route: '/admin/personnel', roles: ['superadmin', 'Admin'] },
   { label: 'Configuration (API)', icon: 'tune', route: '/admin/configuration', roles: ['superadmin', 'Admin'] },
   { label: 'Gestion des Services', icon: 'medical_services', route: '/admin/services', roles: ['superadmin', 'Admin'] },
+  { label: 'Config. Carte', icon: 'map', route: '/admin/map-config', roles: ['superadmin', 'Admin'] },
   { label: 'Médecins', icon: 'people', route: '/admin/medecins', roles: ['superadmin', 'Admin'] },
 
   // ── PARAMÉTRAGES UNITÉS ────────────────────────────────────────────────
@@ -102,6 +103,7 @@ const ALL_NAV_ITEMS: NavItem[] = [
 
   // ── LABO ──
   { sectionLabel: 'CLINIQUE', label: 'Tableau de bord', icon: 'dashboard', route: '/laboratory/dashboard', roles: ['labtech'] },
+  { label: 'Réception', icon: 'inbox', route: '/laboratory/reception', roles: ['labtech'] },
   { label: 'Worklist', icon: 'science', route: '/laboratory', roles: ['labtech'] },
   { label: 'Saisie résultats', icon: 'edit_note', route: '/labo/results', roles: ['labtech'] },
 

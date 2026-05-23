@@ -88,6 +88,31 @@
     </div>
   </div>
 
+  <!-- ── Configured Services Status ──────────────────────── -->
+  <div class="configured-services-card">
+    <div class="cs-header">
+      <h3>
+        <mat-icon>place</mat-icon>
+        Services géo-configurés
+      </h3>
+      <a routerLink="/admin/map-config" class="cs-link">
+        Configurer
+        <mat-icon>settings</mat-icon>
+      </a>
+    </div>
+    <div class="cs-body">
+      @for (svc of configuredServices(); track svc.id) {
+        <div class="cs-item" [class.cs-item--configured]="svc.hasCoords">
+          <span class="cs-status">{{ svc.hasCoords ? '✓' : '✗' }}</span>
+          <span class="cs-name">{{ svc.name }}</span>
+          <span class="cs-type">{{ svc.type_label }}</span>
+        </div>
+      } @empty {
+        <p class="cs-empty">Aucun service trouvé.</p>
+      }
+    </div>
+  </div>
+
   <!-- ── Chart card with view toggle ───────────────────────── -->
   <div class="chart-card">
     <div class="chart-card-header">
