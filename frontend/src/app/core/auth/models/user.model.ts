@@ -40,6 +40,7 @@ export const ROLE_DEFAULT_ROUTES: Record<string, string> = {
   bde: '/bde/dashboard',
   radiotech: '/radiology',
   labtech: '/laboratory/dashboard',
-  pharmacy: '/admin/dashboard',
+  pharmacien: '/pharmacie/dashboard',
+  pharmacy: '/pharmacie/dashboard',
   reception: '/admin/dashboard',
 };
