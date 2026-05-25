@@ -40,10 +40,7 @@ const ALL_NAV_ITEMS: NavItem[] = [
     ]
   },
   {
-    label: 'Pharmacie', icon: 'medication', roles: ['superadmin'], expanded: false, children: [
-      { label: 'Protocoles', icon: 'list_alt', route: '/chimio/protocoles', roles: ['superadmin'] },
-      { label: 'Sessions', icon: 'schedule', route: '/chimio/sessions', roles: ['superadmin'] },
-    ]
+    label: 'Pharmacie', icon: 'medication', roles: ['superadmin', 'pharmacien'], route: '/pharmacie/dashboard',
   },
 
   { sectionLabel: 'PLANNING', label: 'Rendez-vous', icon: 'calendar_today', route: '/appointments', roles: ['superadmin', 'radiotech'] },

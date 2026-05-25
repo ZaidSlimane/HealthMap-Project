@@ -63,6 +63,14 @@ class RbacHierarchySeeder extends Seeder
             ['name' => 'Manage Service', 'slug' => 'service.manage'],
             ['name' => 'Assign Doctors', 'slug' => 'service.assign_doctors'],
             ['name' => 'View Service Stats', 'slug' => 'service.view_stats'],
+
+            // Pharmacy permissions
+            ['name' => 'View Pharmacy Dashboard', 'slug' => 'pharmacy.view_dashboard'],
+            ['name' => 'Manage Catalog', 'slug' => 'pharmacy.manage_catalog'],
+            ['name' => 'Manage Orders', 'slug' => 'pharmacy.manage_orders'],
+            ['name' => 'Manage Stock', 'slug' => 'pharmacy.manage_stock'],
+            ['name' => 'Dispense Medication', 'slug' => 'pharmacy.dispense'],
+            ['name' => 'Pharmacy Wildcard', 'slug' => 'pharmacy.*'],
         ];
 
         foreach ($permissions as $perm) {
@@ -100,6 +108,10 @@ class RbacHierarchySeeder extends Seeder
 
         $radioTech = Role::firstOrCreate(['role' => 'RadioTech']);
         $radioTech->update(['parent_id' => $radioHeadChief->id]);
+
+        // Pharmacy - standalone role
+        $pharmacist = Role::firstOrCreate(['role' => 'Pharmacien']);
+        $pharmacist->update(['parent_id' => null]);
 
         // ─── Assign Permissions to Roles ───────────────────────────────────────
 
@@ -154,6 +166,11 @@ class RbacHierarchySeeder extends Seeder
             'radio.view_worklist',
             'radio.schedule',
             'radio.submit_results',
+        ]);
+
+        // Pharmacist gets pharmacy wildcard
+        $this->syncPermissions($pharmacist, [
+            'pharmacy.*',
         ]);
 
         $this->command->info('RBAC hierarchy seeded successfully.');
