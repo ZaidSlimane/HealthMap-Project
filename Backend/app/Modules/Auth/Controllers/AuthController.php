@@ -142,8 +142,8 @@ class AuthController extends Controller
     {
         $user->load([
             'roles:id,role',
-            'service:id,name,code',
-            'services:id,name,code',
+            'service:id,name',
+            'services:id,name',
             'establishment:id,slug,name',
         ]);
 
@@ -183,9 +183,9 @@ class AuthController extends Controller
             'roles',
             'establishment.type',
             'establishment.province',
-            'service:id,name,code,service_type_id',
+            'service:id,name,service_type_id',
             'service.type:id,label',
-            'services:id,name,code',
+            'services:id,name',
             'poste:id,label,label_ar',
         ]);
 
