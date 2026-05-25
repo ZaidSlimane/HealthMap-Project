@@ -3,6 +3,7 @@
 namespace App\Modules\ClinicalCore\Controllers;
 
 use App\Modules\ClinicalCore\Models\Service;
+use App\Modules\ClinicalCore\Models\ServiceGeolocation;
 use App\Modules\ClinicalCore\Models\EstablishmentUnit;
 use App\Modules\ClinicalCore\Models\Room;
 use App\Modules\ClinicalCore\Models\Bed;
@@ -17,14 +18,14 @@ class ServiceController extends BaseResourceController
 {
     protected string $modelClass = Service::class;
 
-    protected array $with = ['chief', 'medicalChief', 'units.rooms.beds', 'type'];
+    protected array $with = ['chief', 'medicalChief', 'units.rooms.beds', 'type', 'geolocation'];
 
     /**
      * Create a service with optional nested units → rooms → beds.
      */
     public function store(Request $request): JsonResponse
     {
-        $data = $request->only(['name', 'code', 'is_active', 'service_type_id', 'max_duration']);
+        $data = $request->only(['name', 'is_active', 'service_type_id', 'max_duration']);
 
         // Auto-assign establishment from the authenticated user
         $user = Auth::user();
@@ -40,6 +41,15 @@ class ServiceController extends BaseResourceController
 
         $service = DB::transaction(function () use ($data, $request) {
             $service = Service::create($data);
+
+            // Handle geolocation
+            if ($request->has('latitude') && $request->has('longitude')) {
+                ServiceGeolocation::create([
+                    'service_id' => $service->id,
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
+                ]);
+            }
 
             // Handle nested units
             if ($request->has('units')) {
@@ -59,7 +69,7 @@ class ServiceController extends BaseResourceController
     {
         $service = Service::findOrFail($id);
 
-        $data = $request->only(['name', 'code', 'is_active', 'service_type_id', 'chief_id', 'medical_chief_id', 'max_duration', 'latitude', 'longitude']);
+        $data = $request->only(['name', 'is_active', 'service_type_id', 'chief_id', 'medical_chief_id', 'max_duration']);
 
         DB::transaction(function () use ($service, $data, $request) {
             $oldChiefId = $service->chief_id;
@@ -70,6 +80,17 @@ class ServiceController extends BaseResourceController
             $newChiefId = $service->chief_id;
             if ($newChiefId !== $oldChiefId) {
                 $this->syncChefAssignment($service, $oldChiefId, $newChiefId);
+            }
+
+            // Handle geolocation update
+            if ($request->has('latitude') && $request->has('longitude')) {
+                $service->geolocation()->updateOrCreate(
+                    ['service_id' => $service->id],
+                    [
+                        'latitude' => $request->input('latitude'),
+                        'longitude' => $request->input('longitude'),
+                    ]
+                );
             }
 
             // Handle nested units only if explicitly provided

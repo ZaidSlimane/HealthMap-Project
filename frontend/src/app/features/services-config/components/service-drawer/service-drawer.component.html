@@ -46,8 +46,7 @@
             placeholder="ex: CHIRURGIE MAXILLO FACIALE" />
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-2">
+        <div class="form-group">
             <label>Type de service <span class="req">*</span></label>
             <select [ngModel]="form().type" (ngModelChange)="patchForm('type', +$event)">
               @for (t of allTypes(); track t.id) {
@@ -55,12 +54,6 @@
               }
             </select>
           </div>
-          <div class="form-group flex-1">
-            <label>Code carte <span class="req">*</span></label>
-            <input type="number" min="1" max="99"
-              [ngModel]="form().code" (ngModelChange)="patchForm('code', $event)" />
-          </div>
-        </div>
 
         <div class="form-group">
           <label>Médecin Chef <span class="req">*</span></label>

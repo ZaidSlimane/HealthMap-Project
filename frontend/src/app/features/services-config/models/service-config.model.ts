@@ -46,7 +46,6 @@ export interface ServiceConfig {
   name: string;
   type: ServiceType;
   type_label?: string;
-  code: string;
   chief: User;
   medical_chief: User;
   is_active: boolean;

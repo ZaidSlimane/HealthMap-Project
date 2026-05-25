@@ -45,8 +45,8 @@ export class ServicesStore {
             type_label: s.type?.label ?? '',
             chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
             medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
-            coords: (s.latitude != null && s.longitude != null)
-              ? { lat: s.latitude, lon: s.longitude }
+            coords: s.geolocation
+              ? { lat: s.geolocation.latitude, lon: s.geolocation.longitude }
               : undefined,
             units: (s.units ?? []).map((u: any) => ({
               ...u,
@@ -96,7 +96,6 @@ export class ServicesStore {
       // Transform frontend model to backend-compatible payload
       const payload: any = {
         name: svc.name,
-        code: svc.code,
         is_active: svc.is_active,
         service_type_id: svc.type,
         chief_id: (svc as any).chief_id ?? null,
@@ -143,8 +142,8 @@ export class ServicesStore {
       type_label: s.type?.label ?? '',
       chief: s.chief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
       medical_chief: s.medical_chief ?? s.medicalChief ?? { id: '', name: '', first_name: '', email: '', is_active: true },
-      coords: (s.latitude != null && s.longitude != null)
-        ? { lat: s.latitude, lon: s.longitude }
+      coords: s.geolocation
+        ? { lat: s.geolocation.latitude, lon: s.geolocation.longitude }
         : undefined,
       units: (s.units ?? []).map((u: any) => ({
         ...u,

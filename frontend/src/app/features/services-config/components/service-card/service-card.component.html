@@ -6,7 +6,7 @@
     <span class="type-badge"
       [style.background]="typeColor + '22'"
       [style.color]="typeColor">{{ service.type_label || service.type }}</span>
-    <span class="code-badge">#{{ service.code }}</span>
+    <span class="code-badge">#{{ service.id }}</span>
     <span class="status-dot" [class.active]="service.is_active"
       [matTooltip]="service.is_active ? 'Actif' : 'Inactif'"></span>
   </div>
