@@ -24,7 +24,6 @@ type Tab = 'general' | 'unites' | 'salles';
 type DrawerForm = {
   name: string;
   type: ServiceType;
-  code: string;
 };
 
 @Component({
@@ -51,7 +50,7 @@ export class ServiceDrawerComponent implements OnChanges, OnInit {
   allUnitTypes = ALL_UNIT_TYPES;
   doctors = signal<DoctorOption[]>([]);
 
-  form = signal<DrawerForm>({ name: '', type: 1, code: '1' });
+  form = signal<DrawerForm>({ name: '', type: 1 });
   chefId = signal<number | null>(null);
   coordinateurId = signal<number | null>(null);
   actif = signal<boolean>(true);
@@ -103,14 +102,14 @@ export class ServiceDrawerComponent implements OnChanges, OnInit {
 
         if (this.service && this.mode === 'EDIT') {
           const s = this.service;
-          this.form.set({ name: s.name, type: s.type, code: s.code });
+          this.form.set({ name: s.name, type: s.type });
           this.chefId.set(s.chief?.id ? +s.chief.id : null);
           this.coordinateurId.set(s.medical_chief?.id ? +s.medical_chief.id : null);
           this.actif.set(s.is_active);
           this.unites.set(JSON.parse(JSON.stringify(s.units)));
           this.selectedUniteId.set(s.units[0]?.id ?? null);
         } else {
-          this.form.set({ name: '', type: 1, code: '1' });
+          this.form.set({ name: '', type: 1 });
           this.chefId.set(null);
           this.coordinateurId.set(null);
           this.actif.set(true);
@@ -153,17 +152,11 @@ export class ServiceDrawerComponent implements OnChanges, OnInit {
   save(): void {
     const f = this.form();
     if (!f.name?.trim()) { alert('Le nom du service est obligatoire.'); return; }
-    const code = Number(f.code);
-    if (!f.code || !Number.isFinite(code) || code < 1 || code > 99) {
-      alert('Le code carte doit être entre 1 et 99.');
-      return;
-    }
 
     const svc: any = {
       id:             this.mode === 'EDIT' ? this.service!.id : 'svc-' + Date.now(),
       name:           f.name.trim().toUpperCase(),
       type:           f.type as ServiceType,
-      code:           String(code),
       chief_id:       this.chefId(),
       medical_chief_id: this.coordinateurId(),
       chief:          this.makeUser(this.chefId()),

@@ -9,14 +9,19 @@ import { OsmService } from '../../core/services/osm.service';
 import { PageHeaderComponent } from '../../shared/ui/page-header/page-header.component';
 import { environment } from '../../../environments/environment';
 
+interface ServiceGeolocation {
+  id: number;
+  service_id: number;
+  latitude: number;
+  longitude: number;
+}
+
 interface ServiceItem {
   id: number;
   name: string;
-  code: string;
-  latitude: number | null;
-  longitude: number | null;
   service_type_id: number;
   is_active: boolean;
+  geolocation: ServiceGeolocation | null;
 }
 
 @Component({
@@ -44,9 +49,9 @@ interface ServiceItem {
               <button
                 class="service-item"
                 [class.selected]="selectedService()?.id === svc.id"
-                [class.has-coords]="svc.latitude !== null"
+                [class.has-coords]="svc.geolocation !== null"
                 (click)="selectService(svc)">
-                <span class="coord-status">{{ svc.latitude !== null ? '✓' : '✗' }}</span>
+                <span class="coord-status">{{ svc.geolocation !== null ? '✓' : '✗' }}</span>
                 <span class="svc-name">{{ svc.name }}</span>
               </button>
             }
@@ -412,17 +417,17 @@ export class MapConfigComponent implements OnInit, OnDestroy {
     this.markers = [];
 
     for (const svc of this.services()) {
-      if (svc.latitude === null || svc.longitude === null) continue;
+      if (!svc.geolocation) continue;
 
       const el = document.createElement('div');
       el.className = 'svc-config-marker';
       el.innerHTML = `
         <div class="marker-dot"></div>
-        <div class="marker-label">${svc.code || svc.name}</div>
+        <div class="marker-label">${svc.name}</div>
       `;
 
       const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
-        .setLngLat([svc.longitude, svc.latitude])
+        .setLngLat([svc.geolocation.longitude, svc.geolocation.latitude])
         .addTo(this.map);
 
       this.markers.push(marker);
@@ -449,11 +454,11 @@ export class MapConfigComponent implements OnInit, OnDestroy {
         // Update local state
         this.services.update(list =>
           list.map(s => s.id === svc.id
-            ? { ...s, latitude: coords.lat, longitude: coords.lon }
+            ? { ...s, geolocation: { id: 0, service_id: svc.id, latitude: coords.lat, longitude: coords.lon } }
             : s
           )
         );
-        this.selectedService.update(s => s ? { ...s, latitude: coords.lat, longitude: coords.lon } : s);
+        this.selectedService.update(s => s ? { ...s, geolocation: { id: 0, service_id: s.id, latitude: coords.lat, longitude: coords.lon } } : s);
         this.pendingCoords.set(null);
         this.removeTempMarker();
         this.renderServiceMarkers();

@@ -11,7 +11,9 @@ export interface UserRoleDetail {
 
 export interface User {
   id: number;
-  name: string;
+  name: string | null;
+  first_name?: string | null;
+  username?: string | null;
   email: string;
   roles: UserRoleDetail[];
   role_names?: string[];
@@ -40,6 +42,7 @@ export const ROLE_DEFAULT_ROUTES: Record<string, string> = {
   bde: '/bde/dashboard',
   radiotech: '/radiology',
   labtech: '/laboratory/dashboard',
-  pharmacy: '/admin/dashboard',
+  pharmacien: '/pharmacie/dashboard',
+  pharmacy: '/pharmacie/dashboard',
   reception: '/admin/dashboard',
 };

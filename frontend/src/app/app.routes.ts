@@ -45,6 +45,8 @@ export const routes: Routes = [
       // Lab & Radiology module routes (worklist + detail)
       { path: 'radiology', loadChildren: () => import('./features/radiology/radiology.routes').then(m => m.RADIOLOGY_ROUTES), canActivate: [roleGuard(['RadioTech', 'Admin'])] },
       { path: 'laboratory', loadChildren: () => import('./features/laboratory/laboratory.routes').then(m => m.LABORATORY_ROUTES), canActivate: [roleGuard(['LabTech', 'Admin'])] },
+      // Pharmacy module routes
+      { path: 'pharmacie', loadChildren: () => import('./features/pharmacy/pharmacy.routes').then(m => m.PHARMACY_ROUTES), canActivate: [roleGuard(['Pharmacien', 'Admin'])] },
       { path: 'consultation', loadComponent: () => import('./features/consultation/consultation-select.component').then(m => m.ConsultationSelectComponent) },
       { path: 'consultation/active', loadComponent: () => import('./features/consultation/consultation.component').then(m => m.ConsultationComponent) },
       { path: 'consultation/tri', loadComponent: () => import('./features/consultation/triage.component').then(m => m.TriageComponent) },
