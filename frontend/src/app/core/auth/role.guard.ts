@@ -7,6 +7,8 @@ const ROLE_MAP: Record<string, string[]> = {
   'MEDECIN': ['Admin', 'consultation'],
   'INFIRMIER': ['Admin', 'consultation'],
   'RECEPTIONNISTE': ['Admin', 'bde'],
+  'PHARMACIEN': ['Pharmacien', 'Pharmacy'],
+  'PHARMACY': ['Pharmacien', 'Pharmacy'],
 };
 
 export const roleGuard = (roles: string[]): CanActivateFn => () => {

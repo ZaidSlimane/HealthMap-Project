@@ -23,6 +23,7 @@ Route::prefix('pharmacy')->group(function () {
     Route::get('dashboard', [PharmacyDashboardController::class, 'index']);
 
     // DCI
+    Route::get('dci/search-national', [DciController::class, 'searchNational']);
     Route::apiResource('dci', DciController::class);
 
     // Fournisseurs

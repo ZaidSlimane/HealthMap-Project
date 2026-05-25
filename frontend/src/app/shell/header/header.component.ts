@@ -38,4 +38,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
+
+  /** Full display name: "Prénom Nom", falling back to username */
+  displayName(): string {
+    const u = this.auth.currentUser();
+    if (!u) return '';
+    const parts = [u.first_name, u.name].filter(Boolean).join(' ');
+    return parts || u.username || '';
+  }
+
+  /** Avatar initial from display name, falling back to 'U' */
+  userInitial(): string {
+    return (this.displayName() || 'U')[0].toUpperCase();
+  }
 }

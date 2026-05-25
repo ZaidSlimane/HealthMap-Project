@@ -32,7 +32,7 @@ export class LoginComponent {
       next: (user) => {
         this.loading = false;
         const dest = this.onboarding.needsOnboarding() ? '/onboarding' : this.auth.getDefaultRoute();
-        this.router.navigate([dest]);
+        this.router.navigateByUrl(dest);
       },
       error: (err) => {
         this.loading = false;

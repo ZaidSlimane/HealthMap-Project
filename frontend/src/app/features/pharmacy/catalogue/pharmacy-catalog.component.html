@@ -1,0 +1,337 @@
+<hm-page-header
+  title="Catalogue"
+  subtitle="DCI, produits commerciaux et fournisseurs"
+  icon="menu_book">
+  <button class="btn-add" (click)="openCreate()">
+    <span class="material-icons">add</span>
+    {{ addBtnLabel() }}
+  </button>
+</hm-page-header>
+
+<!-- Tab switcher -->
+<div class="tab-bar">
+  <button class="tab-btn" [class.active]="activeTab() === 'dci'" (click)="setTab('dci')">DCI</button>
+  <button class="tab-btn" [class.active]="activeTab() === 'produits'" (click)="setTab('produits')">Produits</button>
+  <button class="tab-btn" [class.active]="activeTab() === 'fournisseurs'" (click)="setTab('fournisseurs')">Fournisseurs</button>
+</div>
+
+<!-- Search -->
+<div class="search-row">
+  <div class="search-box">
+    <span class="material-icons">search</span>
+    <input type="text" [placeholder]="searchPlaceholder()" [(ngModel)]="searchQuery" (ngModelChange)="onSearch($event)" />
+  </div>
+</div>
+
+@if (loading()) {
+  <hm-spinner label="Chargement..." />
+} @else {
+
+  <!-- ── DCI tab ─────────────────────────────────────────────────────────── -->
+  @if (activeTab() === 'dci') {
+    <div class="panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Dénomination</th>
+            <th>Type</th>
+            <th>Classification</th>
+            <th>Classe thérapeutique</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredDci(); track item.id) {
+            <tr>
+              <td><code class="mono">{{ item.code }}</code></td>
+              <td class="denom-cell">{{ item.denomination }}</td>
+              <td>
+                <span class="badge" [ngClass]="typeBadgeClass(getDciType(item))">
+                  {{ typeLabel(getDciType(item)) }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="classifClass(item.classification)">
+                  {{ classifLabel(item.classification) }}
+                </span>
+              </td>
+              <td class="classe-cell">{{ item.classeTherapeutique || '—' }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon" title="Modifier" (click)="openEditDci(item)">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button class="btn-icon btn-icon--danger" title="Supprimer" (click)="deleteDci(item.id)">
+                  <span class="material-icons">delete</span>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty-cell">Aucune DCI trouvée</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (dciTotal() > dciPerPage) {
+      <div class="pagination">
+        <span class="page-info">{{ dciRangeStart }}–{{ dciRangeEnd }} sur {{ dciTotal() }}</span>
+        <button class="btn-page" [disabled]="!dciHasPrev" (click)="dciPrevPage()">
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <button class="btn-page" [disabled]="!dciHasNext" (click)="dciNextPage()">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+    }
+  }
+
+  <!-- ── Produits tab ───────────────────────────────────────────────────── -->
+  @if (activeTab() === 'produits') {
+    <div class="panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Nom commercial</th>
+            <th>DCI liée</th>
+            <th>Fournisseur</th>
+            <th>Forme</th>
+            <th>Dosage</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of filteredProduits(); track p.id) {
+            <tr>
+              <td><code class="mono">{{ p.codeNomenclature }}</code></td>
+              <td>{{ p.nomCommercial }}</td>
+              <td>{{ dciName(p.dciId) }}</td>
+              <td>{{ fournisseurName(p.fournisseurId) }}</td>
+              <td>{{ p.forme || '—' }}</td>
+              <td>{{ p.dosage || '—' }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon" title="Modifier" (click)="editProduit(p)">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button class="btn-icon btn-icon--danger" title="Supprimer" (click)="deleteProduit(p.id)">
+                  <span class="material-icons">delete</span>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="7" class="empty-cell">Aucun produit trouvé</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- ── Fournisseurs tab ───────────────────────────────────────────────── -->
+  @if (activeTab() === 'fournisseurs') {
+    <div class="panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Contact</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (f of filteredFournisseurs(); track f.id) {
+            <tr>
+              <td>{{ f.nom }}</td>
+              <td><span class="badge badge--info">{{ f.type === 'laboratoire' ? 'Laboratoire' : 'Fournisseur' }}</span></td>
+              <td>{{ f.contact || '—' }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon" title="Modifier" (click)="editFournisseur(f)">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button class="btn-icon btn-icon--danger" title="Supprimer" (click)="deleteFournisseur(f.id)">
+                  <span class="material-icons">delete</span>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4" class="empty-cell">Aucun fournisseur trouvé</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- Slide-over drawer                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+@if (drawerMode()) {
+  <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+  <aside class="drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">{{ drawerTitle() }}</span>
+      <button class="btn-icon" (click)="closeDrawer()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- ── DCI create / edit form ──────────────────────────────────────── -->
+      @if (drawerMode() === 'create-dci' || drawerMode() === 'edit-dci') {
+
+        <!-- Step 1: Pick from national list (create only) -->
+        @if (drawerMode() === 'create-dci') {
+          <div class="nat-pick-section">
+            <p class="section-label">
+              <span class="material-icons">search</span>
+              Chercher dans la liste nationale
+            </p>
+
+            @if (natPicked()) {
+              <!-- Picked badge -->
+              <div class="nat-picked">
+                <span class="material-icons">check_circle</span>
+                <span class="nat-picked-name">{{ natPicked()!.denomination }}</span>
+                <button class="btn-icon btn-icon--danger" title="Effacer" (click)="clearNatPick()">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+            } @else {
+              <div class="nat-search-box" [class.searching]="natSearching()">
+                <span class="material-icons">medication</span>
+                <input
+                  type="text"
+                  placeholder="Tapez le nom du principe actif..."
+                  [ngModel]="natQuery()"
+                  (ngModelChange)="onNatQueryChange($event)"
+                  autocomplete="off" />
+                @if (natSearching()) {
+                  <span class="material-icons spin">sync</span>
+                }
+              </div>
+
+              @if (natResults().length > 0) {
+                <ul class="nat-results">
+                  @for (r of natResults(); track r.nat_id) {
+                    <li class="nat-result-item" (click)="pickNatResult(r)">
+                      <span class="nat-result-name">{{ r.denomination }}</span>
+                      @if (r.already_local) {
+                        <span class="badge badge--ok nat-result-badge" title="Déjà dans le catalogue local">
+                          <span class="material-icons" style="font-size:11px;vertical-align:middle">check</span> Local
+                        </span>
+                      }
+                      <span class="badge nat-result-badge" [ngClass]="classifClass(r.classification)">
+                        {{ classifLabel(r.classification) }}
+                      </span>
+                      @if (r.classe_therapeutique) {
+                        <span class="nat-result-classe">{{ r.classe_therapeutique }}</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              }
+            }
+          </div>
+
+          <div class="form-divider">
+            <span>ou saisir manuellement</span>
+          </div>
+        }
+
+        <!-- Form fields -->
+        <div class="form-group">
+          <label class="form-label">Code *</label>
+          <input class="form-input" type="text" placeholder="Ex: NAT000042"
+            [ngModel]="dciForm().code"
+            (ngModelChange)="patchCode($event)" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Dénomination (DCI) *</label>
+          <input class="form-input" type="text" placeholder="Ex: AMOXICILLINE"
+            [ngModel]="dciForm().denomination"
+            (ngModelChange)="patchDenomination($event)" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Classification</label>
+          <select class="form-input"
+            [ngModel]="dciForm().classification"
+            (ngModelChange)="patchClassification($event)">
+            <option value="nationale">Nationale</option>
+            <option value="orse">ORSE</option>
+            <option value="strategique">Stratégique</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Type dans le catalogue local</label>
+          <select class="form-input"
+            [ngModel]="dciForm().type"
+            (ngModelChange)="patchType($event)">
+            <option value="local">Local — Inventaire quotidien</option>
+            <option value="orse">ORSE — Réserve d'urgence</option>
+            <option value="strategique">Stratégique — Surveillance renforcée</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Classe thérapeutique</label>
+          <input class="form-input" type="text" placeholder="Ex: ANTIBIOTIQUES"
+            [ngModel]="dciForm().classeTherapeutique"
+            (ngModelChange)="patchClasseTherapeutique($event)" />
+        </div>
+
+        <div class="form-section-title">Paramètres locaux de stock</div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Seuil minimum</label>
+            <input class="form-input" type="number" min="0"
+              [ngModel]="dciForm().seuilMin"
+              (ngModelChange)="patchSeuilMin($event)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Seuil sécurité</label>
+            <input class="form-input" type="number" min="0"
+              [ngModel]="dciForm().seuilSecurite"
+              (ngModelChange)="patchSeuilSecurite($event)" />
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Point de commande</label>
+            <input class="form-input" type="number" min="0"
+              [ngModel]="dciForm().pointCommande"
+              (ngModelChange)="patchPointCommande($event)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prix défaut (DA)</label>
+            <input class="form-input" type="number" min="0" step="0.01"
+              [ngModel]="dciForm().prixDefaut"
+              (ngModelChange)="patchPrixDefaut($event)" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-secondary" (click)="closeDrawer()">Annuler</button>
+          <button class="btn-primary" [disabled]="saving()" (click)="saveDci()">
+            @if (saving()) { <span class="material-icons spin">sync</span> }
+            {{ drawerMode() === 'edit-dci' ? 'Enregistrer' : 'Ajouter' }}
+          </button>
+        </div>
+      }
+
+      <!-- ── Produits / Fournisseurs stubs ───────────────────────────────── -->
+      @if (drawerMode() === 'create-produit' || drawerMode() === 'edit-produit' ||
+           drawerMode() === 'create-fournisseur' || drawerMode() === 'edit-fournisseur') {
+        <p class="coming-soon">Formulaire en cours de développement.</p>
+      }
+
+    </div>
+  </aside>
+}

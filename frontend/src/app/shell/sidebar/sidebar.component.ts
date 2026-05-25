@@ -40,8 +40,15 @@ const ALL_NAV_ITEMS: NavItem[] = [
     ]
   },
   {
-    label: 'Pharmacie', icon: 'medication', roles: ['superadmin', 'pharmacien'], route: '/pharmacie/dashboard',
+    label: 'Pharmacie', icon: 'medication', roles: ['superadmin', 'Admin'], route: '/pharmacie/dashboard',
   },
+
+  // ── PHARMACIE (dedicated nav group for Pharmacien role) ──
+  { sectionLabel: 'PHARMACIE', label: 'Tableau de bord', icon: 'dashboard',         route: '/pharmacie/dashboard',         roles: ['Pharmacien'] },
+  { label: 'Catalogue',          icon: 'menu_book',       route: '/pharmacie/catalogue',         roles: ['Pharmacien'] },
+  { label: 'Approvisionnement',  icon: 'local_shipping',  route: '/pharmacie/approvisionnement', roles: ['Pharmacien'] },
+  { label: 'Distribution',       icon: 'send',            route: '/pharmacie/distribution',      roles: ['Pharmacien'] },
+  { label: 'Inventaire',         icon: 'inventory_2',     route: '/pharmacie/inventaire',        roles: ['Pharmacien'] },
 
   { sectionLabel: 'PLANNING', label: 'Rendez-vous', icon: 'calendar_today', route: '/appointments', roles: ['superadmin', 'radiotech'] },
   { label: 'File d\'attente', icon: 'phone_in_talk', route: '/queue/call', roles: ['superadmin', 'radiotech', 'labtech'] },

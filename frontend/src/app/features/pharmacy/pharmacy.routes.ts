@@ -1,25 +1,36 @@
 import { Routes } from '@angular/router';
-import { PharmacyHubComponent } from './pharmacy-hub/pharmacy-hub.component';
-import { PharmacyDashboardComponent } from './dashboard/pharmacy-dashboard.component';
-import { PharmacyCatalogComponent } from './catalogue/pharmacy-catalog.component';
-import { PharmacyInboundComponent } from './inbound/pharmacy-inbound.component';
-import { PharmacyOutboundComponent } from './outbound/pharmacy-outbound.component';
-import { PharmacyInventoryComponent } from './inventory/pharmacy-inventory.component';
 import { roleGuard } from '../../core/auth/role.guard';
 
 export const PHARMACY_ROUTES: Routes = [
   {
-    path: 'pharmacie',
-    component: PharmacyHubComponent,
-    canActivate: [roleGuard],
-    data: { roles: ['Pharmacien', 'Admin'] },
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: PharmacyDashboardComponent },
-      { path: 'catalogue', component: PharmacyCatalogComponent },
-      { path: 'approvisionnement', component: PharmacyInboundComponent },
-      { path: 'distribution', component: PharmacyOutboundComponent },
-      { path: 'inventaire', component: PharmacyInventoryComponent },
-    ],
+    path: 'dashboard',
+    loadComponent: () => import('./dashboard/pharmacy-dashboard.component').then(m => m.PharmacyDashboardComponent),
+    canActivate: [roleGuard(['Pharmacien', 'Admin'])],
+    title: 'Pharmacie — Tableau de bord',
   },
+  {
+    path: 'catalogue',
+    loadComponent: () => import('./catalogue/pharmacy-catalog.component').then(m => m.PharmacyCatalogComponent),
+    canActivate: [roleGuard(['Pharmacien', 'Admin'])],
+    title: 'Pharmacie — Catalogue',
+  },
+  {
+    path: 'approvisionnement',
+    loadComponent: () => import('./inbound/pharmacy-inbound.component').then(m => m.PharmacyInboundComponent),
+    canActivate: [roleGuard(['Pharmacien', 'Admin'])],
+    title: 'Pharmacie — Approvisionnement',
+  },
+  {
+    path: 'distribution',
+    loadComponent: () => import('./outbound/pharmacy-outbound.component').then(m => m.PharmacyOutboundComponent),
+    canActivate: [roleGuard(['Pharmacien', 'Admin'])],
+    title: 'Pharmacie — Distribution',
+  },
+  {
+    path: 'inventaire',
+    loadComponent: () => import('./inventory/pharmacy-inventory.component').then(m => m.PharmacyInventoryComponent),
+    canActivate: [roleGuard(['Pharmacien', 'Admin'])],
+    title: 'Pharmacie — Inventaire',
+  },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];

@@ -1,4 +1,6 @@
-export interface Dci {
+// ── Backend API shapes (snake_case from Laravel) ─────────────────────────────
+
+export interface DciApi {
   id: number;
   code: string;
   denomination: string;
@@ -6,7 +8,7 @@ export interface Dci {
   classe_therapeutique: string | null;
 }
 
-export interface Fournisseur {
+export interface FournisseurApi {
   id: number;
   nom: string;
   type: 'fournisseur' | 'laboratoire';
@@ -15,14 +17,14 @@ export interface Fournisseur {
   telephone: string | null;
 }
 
-export interface Produit {
+export interface ProduitApi {
   id: number;
   code_nomenclature: string;
   nom_commercial: string;
   dci_id: number | null;
-  dci: Dci | null;
+  dci: DciApi | null;
   fournisseur_id: number | null;
-  fournisseur: Fournisseur | null;
+  fournisseur: FournisseurApi | null;
   forme: string | null;
   dosage: string | null;
   unite: string;
@@ -35,11 +37,11 @@ export interface Produit {
   stock_status?: 'critique' | 'alerte' | 'ok';
 }
 
-export interface LigneCommande {
+export interface LigneCommandeApi {
   id: number;
   commande_id: number;
   produit_id: number;
-  produit: Produit | null;
+  produit: ProduitApi | null;
   qte_commandee: number;
   qte_recue: number;
   lot: string | null;
@@ -47,21 +49,21 @@ export interface LigneCommande {
   prix_unitaire: number | null;
 }
 
-export interface Commande {
+export interface CommandeApi {
   id: number;
   reference: string;
   fournisseur_id: number;
-  fournisseur: Fournisseur | null;
+  fournisseur: FournisseurApi | null;
   date_commande: string;
   statut: 'en_attente' | 'confirmee' | 'recue';
   notes: string | null;
-  lignes: LigneCommande[];
+  lignes: LigneCommandeApi[];
 }
 
-export interface MouvementStock {
+export interface MouvementStockApi {
   id: number;
   produit_id: number;
-  produit: Produit | null;
+  produit: ProduitApi | null;
   type: 'entree' | 'sortie' | 'ajustement';
   quantite: number;
   stock_avant: number;
@@ -71,6 +73,65 @@ export interface MouvementStock {
   motif: string | null;
   created_at: string;
 }
+
+// ── Frontend view-model shapes (camelCase used by components) ────────────────
+
+export interface Dci {
+  id: string;
+  code: string;
+  denomination: string;
+  classification: 'nationale' | 'orse' | 'strategique';
+  classeTherapeutique: string;
+}
+
+export interface Fournisseur {
+  id: string;
+  nom: string;
+  type: 'fournisseur' | 'laboratoire';
+  contact: string;
+}
+
+export interface Produit {
+  id: string;
+  codeNomenclature: string;
+  nomCommercial: string;
+  dciId: string;
+  fournisseurId: string;
+  forme: string;
+  dosage: string;
+  stockActuel: number;
+  seuilMin: number;
+  seuilSecurite: number;
+}
+
+export interface LigneCommande {
+  produitId: string;
+  qteCommandee: number;
+  qteRecue: number;
+  lot: string;
+  dateExpiration: string;
+}
+
+export interface Commande {
+  id: string;
+  reference: string;
+  fournisseurId: string;
+  dateCommande: string;
+  statut: 'en_attente' | 'confirmee' | 'recue';
+  lignes: LigneCommande[];
+}
+
+export interface MouvementStock {
+  id: string;
+  produitId: string;
+  type: 'entree' | 'sortie';
+  quantite: number;
+  reference: string;
+  serviceOuFournisseur: string;
+  date: string;
+}
+
+// ── Dashboard-specific shapes ─────────────────────────────────────────────────
 
 export interface DashboardKpis {
   produits_en_stock: number;

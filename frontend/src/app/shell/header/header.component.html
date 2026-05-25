@@ -43,8 +43,8 @@
   </button>
 
   <div class="user-section">
-    <div class="user-avatar">{{ (auth.currentUser()?.name || 'U')[0].toUpperCase() }}</div>
-    <span class="username-chip">{{ auth.currentUser()?.name }}</span>
+    <div class="user-avatar">{{ userInitial() }}</div>
+    <span class="username-chip">{{ displayName() }}</span>
     <button class="logout-btn" (click)="logout()" title="Déconnexion">
       <mat-icon>logout</mat-icon>
     </button>

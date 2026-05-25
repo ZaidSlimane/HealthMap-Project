@@ -11,7 +11,9 @@ export interface UserRoleDetail {
 
 export interface User {
   id: number;
-  name: string;
+  name: string | null;
+  first_name?: string | null;
+  username?: string | null;
   email: string;
   roles: UserRoleDetail[];
   role_names?: string[];
