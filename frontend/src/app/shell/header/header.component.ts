@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +16,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  auth = inject(AuthService);
+  auth    = inject(AuthService);
+  notifs  = inject(NotificationService);
   private router = inject(Router);
 
   currentTime = '';
@@ -24,10 +26,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.updateTime();
     this.timer = setInterval(() => this.updateTime(), 1000);
+    this.notifs.startPolling();
   }
 
   ngOnDestroy() {
     if (this.timer) clearInterval(this.timer);
+    this.notifs.stopPolling();
   }
 
   updateTime() {
@@ -35,6 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    this.notifs.stopPolling();
     this.auth.logout();
     this.router.navigate(['/login']);
   }

@@ -22,24 +22,12 @@
 
   <span class="header-clock">{{ currentTime }}</span>
 
-  <button class="notif-btn" title="Notifications système">
+  <!-- Single notification bell with live count -->
+  <button class="notif-btn" title="Notifications — demandes et résultats en attente">
     <mat-icon>notifications</mat-icon>
-    <span class="notif-badge">2</span>
-  </button>
-
-  <button class="notif-btn" title="Alertes patients">
-    <mat-icon>notification_important</mat-icon>
-    <span class="notif-badge">5</span>
-  </button>
-
-  <button class="notif-btn" title="Alertes administratives">
-    <mat-icon>notifications_active</mat-icon>
-    <span class="notif-badge">8</span>
-  </button>
-
-  <button class="notif-btn" title="Messages">
-    <mat-icon>mail</mat-icon>
-    <span class="notif-badge notif-badge-accent">3</span>
+    @if (notifs.counts().total > 0) {
+      <span class="notif-badge">{{ notifs.counts().total > 99 ? '99+' : notifs.counts().total }}</span>
+    }
   </button>
 
   <div class="user-section">

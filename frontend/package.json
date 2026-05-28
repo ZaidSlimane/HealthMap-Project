@@ -30,9 +30,11 @@
     "@mappedin/mappedin-js": "^6.17.1",
     "@types/geojson": "^7946.0.16",
     "chart.js": "^4.4.0",
+    "laravel-echo": "^2.3.4",
     "maplibre-gl": "^5.23.0",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.0",
+    "pusher-js": "^8.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

@@ -45,6 +45,47 @@ services:
     networks:
       - healthmap_network
 
+  # ─── Laravel Reverb WebSocket server ───────────────────────────────
+  # Uses the BUILT image (no host volume mount) so vendor/ is the one
+  # built by composer install in the Dockerfile — no stale autoload issue.
+  reverb:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: healthmap_reverb
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080 --no-interaction
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - healthmap_network
+
+  # ─── Queue worker (processes broadcast jobs from Redis) ────────────
+  # Same: uses the built image without host volume mount for vendor.
+  queue:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: healthmap_queue
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan queue:work redis --sleep=1 --tries=3 --timeout=30
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - healthmap_network
+
   # ─── Redis (real-time transport + queue layer) ───────────────────────
   redis:
     image: redis:7-alpine

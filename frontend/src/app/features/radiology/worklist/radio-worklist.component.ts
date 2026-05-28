@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { SpinnerComponent } from '../../../shared/ui/spinner/spinner.component';
 import { RadioService } from '../services/radio.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-radio-worklist',
@@ -194,10 +195,24 @@ import { RadioService } from '../services/radio.service';
 export class RadioWorklistComponent implements OnInit {
   private readonly radioService = inject(RadioService);
   private readonly router = inject(Router);
+  private readonly notifs = inject(NotificationService);
 
   readonly worklist = signal<any[]>([]);
   readonly loading = signal(true);
   readonly errorMessage = signal('');
+
+  private lastKnownPending = -1;
+  private readonly radioPending = computed(() => this.notifs.counts().radio_pending);
+
+  constructor() {
+    effect(() => {
+      const pending = this.radioPending();
+      if (this.lastKnownPending !== -1 && pending !== this.lastKnownPending) {
+        this.loadWorklist();
+      }
+      this.lastKnownPending = pending;
+    });
+  }
 
   ngOnInit(): void {
     this.loadWorklist();

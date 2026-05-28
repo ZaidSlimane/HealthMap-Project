@@ -27,6 +27,7 @@ use App\Modules\ClinicalCore\Controllers\ServiceController;
 use App\Modules\ClinicalCore\Controllers\ServiceTypeController;
 use App\Modules\ClinicalCore\Controllers\TriageController;
 use App\Modules\ClinicalCore\Controllers\WaitingListController;
+use App\Modules\ClinicalCore\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,10 @@ use App\Modules\ClinicalCore\Controllers\WaitingListController;
 */
 
 Route::middleware(['auth'])->group(function () {
+
+    // ── Notifications (all authenticated users) ──────────────────────────
+    Route::get('notifications/counts', [NotificationController::class, 'counts']);
+    Route::post('notifications/mark-seen', [NotificationController::class, 'markSeen']);
 
     // ── Doctor: service boxes (for consultation selection flow) ──────
     Route::middleware('role:Admin,Doctor,ChefService')->group(function () {

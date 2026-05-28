@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { SpinnerComponent } from '../../../shared/ui/spinner/spinner.component';
 import { LaboService } from '../services/labo.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-labo-worklist',
@@ -194,10 +195,24 @@ import { LaboService } from '../services/labo.service';
 export class LaboWorklistComponent implements OnInit {
   private readonly laboService = inject(LaboService);
   private readonly router = inject(Router);
+  private readonly notifs = inject(NotificationService);
 
   readonly worklist = signal<any[]>([]);
   readonly loading = signal(true);
   readonly errorMessage = signal('');
+
+  private lastKnownPending = -1;
+  private readonly laboPending = computed(() => this.notifs.counts().labo_pending);
+
+  constructor() {
+    effect(() => {
+      const pending = this.laboPending();
+      if (this.lastKnownPending !== -1 && pending !== this.lastKnownPending) {
+        this.loadWorklist();
+      }
+      this.lastKnownPending = pending;
+    });
+  }
 
   ngOnInit(): void {
     this.loadWorklist();
