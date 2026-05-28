@@ -1,43 +1,69 @@
 <div class="page-container page-fade-in">
   <div class="split-layout">
-    <!-- LEFT: Waiting list -->
+
+    <!-- ── LEFT: Requests list ─────────────────────────────────────── -->
     <div class="left-panel card-surface">
-      <h3 class="panel-title">Liste des demandes en attente</h3>
-      <div class="waiting-list">
-        @for (req of urgentRequests; track req.id) {
-          <div class="urgent-card">
-            <div class="urgent-header urgent-stripe">
-              <span class="patient-name">{{ req.patientName }}</span>
-              <span class="exam-type">{{ req.examType }}</span>
-            </div>
-            <div class="urgent-actions">
-              <button mat-stroked-button class="btn-skip">
-                <mat-icon>skip_next</mat-icon>
-                Passer sans rdv
-              </button>
-              <span class="badge-urgence">urgence</span>
-            </div>
-          </div>
+      <div class="panel-header">
+        <h3 class="panel-title">Demandes d'examens</h3>
+        @if (!loading()) {
+          <span class="request-count">{{ requests().length }}</span>
         }
       </div>
-      <div class="list-link">
-        <a routerLink="/radiology/requests/liste">
-          <mat-icon>table_chart</mat-icon> Voir la liste complète
-        </a>
-      </div>
+
+      @if (loading()) {
+        <hm-spinner label="Chargement..." [inline]="true" />
+      } @else if (error()) {
+        <div class="error-banner">
+          <span class="material-icons">error_outline</span>
+          {{ error() }}
+        </div>
+      } @else if (requests().length === 0) {
+        <div class="empty-state">
+          <span class="material-icons">inbox</span>
+          <p>Aucune demande en attente</p>
+        </div>
+      } @else {
+        <div class="request-list">
+          @for (req of requests(); track req.id) {
+            <div class="request-card" [class.card-urgent]="req.urgency === 'urgente'" (click)="openDetail(req.id)">
+              <div class="card-top">
+                <span class="patient-name">{{ patientLabel(req) }}</span>
+                <span class="badge" [ngClass]="statusClass(req.status)">
+                  {{ statusLabel(req.status) }}
+                </span>
+              </div>
+              <div class="card-mid">
+                <span class="exam-label">{{ examLabel(req) }}</span>
+              </div>
+              <div class="card-bot">
+                <span class="card-date">{{ req.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+                @if (req.urgency === 'urgente') {
+                  <span class="urgency-chip">
+                    <span class="material-icons">priority_high</span> Urgente
+                  </span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
     </div>
 
-    <!-- RIGHT: Calendar -->
+    <!-- ── RIGHT: Calendar ─────────────────────────────────────────── -->
     <div class="right-panel card-surface">
       <div class="calendar-nav">
-        <button mat-icon-button (click)="prevDay()"><mat-icon>chevron_left</mat-icon></button>
-        <button mat-icon-button (click)="nextDay()"><mat-icon>chevron_right</mat-icon></button>
-        <button mat-stroked-button (click)="today()">Aujourd'hui</button>
+        <button mat-icon-button (click)="prevDay()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button (click)="nextDay()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <button mat-stroked-button (click)="goToday()">Aujourd'hui</button>
         <h2 class="calendar-date">{{ formattedDate }}</h2>
         <div class="view-toggle">
-          <button mat-stroked-button [class.active-view]="calendarView==='mois'" (click)="calendarView='mois'">Mois</button>
-          <button mat-stroked-button [class.active-view]="calendarView==='semaine'" (click)="calendarView='semaine'">Semaine</button>
-          <button mat-flat-button [class.active-view]="calendarView==='jour'" (click)="calendarView='jour'" color="primary">Jour</button>
+          <button mat-stroked-button [class.active-view]="calendarView === 'mois'" (click)="calendarView = 'mois'">Mois</button>
+          <button mat-stroked-button [class.active-view]="calendarView === 'semaine'" (click)="calendarView = 'semaine'">Semaine</button>
+          <button mat-flat-button [class.active-view]="calendarView === 'jour'" (click)="calendarView = 'jour'" color="primary">Jour</button>
         </div>
       </div>
 
@@ -45,11 +71,11 @@
         <div class="cal-header">
           <div class="time-col"></div>
           <div class="day-col">
-            <div class="day-name">lundi</div>
+            <div class="day-name">{{ calendarDate | date:'EEEE' | titlecase }}</div>
           </div>
         </div>
         <div class="all-day-row">
-          <div class="time-col">Toute la journée</div>
+          <div class="time-col">Journée</div>
           <div class="day-col"></div>
         </div>
         @for (hour of hours; track hour) {
@@ -60,5 +86,6 @@
         }
       </div>
     </div>
+
   </div>
 </div>

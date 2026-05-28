@@ -525,6 +525,11 @@ export class ExamRequestModalComponent implements OnChanges {
   }
 
   submit(): void {
+    if (!Number.isFinite(this.consultationId) || this.consultationId <= 0) {
+      this.validationError.set('Identifiant de consultation invalide.');
+      return;
+    }
+
     if (this.selectedItems().length === 0) {
       this.validationError.set('Veuillez sélectionner au moins un examen.');
       return;
@@ -554,9 +559,9 @@ export class ExamRequestModalComponent implements OnChanges {
         this.requestSubmitted.emit();
         this.close();
       },
-      error: () => {
+      error: (err) => {
         this.submitting.set(false);
-        this.validationError.set('Erreur lors de la soumission. Veuillez réessayer.');
+        this.validationError.set(this.getSubmitError(err, 'Erreur lors de la soumission. Veuillez réessayer.'));
       },
     });
   }
@@ -578,9 +583,9 @@ export class ExamRequestModalComponent implements OnChanges {
         this.requestSubmitted.emit();
         this.close();
       },
-      error: () => {
+      error: (err) => {
         this.submitting.set(false);
-        this.validationError.set('Erreur lors de la soumission. Veuillez réessayer.');
+        this.validationError.set(this.getSubmitError(err, 'Erreur lors de la soumission. Veuillez réessayer.'));
       },
     });
   }
@@ -627,5 +632,18 @@ export class ExamRequestModalComponent implements OnChanges {
     this.catalogItems.set([]);
     this.validationError.set('');
     this.submitting.set(false);
+  }
+
+  private getSubmitError(err: any, fallback: string): string {
+    const message = err?.error?.message;
+    const errors = err?.error?.errors ?? {};
+    return message
+      || errors.context?.[0]
+      || errors.consultation_id?.[0]
+      || errors.admission_id?.[0]
+      || errors.radiology_exam_type_ids?.[0]
+      || errors['radiology_exam_type_ids.0']?.[0]
+      || errors.items?.[0]
+      || fallback;
   }
 }

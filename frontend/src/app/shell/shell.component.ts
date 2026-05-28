@@ -1,8 +1,9 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { LoadingService } from '../core/services/loading.service';
+import { EchoService } from '../core/services/echo.service';
 
 @Component({
   selector: 'app-shell',
@@ -78,7 +79,17 @@ import { LoadingService } from '../core/services/loading.service';
     }
   `]
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit, OnDestroy {
   sidebarCollapsed = signal(false);
   loading = inject(LoadingService);
+  private echoService = inject(EchoService);
+
+  ngOnInit(): void {
+    // Start WebSocket connection when shell mounts (user is authenticated)
+    this.echoService.startEcho();
+  }
+
+  ngOnDestroy(): void {
+    this.echoService.stopEcho();
+  }
 }

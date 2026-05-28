@@ -58,6 +58,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/radiology/*',
             'api/laboratory/*',
             'api/pharmacy/*',
+            'api/clinical-core/notifications/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
