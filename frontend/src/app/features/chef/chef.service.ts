@@ -42,6 +42,12 @@ export interface ServiceDoctor {
   is_active: boolean;
 }
 
+export interface ForecastDay {
+  day: number;
+  date: string;
+  occupancy_pct: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ChefApiService {
   private readonly http = inject(HttpClient);
@@ -81,5 +87,11 @@ export class ChefApiService {
 
   getDoctors(): Observable<ServiceDoctor[]> {
     return this.http.get<ServiceDoctor[]>(`${this.API}/doctors`);
+  }
+
+  getOccupancyForecast(): Observable<ForecastDay[]> {
+    return this.http.get<ForecastDay[]>(
+      `${environment.baseUrl}/predictions/occupancy`
+    );
   }
 }

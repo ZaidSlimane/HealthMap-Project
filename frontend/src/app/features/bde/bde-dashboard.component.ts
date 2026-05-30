@@ -1,13 +1,26 @@
-import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
 import { PatientStore } from './data/patient-store';
 import { AdmissionRequestService } from '../../core/services/admission-request.service';
 import { ETAT_SORTIE_META } from './models/patient.model';
+import { environment } from '../../../environments/environment';
 
 interface KpiCard {
   label: string; value: number | string; sub: string; icon: string; gradient: string;
+}
+
+interface BdeStats {
+  patients: number;
+  active_admissions: number;
+  total_admissions: number;
+  today_admissions: number;
+  waiting_now: number;
+  gender: { M: number; F: number };
+  chart_daily: { date: string; label: string; count: number }[];
+  chart_monthly: { ym: string; label: string; count: number }[];
 }
 
 @Component({
@@ -18,55 +31,85 @@ interface KpiCard {
   templateUrl: './bde-dashboard.component.html',
   styleUrl: './bde-dashboard.component.scss',
 })
-export class BdeDashboardComponent {
+export class BdeDashboardComponent implements OnInit {
   private store = inject(PatientStore);
   private adm = inject(AdmissionRequestService);
+  private http = inject(HttpClient);
 
   readonly today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
   });
 
+  // ── Real API stats ──────────────────────────────────────────────────────
+  private readonly stats = signal<BdeStats | null>(null);
+
   // ── Filters ──
   chartView = signal<'Quotidien' | 'Mensuel'>('Quotidien');
   setChartView(v: 'Quotidien' | 'Mensuel') { this.chartView.set(v); }
 
-  // ── Data ──
-  readonly patientCount = computed(() => this.store.patients().length);
+  // ── Data — prefer API stats, fall back to local store ──────────────────
+  readonly patientCount = computed(() =>
+    this.stats()?.patients ?? this.store.patients().length
+  );
   readonly dossierCount = computed(() => this.store.dossiers().length);
-  readonly genres = this.store.genreCounts;
+  readonly genres = computed(() => {
+    const s = this.stats();
+    if (s) return { M: s.gender.M, F: s.gender.F, total: s.gender.M + s.gender.F };
+    return this.store.genreCounts();
+  });
   readonly countByEtat = this.store.countByEtat;
-  readonly daily = this.store.admissionsLastDays;
-  readonly monthly = this.store.admissionsByMonth;
   readonly thisMonth = this.store.thisMonthBreakdown;
   readonly thisMonthLabel = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
   readonly thisMonthRows = computed(() => this.thisMonth().rows);
   readonly thisMonthMaxCount = computed(() => Math.max(1, ...this.thisMonth().rows.map(r => r.count)));
 
   readonly admissionsEnAttente = computed(() => this.adm.pending().length);
-  readonly admissionsEnCours    = computed(() => this.countByEtat()['EN_COURS']);
+  readonly admissionsEnCours = computed(() =>
+    this.stats()?.active_admissions ?? this.countByEtat()['EN_COURS']
+  );
 
-  // KPI strip — exact metric set per the BDE spec:
-  // Admission · Garde malade · Permission de sortie · Évasion
-  readonly admissionsCount = computed(() => {
-    let n = 0; for (const d of this.store.dossiers()) n += d.parcours.length; return n;
-  });
+  // KPI strip — real data from API
+  readonly admissionsCount = computed(() =>
+    this.stats()?.total_admissions ?? (() => {
+      let n = 0; for (const d of this.store.dossiers()) n += d.parcours.length; return n;
+    })()
+  );
   readonly gardeMaladeCount = computed(() =>
     this.store.patients().filter(p => !!(p.accompagnant && p.accompagnant.nom)).length
   );
-  readonly permissionSortieCount = computed(() => 0); // not modelled — placeholder
+  readonly permissionSortieCount = computed(() => 0);
   readonly evasionCount = computed(() => this.countByEtat()['EVASION'] ?? 0);
 
-  // KPI subtitles use sentence case to match the rest of the dashboard copy.
   readonly kpis = computed<KpiCard[]>(() => [
-    { label: 'Admission', value: this.admissionsCount(), sub: `${this.dossierCount()} dossiers ouverts`,
+    { label: 'Admissions', value: this.admissionsCount(), sub: `${this.admissionsEnCours()} actives`,
       icon: 'how_to_reg', gradient: 'linear-gradient(135deg, #00BCD4 0%, #0097A7 100%)' },
-    { label: 'Garde malade', value: this.gardeMaladeCount(), sub: 'avec accompagnant déclaré',
+    { label: 'Patients enregistrés', value: this.patientCount(), sub: `${this.genres().M}H · ${this.genres().F}F`,
       icon: 'group', gradient: 'linear-gradient(135deg, #1E88E5 0%, #1565C0 100%)' },
-    { label: 'Permission de sortie', value: this.permissionSortieCount(), sub: 'en cours',
-      icon: 'event_available', gradient: 'linear-gradient(135deg, #FB8C00 0%, #EF6C00 100%)' },
-    { label: 'Évasion', value: this.evasionCount(), sub: 'depuis l\'ouverture',
-      icon: 'directions_run', gradient: 'linear-gradient(135deg, #E53935 0%, #B71C1C 100%)' },
+    { label: 'File d\'attente', value: this.stats()?.waiting_now ?? this.admissionsEnAttente(), sub: 'en attente maintenant',
+      icon: 'hourglass_empty', gradient: 'linear-gradient(135deg, #FB8C00 0%, #EF6C00 100%)' },
+    { label: 'Admissions aujourd\'hui', value: this.stats()?.today_admissions ?? this.todayAdmissions(), sub: 'entrées du jour',
+      icon: 'login', gradient: 'linear-gradient(135deg, #43A047 0%, #2E7D32 100%)' },
   ]);
+
+  ngOnInit(): void {
+    this.http.get<BdeStats>(`${environment.baseUrl}/clinical-core/bde/dashboard/stats`).subscribe({
+      next: (s) => {
+        this.stats.set(s);
+        // Replace chart data with real API data
+        this.chartData.set(s.chart_daily.map(d => ({
+          date: d.label,
+          admissions: d.count,
+          radiologie: 0,
+          labo: 0,
+        })));
+        this.monthlyData.set(s.chart_monthly.map(m => ({
+          label: m.label,
+          count: m.count,
+        })));
+      },
+      error: () => { /* keep local store data */ },
+    });
+  }
 
   private sortiesToday(): number {
     const today = new Date().toISOString().slice(0,10);
@@ -89,8 +132,8 @@ export class BdeDashboardComponent {
   // ── Chart helpers ──
   readonly currentChart = computed(() =>
     this.chartView() === 'Quotidien'
-      ? this.daily().map(b => ({ label: b.label, count: b.count }))
-      : this.monthly().map(b => ({ label: b.label, count: b.count }))
+      ? this.chartData().map(b => ({ label: b.date, count: b.admissions }))
+      : this.monthlyData()
   );
 
   readonly chartMax = computed(() => Math.max(1, ...this.currentChart().map(p => p.count)));
@@ -180,9 +223,25 @@ export class BdeDashboardComponent {
   private readonly todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
   private readonly todayEnd = this.todayStart + 86_400_000;
   readonly todayAdmissions = computed(() =>
+    this.stats()?.today_admissions ??
     this.store.patients().filter(p =>
       typeof p.createdAt === 'number' && p.createdAt >= this.todayStart && p.createdAt < this.todayEnd
     ).length
+  );
+
+  // ── Chart data signals (populated by ngOnInit from API) ──────────────────
+  chartData = signal<{ date: string; admissions: number; radiologie: number; labo: number }[]>(
+    Array.from({ length: 14 }, (_, i) => {
+      const d = new Date(); d.setDate(d.getDate() - (13 - i));
+      return { date: d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }), admissions: 0, radiologie: 0, labo: 0 };
+    })
+  );
+
+  monthlyData = signal<{ label: string; count: number }[]>(
+    Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(); d.setMonth(d.getMonth() - (11 - i));
+      return { label: d.toLocaleDateString('fr-FR', { month: 'short' }), count: 0 };
+    })
   );
 
 }

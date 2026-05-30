@@ -53,10 +53,10 @@ export class AdminDashboardComponent implements OnInit {
   // Mocked placeholders for areas not yet wired to a backend.
   readonly totalAlerts    = 12;
   readonly criticalAlerts = 4;
-  readonly totalUsers     = 156;
-  readonly activeUsers    = 23;
-  readonly stockItems     = 842;
-  readonly stockLow       = 18;
+  readonly totalUsers     = signal(0);
+  readonly activeUsers    = signal(0);
+  readonly stockItems     = signal(0);
+  readonly stockLow       = signal(0);
 
   // ── KPI strip (computed so it tracks the live signals) ──────────────────
   readonly hospitalKpis = computed<HospitalKpi[]>(() => [
@@ -76,13 +76,13 @@ export class AdminDashboardComponent implements OnInit {
       gradient: 'linear-gradient(135deg, #E53935 0%, #B71C1C 100%)',
     },
     {
-      label: 'Utilisateurs', value: this.totalUsers,
-      sub: `${this.activeUsers} en ligne`, icon: 'group',
+      label: 'Utilisateurs', value: this.totalUsers(),
+      sub: `${this.activeUsers()} actifs`, icon: 'group',
       gradient: 'linear-gradient(135deg, #8E24AA 0%, #5E35B1 100%)',
     },
     {
-      label: 'Stock pharmacie', value: this.stockItems,
-      sub: `${this.stockLow} en rupture`, icon: 'medication',
+      label: 'DCI Pharmacie', value: this.stockItems(),
+      sub: `${this.stockLow()} stratégiques`, icon: 'medication',
       gradient: 'linear-gradient(135deg, #43A047 0%, #2E7D32 100%)',
     },
   ]);
@@ -119,6 +119,17 @@ export class AdminDashboardComponent implements OnInit {
         this.configuredServices.set(svcs);
       },
       error: () => {},
+    });
+
+    // Load real user + pharmacy counts
+    this.http.get<any>(`${environment.baseUrl}/admin/dashboard/stats`).subscribe({
+      next: (res) => {
+        this.totalUsers.set(res.users?.total ?? 0);
+        this.activeUsers.set(res.users?.active ?? 0);
+        this.stockItems.set(res.pharmacy?.dci_total ?? 0);
+        this.stockLow.set(res.pharmacy?.dci_strategique ?? 0);
+      },
+      error: () => { /* leave at 0 */ },
     });
   }
 

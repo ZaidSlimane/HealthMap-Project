@@ -1,0 +1,65 @@
+{
+  "gender": {
+    "M": 1,
+    "F": 0
+  },
+  "service_name": {
+    "MED": 3,
+    "CSURG": 1,
+    "SURG": 9,
+    "CMED": 0,
+    "ORTHO": 7,
+    "PSYCH": 8,
+    "VSURG": 12,
+    "TSURG": 11,
+    "OMED": 6,
+    "GYN": 2,
+    "NSURG": 5,
+    "NMED": 4,
+    "TRAUM": 10
+  },
+  "mode": {
+    "URGENT": 8,
+    "ELECTIVE": 3,
+    "EW EMER.": 5,
+    "DIRECT EMER.": 1,
+    "EU OBSERVATION": 4,
+    "OBSERVATION ADMIT": 6,
+    "DIRECT OBSERVATION": 2,
+    "AMBULATORY OBSERVATION": 0,
+    "SURGICAL SAME DAY ADMISSION": 7
+  },
+  "marital_status": {
+    "SINGLE": 3,
+    "MARRIED": 1,
+    "WIDOWED": 4,
+    "DIVORCED": 0
+  },
+  "nationality": {
+    "BLACK/CAPE VERDEAN": 1,
+    "HISPANIC/LATINO - PUERTO RICAN": 4,
+    "WHITE": 10,
+    "OTHER": 6,
+    "BLACK/AFRICAN AMERICAN": 0,
+    "HISPANIC/LATINO - SALVADORAN": 5,
+    "UNABLE TO OBTAIN": 9,
+    "WHITE - OTHER EUROPEAN": 13,
+    "PORTUGUESE": 8,
+    "HISPANIC/LATINO - CUBAN": 3,
+    "PATIENT DECLINED TO ANSWER": 7,
+    "WHITE - BRAZILIAN": 12,
+    "HISPANIC OR LATINO": 2
+  },
+  "admit_season": {
+    "Winter": 3,
+    "Fall": 0,
+    "Summer": -1,
+    "Spring": 1
+  },
+  "admit_period": {
+    "Afternoon": 0,
+    "Night": 3,
+    "Evening": -1,
+    "Morning": 2
+  }
+}

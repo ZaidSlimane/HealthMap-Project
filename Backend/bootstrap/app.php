@@ -40,6 +40,10 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')
                 ->prefix('api')
                 ->group(base_path('routes/modules/pharmacy.php'));
+
+            Route::middleware('web')
+                ->prefix('api')
+                ->group(base_path('routes/modules/predictions.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -58,6 +62,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/radiology/*',
             'api/laboratory/*',
             'api/pharmacy/*',
+            'api/predictions/*',
             'api/clinical-core/notifications/*',
         ]);
     })

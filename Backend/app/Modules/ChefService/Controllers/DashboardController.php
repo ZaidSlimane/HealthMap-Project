@@ -19,6 +19,9 @@ class DashboardController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $serviceId = $this->chefServiceId();
+        $service = Service::find($serviceId);
+
+        abort_unless($service, 404, 'Service introuvable.');
 
         // Get doctor IDs in this service for consultation count
         $doctorIds = User::whereHas('services', fn($q) =>
@@ -28,7 +31,7 @@ class DashboardController extends Controller
         )->pluck('id');
 
         return response()->json([
-            'service_name' => Service::find($serviceId)->name,
+            'service_name' => $service->name,
             'box_count' => Box::where('service_id', $serviceId)->count(),
             'doctor_count' => $doctorIds->count(),
             'today_patient_count' => WaitingList::where('service_id', $serviceId)

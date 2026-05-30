@@ -151,6 +151,75 @@ Route::middleware(['auth'])->group(function () {
         Route::post('waiting-lists/{id}/absent', [WaitingListController::class, 'absent']);
         Route::post('waiting-lists/{id}/rappel', [WaitingListController::class, 'rappel']);
         Route::post('waiting-lists/{id}/complete', [WaitingListController::class, 'complete']);
+
+        // BDE dashboard KPIs — real counts from the DB
+        Route::get('bde/dashboard/stats', function () {
+            $estId = auth()->user()?->establishment_id;
+
+            $admQuery = \App\Modules\ClinicalCore\Models\Admission::query();
+            $patQuery = \App\Modules\ClinicalCore\Models\Patient::query();
+            $wlQuery  = \Illuminate\Support\Facades\DB::table('waiting_lists');
+
+            if ($estId !== null) {
+                $admQuery->where('establishment_id', $estId);
+                $patQuery->where('establishment_id', $estId);
+                $wlQuery->where('establishment_id', $estId);
+            }
+
+            $totalPatients    = (clone $patQuery)->count();
+            $activeAdmissions = (clone $admQuery)->where('status', 'active')->count();
+            $totalAdmissions  = (clone $admQuery)->count();
+
+            // Gender breakdown from patients
+            $genderM = (clone $patQuery)->where('gender', 'M')->count();
+            $genderF = (clone $patQuery)->where('gender', 'F')->count();
+
+            // Waiting list
+            $waitingNow = (clone $wlQuery)->where('status', 'waiting')->count();
+
+            // Today's admissions
+            $todayAdmissions = (clone $admQuery)
+                ->whereDate('date_admission', today())
+                ->count();
+
+            // Admissions last 14 days (for the chart)
+            $last14 = [];
+            for ($i = 13; $i >= 0; $i--) {
+                $date = now()->subDays($i)->toDateString();
+                $count = (clone $admQuery)->whereDate('date_admission', $date)->count();
+                $last14[] = [
+                    'date'  => $date,
+                    'label' => now()->subDays($i)->format('d/m'),
+                    'count' => $count,
+                ];
+            }
+
+            // Admissions last 12 months (for the monthly chart)
+            $last12 = [];
+            for ($i = 11; $i >= 0; $i--) {
+                $month = now()->subMonths($i);
+                $count = (clone $admQuery)
+                    ->whereYear('date_admission', $month->year)
+                    ->whereMonth('date_admission', $month->month)
+                    ->count();
+                $last12[] = [
+                    'ym'    => $month->format('Y-m'),
+                    'label' => $month->locale('fr')->isoFormat('MMM'),
+                    'count' => $count,
+                ];
+            }
+
+            return response()->json([
+                'patients'         => $totalPatients,
+                'active_admissions'=> $activeAdmissions,
+                'total_admissions' => $totalAdmissions,
+                'today_admissions' => $todayAdmissions,
+                'waiting_now'      => $waitingNow,
+                'gender'           => ['M' => $genderM, 'F' => $genderF],
+                'chart_daily'      => $last14,
+                'chart_monthly'    => $last12,
+            ]);
+        });
     });
 
     // ── Clinical: doctors and admins. Patients are co-managed by BDE
